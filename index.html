@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-palette="purple">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf9ff">
+  <meta name="description"
+    content="A public learning log of 20 Java projects, with practical challenges and clear notes for beginners.">
+  <meta property="og:title" content="BuilderJava.ln — Learn Java by building">
+  <meta property="og:description"
+    content="Twenty Java projects. Small steps, real practice, notes for the next beginner.">
+  <meta property="og:type" content="website">
+  <title>BuilderJava.ln — Learn Java by building</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="./styles/style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="./js/projects.js" defer></script>
+  <script src="./js/app.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="navbar navbar-expand-lg site-nav sticky-top" aria-label="Main navigation">
+    <div class="container nav-container">
+      <a class="navbar-brand brand-lockup" href="#home" aria-label="BuilderJava.ln home">
+        <span class="brand-mark" aria-hidden="true">E.</span>
+        <span class="brand-name">BuilderJava<span>.ln</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#roadmap">Roadmap</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#customize">Appearance</a></li>
+          <li class="nav-item ms-lg-2"><button class="btn btn-sm theme-toggle" id="themeToggle" type="button"
+              aria-label="Switch color theme"><i class="bi bi-moon-stars me-2" aria-hidden="true"></i><span>Dark
+                mode</span></button></li>
+          <li class="nav-item ms-lg-1"><a class="btn btn-sm btn-primary-soft" href="https://github.com/duartexz-dev"
+              target="_blank" rel="noreferrer"><i class="bi bi-github me-2" aria-hidden="true"></i>GitHub profile</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero-section section-space" id="home">
+      <div class="container">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-7 hero-copy reveal">
+            <div class="eyebrow"><span class="eyebrow-dot"></span> An open learning log · built one step at a time</div>
+            <h1>Less watching.<br><span>More building in Java.</span></h1>
+            <p class="hero-description">I’m working through 20 Java projects over three months — starting with the
+              basics, then adding object-oriented programming, files, APIs, and a desktop app. Each project includes the
+              things I wish were clearer when I was starting out: what to build, what to practice, and how to run it.
+            </p>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+              <a class="btn btn-primary-soft btn-lg" href="#projects">Explore the projects <i
+                  class="bi bi-arrow-down-right ms-2" aria-hidden="true"></i></a>
+              <a class="btn btn-outline-soft btn-lg" href="#roadmap"><i class="bi bi-signpost-2 me-2"
+                  aria-hidden="true"></i>See the roadmap</a>
+            </div>
+            <div class="hero-meta mt-4">
+              <span><i class="bi bi-code-slash" aria-hidden="true"></i> Java first</span>
+              <span><i class="bi bi-calendar3" aria-hidden="true"></i> A 12-week target</span>
+              <span><i class="bi bi-book" aria-hidden="true"></i> Notes for the next beginner</span>
+            </div>
+          </div>
+          <div class="col-lg-5 hero-visual reveal reveal-delay-1">
+            <div class="code-window" id="codeWindow" aria-label="Decorative Java code sample">
+              <div class="code-window-bar">
+                <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                <span class="code-filename">MyNextStep.java</span>
+                <span class="code-live"><span></span> learning</span>
+              </div>
+              <div class="code-lines" aria-hidden="true">
+                <div class="code-line"><span class="ln">01</span><span><b class="kw">public class</b> <b
+                      class="type">LearningPlan</b> {</span></div>
+                <div class="code-line"><span class="ln">02</span><span>&nbsp;&nbsp;<b class="kw">public static void</b>
+                    main(String[] args) {</span></div>
+                <div class="code-line"><span class="ln">03</span><span>&nbsp;&nbsp;&nbsp;&nbsp;String goal = <b
+                      class="str">"learn by doing"</b>;</span></div>
+                <div class="code-line"><span class="ln">04</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<b
+                      class="kw-blue">while</b> (projectsLeft &gt; 0) {</span></div>
+                <div class="code-line"><span
+                    class="ln">05</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buildOneProject();</span></div>
+                <div class="code-line"><span
+                    class="ln">06</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writeWhatILearned();</span></div>
+                <div class="code-line"><span class="ln">07</span><span>&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
+                <div class="code-line"><span class="ln">08</span><span>&nbsp;&nbsp;}</span></div>
+                <div class="code-line"><span class="ln">09</span><span>}</span></div>
+              </div>
+              <div class="code-window-footer"><span><i class="bi bi-check2-circle" aria-hidden="true"></i> small steps
+                  count</span><span>Java <span class="footer-separator">/</span> 001</span></div>
+            </div>
+            <div class="hero-note note-one"><i class="bi bi-pencil-square" aria-hidden="true"></i><span>Build it, then
+                explain it.</span></div>
+            <div class="hero-note note-two"><span class="note-count"
+                id="heroCompletedCount">0</span><span><strong>projects complete</strong><small>out of 20
+                  planned</small></span></div>
+          </div>
+        </div>
+
+        <div class="stats-row row g-3 mt-5 reveal reveal-delay-2">
+          <div class="col-6 col-lg-4">
+            <div class="stat-card"><span class="stat-value">20</span><span class="stat-label">Projects planned</span>
+            </div>
+          </div>
+          <div class="col-6 col-lg-4">
+            <div class="stat-card"><span class="stat-value">12 <small>weeks</small></span><span
+                class="stat-label">Learning target</span></div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="stat-card progress-stat">
+              <div class="stat-topline"><span class="stat-value"><span id="completedCount">0</span><span
+                    class="stat-muted">/20</span></span><span class="progress-copy" id="progressCopy">Just getting
+                  started</span></div>
+              <div class="progress journey-progress" role="progressbar" aria-label="Projects completed"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="20">
+                <div class="progress-bar" id="progressBar" style="width:0%"></div>
+              </div><span class="stat-label">Completed projects</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-section section-space" id="projects">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div>
+            <div class="eyebrow">THE PROJECT INDEX</div>
+            <h2>Pick a problem.<br><span>Build your way through it.</span></h2>
+          </div>
+          <p>Open any project card to see what you’ll build, which concepts it practices, and a realistic time estimate.
+            These are learning plans for now — the status changes as the work gets done.</p>
+        </div>
+
+        <div class="filter-panel reveal">
+          <div class="filter-topline">
+            <div class="filter-label"><i class="bi bi-sliders2" aria-hidden="true"></i> Browse projects</div>
+            <span class="results-count" id="resultsCount" aria-live="polite">20 projects</span>
+          </div>
+          <div class="topic-filters" role="group" aria-label="Filter projects by topic" id="topicFilters">
+            <button class="topic-badge active" type="button" data-topic="all" aria-pressed="true">All topics</button>
+            <button class="topic-badge" type="button" data-topic="fundamentals"
+              aria-pressed="false">Fundamentals</button>
+            <button class="topic-badge" type="button" data-topic="logic" aria-pressed="false">Logic</button>
+            <button class="topic-badge" type="button" data-topic="oop" aria-pressed="false">OOP</button>
+            <button class="topic-badge" type="button" data-topic="files" aria-pressed="false">Files & data</button>
+            <button class="topic-badge" type="button" data-topic="api" aria-pressed="false">APIs</button>
+            <button class="topic-badge" type="button" data-topic="gui" aria-pressed="false">Desktop UI</button>
+          </div>
+          <div class="filter-controls">
+            <label class="search-field"><i class="bi bi-search" aria-hidden="true"></i><span
+                class="visually-hidden">Search projects</span><input id="projectSearch" type="search"
+                placeholder="Search by name or concept..." autocomplete="off"></label>
+            <label class="select-field"><span>Difficulty</span><select id="difficultyFilter"
+                class="form-select form-select-sm" aria-label="Filter by difficulty">
+                <option value="all">All levels</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+              </select></label>
+            <label class="select-field"><span>Status</span><select id="statusFilter" class="form-select form-select-sm"
+                aria-label="Filter by project status">
+                <option value="all">All statuses</option>
+                <option value="planned">Planned</option>
+                <option value="in-progress">In progress</option>
+                <option value="completed">Completed</option>
+              </select></label>
+            <button class="btn btn-reset" id="resetFilters" type="button">Reset filters</button>
+          </div>
+        </div>
+
+        <div class="row g-3 project-grid" id="projectGrid" aria-live="polite" aria-busy="true"></div>
+        <div class="empty-state d-none" id="emptyState"><span class="empty-icon"><i class="bi bi-search"
+              aria-hidden="true"></i></span>
+          <h3>No projects found</h3>
+          <p>Try another search or remove one of the filters.</p><button class="btn btn-outline-soft" id="emptyReset"
+            type="button">Clear filters</button>
+        </div>
+
+        <div class="projects-footnote reveal"><i class="bi bi-info-circle" aria-hidden="true"></i>
+          <p>Time estimates are starting points, not deadlines. The source-code links will appear when each project is
+            published in the repository.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="roadmap-section section-space" id="roadmap">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div>
+            <div class="eyebrow">THE 12-WEEK PLAN</div>
+            <h2>Go from syntax<br><span>to small applications.</span></h2>
+          </div>
+          <p>The roadmap sets a direction, not a race. Spend longer on a concept when you need to; understanding the
+            code matters more than checking a box.</p>
+        </div>
+        <div class="roadmap-grid row g-3">
+          <div class="col-md-4 reveal">
+            <article class="roadmap-card h-100">
+              <div class="roadmap-top"><span class="roadmap-number">01</span><span class="roadmap-weeks">Weeks
+                  1–4</span></div>
+              <h3>Build the foundation</h3>
+              <p>Get comfortable with input, output, conditions, loops, methods, arrays, and simple validation.</p>
+              <div class="roadmap-footer"><span>Projects 01–08</span><span class="roadmap-line"></span></div>
+            </article>
+          </div>
+          <div class="col-md-4 reveal reveal-delay-1">
+            <article class="roadmap-card h-100">
+              <div class="roadmap-top"><span class="roadmap-number">02</span><span class="roadmap-weeks">Weeks
+                  5–8</span></div>
+              <h3>Model real problems</h3>
+              <p>Use classes, objects, collections, and encapsulation to represent tasks, money, products, and books.
+              </p>
+              <div class="roadmap-footer"><span>Projects 09–16</span><span class="roadmap-line"></span></div>
+            </article>
+          </div>
+          <div class="col-md-4 reveal reveal-delay-2">
+            <article class="roadmap-card h-100">
+              <div class="roadmap-top"><span class="roadmap-number">03</span><span class="roadmap-weeks">Weeks
+                  9–12</span></div>
+              <h3>Connect the pieces</h3>
+              <p>Practice file persistence, API requests, error handling, and a small desktop interface.</p>
+              <div class="roadmap-footer"><span>Projects 17–20</span><span class="roadmap-line"></span></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section section-space" id="about">
+      <div class="container">
+        <div class="about-panel reveal">
+          <div class="about-copy">
+            <div class="eyebrow">WHY THIS EXISTS</div>
+            <h2>Learn it.<br><span>Build it. Explain it.</span></h2>
+            <p>This is a learning repository, not a collection of copied solutions. Each project is meant to start with
+              a problem, grow through practice, and end with notes that explain the decisions behind the code.</p><a
+              class="text-link" href="https://github.com/duartexz-dev" target="_blank" rel="noreferrer">Follow the work
+              on GitHub <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+          </div>
+          <div class="principles-list">
+            <article class="principle-item"><span class="principle-icon"><i class="bi bi-hammer"
+                  aria-hidden="true"></i></span>
+              <div>
+                <h3>Made by practicing</h3>
+                <p>Write the code, test edge cases, and improve it in small steps.</p>
+              </div>
+            </article>
+            <article class="principle-item"><span class="principle-icon"><i class="bi bi-journal-text"
+                  aria-hidden="true"></i></span>
+              <div>
+                <h3>Documented for beginners</h3>
+                <p>Every project should explain what it does and how to run it.</p>
+              </div>
+            </article>
+            <article class="principle-item"><span class="principle-icon"><i class="bi bi-graph-up-arrow"
+                  aria-hidden="true"></i></span>
+              <div>
+                <h3>Progress kept honest</h3>
+                <p>The project status reflects the work completed, not a planned milestone.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="customize-section section-space" id="customize">
+      <div class="container">
+        <div class="section-heading compact-heading reveal">
+          <div>
+            <div class="eyebrow">MAKE IT YOURS</div>
+            <h2>Set your own tone.</h2>
+          </div>
+          <p>Pick a color accent that feels right. The selection stays in this browser.</p>
+        </div>
+        <div class="customize-panel reveal">
+          <div>
+            <h3>Choose an accent</h3>
+            <p>Four variations, same interface.</p>
+          </div>
+          <div class="palette-options" role="group" aria-label="Choose a color palette">
+            <button class="palette-button active" type="button" data-palette-choice="purple" aria-pressed="true"><span
+                class="palette-swatch swatch-purple"></span><span>Violet</span></button>
+            <button class="palette-button" type="button" data-palette-choice="blue" aria-pressed="false"><span
+                class="palette-swatch swatch-blue"></span><span>Blue</span></button>
+            <button class="palette-button" type="button" data-palette-choice="pink" aria-pressed="false"><span
+                class="palette-swatch swatch-pink"></span><span>Pink</span></button>
+            <button class="palette-button" type="button" data-palette-choice="mono" aria-pressed="false"><span
+                class="palette-swatch swatch-mono"></span><span>Black & white</span></button>
+          </div>
+        </div>
+        <p class="local-preference-note"><i class="bi bi-shield-check" aria-hidden="true"></i> Theme and palette
+          preferences stay in your browser. They are not sent to a server.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner"><a class="footer-brand" href="#home"><span class="brand-mark brand-mark-small"
+          aria-hidden="true">E.</span><span>BuilderJava.ln</span></a>
+      <p>Made to learn in public. One project at a time.</p>
+      <div class="footer-links"><a href="#projects">Projects</a><a href="#roadmap">Roadmap</a><a
+          href="https://github.com/duartexz-dev" target="_blank" rel="noreferrer">GitHub <i class="bi bi-arrow-up-right"
+            aria-hidden="true"></i></a></div>
+    </div>
+  </footer>
+
+  <div class="modal fade project-modal" id="projectModal" tabindex="-1" aria-labelledby="projectModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <div class="eyebrow mb-2" id="modalEyebrow">PROJECT PLAN</div>
+            <h2 class="modal-title" id="projectModalTitle">Project title</h2>
+          </div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="projectModalBody"></div>
+        <div class="modal-footer" id="projectModalFooter"><button type="button" class="btn btn-outline-soft"
+            data-bs-dismiss="modal">Close</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="siteToast" class="toast site-toast" role="status" aria-live="polite" aria-atomic="true">
+      <div class="toast-body"><i class="bi bi-check-circle me-2" aria-hidden="true"></i><span
+          id="toastMessage">Preference updated.</span></div>
+    </div>
+  </div>
+</body>
+
+</html>

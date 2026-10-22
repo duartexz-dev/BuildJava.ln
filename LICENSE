@@ -1,0 +1,73 @@
+# BuilderJava.ln — Learning Java by building
+
+A small, responsive landing page for a public learning repository with 20 hands-on Java projects. The site is built with HTML, CSS, Bootstrap 5, Bootstrap Icons, and vanilla JavaScript.
+
+> Learning repository, not a collection of finished tutorials: project statuses stay **Planned** until the work is actually completed.
+
+## Features
+
+- Responsive layout with a warm, minimal visual style inspired by the sage and paper colors of NoteLab.
+- Light/dark mode plus four accent palettes; preferences are stored locally in the browser.
+- Twenty project cards generated from one data file.
+- Hover-to-expand project cards, with click and keyboard alternatives for touch devices and accessibility.
+- Expanded cards include a description, objective, topic tags, difficulty, time estimate, and a project-plan action.
+- A Bootstrap modal for learning objectives and extra challenges.
+- Search plus combined topic, difficulty, and status filters.
+- Progress counts derived from each project's real `status` value.
+- Scroll-reveal and small motion details, respecting `prefers-reduced-motion`.
+- GitHub Pages workflow included.
+- No build step, framework, backend, or account is required.
+
+## Run locally
+
+Open `index.html` in a browser. Bootstrap, Bootstrap Icons, and Google Fonts are loaded from CDNs, so those assets need an internet connection. You can also use VS Code with the Live Server extension.
+
+## Customize projects
+
+Edit `js/projects.js`. Each project has a name, category, difficulty, status, time estimate, concepts, summary, objective, and practice challenges.
+
+Allowed status values:
+
+- `planned`
+- `in-progress`
+- `completed`
+
+The project counts and progress bar are calculated from these values. Change a project's status only after the work matches that status.
+
+## Add real source-code links
+
+The repository has not been connected to this landing page yet, so project source links are intentionally not fabricated. After the repository and folders exist, set `repoBaseUrl` near the top of `js/projects.js`:
+
+```js
+window.EXERCISM_JAVA_CONFIG = {
+  repoBaseUrl: "https://github.com/duartexz-dev/BuilderJava.ln",
+  githubProfileUrl: "https://github.com/duartexz-dev",
+  repoBranch: "main"
+};
+```
+
+Make sure the folder names in the catalog match the folders you publish in `projects/`. Once configured, the card actions automatically link to each project's GitHub directory.
+
+## Publish with GitHub Pages
+
+1. Put the page files at the root of your repository.
+2. Push the `.github/workflows/pages.yml` workflow to the `main` branch.
+3. In GitHub, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source if it is not already selected.
+4. Push a commit. The workflow deploys the root directory; after a successful run, GitHub shows the Pages URL in the repository settings.
+
+## Files
+
+```text
+.
+├── index.html
+├── css/style.css
+├── js/app.js
+├── js/projects.js
+├── README.md
+├── LICENSE
+└── .github/workflows/pages.yml
+```
+
+## License
+
+MIT. See `LICENSE`.
