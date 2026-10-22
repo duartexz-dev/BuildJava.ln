@@ -49,6 +49,7 @@ This is an evolving learning project, not a collection of finished tutorials. Pr
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" alt="CSS3">
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript">
   <img src="https://img.shields.io/badge/Bootstrap_5-7952B3?style=flat-square&logo=bootstrap&logoColor=white" alt="Bootstrap 5">
+    <img src="https://img.shields.io/badge/Java-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="Java">
 </p>
 
 The interface uses HTML, CSS, Bootstrap 5, Bootstrap Icons, and vanilla JavaScript.
