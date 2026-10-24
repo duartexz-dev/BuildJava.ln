@@ -55,146 +55,26 @@
   </nav>
 
   <main id="main">
-    <section class="hero-section section-space" id="home">
+    <section class="hero-section" id="home">
       <div class="container">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-7 hero-copy reveal">
-            <div class="eyebrow"><span class="eyebrow-dot"></span> An open learning log · built one step at a time</div>
-            <h1>Less watching.<br><span>More building in Java.</span></h1>
-            <p class="hero-description">I’m working through 20 Java projects over three months — starting with the
-              basics, then adding object-oriented programming, files, APIs, and a desktop app. Each project includes the
-              things I wish were clearer when I was starting out: what to build, what to practice, and how to run it.
-            </p>
-            <div class="d-flex flex-wrap gap-3 mt-4">
-              <a class="btn btn-primary-soft btn-lg" href="#projects">Explore the projects <i
-                  class="bi bi-arrow-down-right ms-2" aria-hidden="true"></i></a>
-              <a class="btn btn-outline-soft btn-lg" href="#roadmap"><i class="bi bi-signpost-2 me-2"
-                  aria-hidden="true"></i>See the roadmap</a>
-            </div>
-            <div class="hero-meta mt-4">
-              <span><i class="bi bi-code-slash" aria-hidden="true"></i> Java first</span>
-              <span><i class="bi bi-calendar3" aria-hidden="true"></i> A 12-week target</span>
-              <span><i class="bi bi-book" aria-hidden="true"></i> Notes for the next beginner</span>
-            </div>
-          </div>
-          <div class="col-lg-5 hero-visual reveal reveal-delay-1">
-            <div class="code-window" id="codeWindow" aria-label="Decorative Java code sample">
-              <div class="code-window-bar">
-                <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-                <span class="code-filename">MyNextStep.java</span>
-                <span class="code-live"><span></span> learning</span>
-              </div>
-              <div class="code-lines" aria-hidden="true">
-                <div class="code-line"><span class="ln">01</span><span><b class="kw">public class</b> <b
-                      class="type">LearningPlan</b> {</span></div>
-                <div class="code-line"><span class="ln">02</span><span>&nbsp;&nbsp;<b class="kw">public static void</b>
-                    main(String[] args) {</span></div>
-                <div class="code-line"><span class="ln">03</span><span>&nbsp;&nbsp;&nbsp;&nbsp;String goal = <b
-                      class="str">"learn by doing"</b>;</span></div>
-                <div class="code-line"><span class="ln">04</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<b
-                      class="kw-blue">while</b> (projectsLeft &gt; 0) {</span></div>
-                <div class="code-line"><span
-                    class="ln">05</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buildOneProject();</span></div>
-                <div class="code-line"><span
-                    class="ln">06</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writeWhatILearned();</span></div>
-                <div class="code-line"><span class="ln">07</span><span>&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
-                <div class="code-line"><span class="ln">08</span><span>&nbsp;&nbsp;}</span></div>
-                <div class="code-line"><span class="ln">09</span><span>}</span></div>
-              </div>
-              <div class="code-window-footer"><span><i class="bi bi-check2-circle" aria-hidden="true"></i> small steps
-                  count</span><span>Java <span class="footer-separator">/</span> 001</span></div>
-            </div>
-            <div class="hero-note note-one"><i class="bi bi-pencil-square" aria-hidden="true"></i><span>Build it, then
-                explain it.</span></div>
-            <div class="hero-note note-two"><span class="note-count"
-                id="heroCompletedCount">0</span><span><strong>projects complete</strong><small>out of 20
-                  planned</small></span></div>
-          </div>
-        </div>
-
-        <div class="stats-row row g-3 mt-5 reveal reveal-delay-2">
-          <div class="col-6 col-lg-4">
-            <div class="stat-card"><span class="stat-value">20</span><span class="stat-label">Projects planned</span>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4">
-            <div class="stat-card"><span class="stat-value">12 <small>weeks</small></span><span
-                class="stat-label">Learning target</span></div>
-          </div>
-          <div class="col-12 col-lg-4">
-            <div class="stat-card progress-stat">
-              <div class="stat-topline"><span class="stat-value"><span id="completedCount">0</span><span
-                    class="stat-muted">/20</span></span><span class="progress-copy" id="progressCopy">Just getting
-                  started</span></div>
-              <div class="progress journey-progress" role="progressbar" aria-label="Projects completed"
-                aria-valuenow="0" aria-valuemin="0" aria-valuemax="20">
-                <div class="progress-bar" id="progressBar" style="width:0%"></div>
-              </div><span class="stat-label">Completed projects</span>
-            </div>
-          </div>
-        </div>
+        <p class="eyebrow">Java repositories</p>
+        <h1>Browse Java projects.</h1>
+        <p class="hero-description">A small project catalog. Use this card as a starting point for your own layout.</p>
+        <a class="hero-link" href="#projects">Browse projects <i class="bi bi-arrow-down" aria-hidden="true"></i></a>
       </div>
     </section>
 
-    <section class="projects-section section-space" id="projects">
+    <section class="projects-section" id="projects">
       <div class="container">
-        <div class="section-heading reveal">
+        <div class="section-heading">
           <div>
-            <div class="eyebrow">THE PROJECT INDEX</div>
-            <h2>Pick a problem.<br><span>Build your way through it.</span></h2>
+            <div class="eyebrow">PROJECT CATALOG</div>
+            <h2>Find a repository.</h2>
           </div>
-          <p>Open any project card to see what you’ll build, which concepts it practices, and a realistic time estimate.
-            These are learning plans for now — the status changes as the work gets done.</p>
+          <p>One example project card with its specifications.</p>
         </div>
 
-        <div class="filter-panel reveal">
-          <div class="filter-topline">
-            <div class="filter-label"><i class="bi bi-sliders2" aria-hidden="true"></i> Browse projects</div>
-            <span class="results-count" id="resultsCount" aria-live="polite">20 projects</span>
-          </div>
-          <div class="topic-filters" role="group" aria-label="Filter projects by topic" id="topicFilters">
-            <button class="topic-badge active" type="button" data-topic="all" aria-pressed="true">All topics</button>
-            <button class="topic-badge" type="button" data-topic="fundamentals"
-              aria-pressed="false">Fundamentals</button>
-            <button class="topic-badge" type="button" data-topic="logic" aria-pressed="false">Logic</button>
-            <button class="topic-badge" type="button" data-topic="oop" aria-pressed="false">OOP</button>
-            <button class="topic-badge" type="button" data-topic="files" aria-pressed="false">Files & data</button>
-            <button class="topic-badge" type="button" data-topic="api" aria-pressed="false">APIs</button>
-            <button class="topic-badge" type="button" data-topic="gui" aria-pressed="false">Desktop UI</button>
-          </div>
-          <div class="filter-controls">
-            <label class="search-field"><i class="bi bi-search" aria-hidden="true"></i><span
-                class="visually-hidden">Search projects</span><input id="projectSearch" type="search"
-                placeholder="Search by name or concept..." autocomplete="off"></label>
-            <label class="select-field"><span>Difficulty</span><select id="difficultyFilter"
-                class="form-select form-select-sm" aria-label="Filter by difficulty">
-                <option value="all">All levels</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-              </select></label>
-            <label class="select-field"><span>Status</span><select id="statusFilter" class="form-select form-select-sm"
-                aria-label="Filter by project status">
-                <option value="all">All statuses</option>
-                <option value="planned">Planned</option>
-                <option value="in-progress">In progress</option>
-                <option value="completed">Completed</option>
-              </select></label>
-            <button class="btn btn-reset" id="resetFilters" type="button">Reset filters</button>
-          </div>
-        </div>
-
-        <div class="row g-3 project-grid" id="projectGrid" aria-live="polite" aria-busy="true"></div>
-        <div class="empty-state d-none" id="emptyState"><span class="empty-icon"><i class="bi bi-search"
-              aria-hidden="true"></i></span>
-          <h3>No projects found</h3>
-          <p>Try another search or remove one of the filters.</p><button class="btn btn-outline-soft" id="emptyReset"
-            type="button">Clear filters</button>
-        </div>
-
-        <div class="projects-footnote reveal"><i class="bi bi-info-circle" aria-hidden="true"></i>
-          <p>Time estimates are starting points, not deadlines. The source-code links will appear when each project is
-            published in the repository.</p>
-        </div>
+        <div class="row g-3 project-grid" id="projects-list"></div>
       </div>
     </section>
 
@@ -286,12 +166,12 @@
             <div class="eyebrow">MAKE IT YOURS</div>
             <h2>Set your own tone.</h2>
           </div>
-          <p>Pick a color accent that feels right. The selection stays in this browser.</p>
+          <p>Choose a preset or pick your own accent. Your selection stays in this browser.</p>
         </div>
         <div class="customize-panel reveal">
           <div>
             <h3>Choose an accent</h3>
-            <p>Four variations, same interface.</p>
+            <p>Pick a palette or craft a color that is yours.</p>
           </div>
           <div class="palette-options" role="group" aria-label="Choose a color palette">
             <button class="palette-button active" type="button" data-palette-choice="purple" aria-pressed="true"><span
@@ -302,8 +182,14 @@
                 class="palette-swatch swatch-pink"></span><span>Pink</span></button>
             <button class="palette-button" type="button" data-palette-choice="mono" aria-pressed="false"><span
                 class="palette-swatch swatch-mono"></span><span>Black & white</span></button>
+            <label class="custom-color-control" id="customColorControl">
+              <input id="customColor" type="color" value="#7856ff" aria-label="Choose a custom accent color">
+              <span>Custom tone</span>
+            </label>
           </div>
         </div>
+        <p class="palette-ambient-note"><i class="bi bi-stars" aria-hidden="true"></i> Your color sets the mood — a soft
+          glow follows it across the page.</p>
         <p class="local-preference-note"><i class="bi bi-shield-check" aria-hidden="true"></i> Theme and palette
           preferences stay in your browser. They are not sent to a server.</p>
       </div>

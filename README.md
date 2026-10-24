@@ -32,11 +32,9 @@ This is an evolving learning project, not a collection of finished tutorials. Pr
 
 ## Features
 
-- **Interactive project catalog** — explore projects through expandable cards.
-- **Smart filtering** — search by name or concept and combine category, difficulty, and status filters.
-- **Project details** — review objectives, key concepts, estimated completion time, and extra challenges.
-- **Learning progress** — track planned, in-progress, and completed projects.
-- **Personalized appearance** — switch between light and dark modes and choose from four accent palettes.
+- **Project card example** — one sample card reveals its specifications on hover or keyboard focus.
+- **Plain JavaScript data model** — `js/projects.js` contains a regular array to use as a reference.
+- **Personalized appearance** — switch between light and near-black dark modes, choose blue, pink, or monochrome accents, or select a custom color.
 - **Subtle animations** — scroll reveals and interface transitions, with support for reduced-motion preferences.
 - **Responsive design** — layouts adapted for desktop, tablet, and mobile.
 - **GitHub integration** — connect project cards to their source code as folders become available.
@@ -127,24 +125,22 @@ Project information is maintained in:
 js/projects.js
 ```
 
-Each entry contains information such as:
+`js/projects.js` has a regular array with one sample object. Add objects there as needed; no search or automatic card generation is included.
 
-- Project name and summary.
-- Category and difficulty.
-- Estimated completion time.
-- Concepts covered.
-- Learning objective and extra challenges.
-- Current status and source directory.
+```javascript
+const projects = [
+  {
+    name: "Contact Book",
+    type: "Collections",
+    difficulty: "Beginner",
+    description: "Store and search a list of contacts.",
+    concepts: ["ArrayList", "Input validation"],
+    repoUrl: "https://github.com/your-name/your-repository"
+  }
+];
+```
 
-### Project statuses
-
-| Status | Meaning |
-|:--|:--|
-| `planned` | The project is on the roadmap but work has not started. |
-| `in-progress` | Implementation or documentation is underway. |
-| `completed` | The project has been implemented, tested, and documented. |
-
-The catalog and progress indicators are generated from the project data. Keep these values accurate to ensure the page reflects real progress.
+The sample card is written directly in `index.html`, so edit its markup separately when building your own catalog.
 
 ## Connect project source code
 
