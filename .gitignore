@@ -1,0 +1,38 @@
+# Sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.log
+target/
+build/
+out/
+bin/
+.classpath
+.project
+.settings/
+
+# Editores
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# Node (caso venha a usar ferramentas de build no futuro)
+node_modules/
+npm-debug.log*
+
+# Ambiente
+.env
+.env.local
