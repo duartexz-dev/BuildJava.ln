@@ -1,0 +1,44 @@
+name: Update project progress
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "js/projects.js"
+      - "scripts/update-progress.mjs"
+      - ".github/workflows/update-progress.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-progress:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Generate progress SVG
+        run: node scripts/update-progress.mjs
+
+      - name: Commit updated SVG
+        run: |
+          if git diff --quiet -- assets/progress.svg; then
+            echo "Progress bar is already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add assets/progress.svg
+          git commit -m "chore: update project progress bar"
+          git push

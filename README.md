@@ -1,5 +1,6 @@
 # BuildJava.ln
 
+![BuildJava.ln Progress](./assets/progress.svg)
 ![Java](https://img.shields.io/badge/Java-learning%20journey-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
 ![Status](https://img.shields.io/badge/status-early%20development-yellow?style=flat-square)
 ![Frontend](https://img.shields.io/badge/frontend-HTML%20%7C%20CSS%20%7C%20JS-blue?style=flat-square)
