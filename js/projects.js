@@ -43,6 +43,15 @@ const projects = [
     description: "Validate an email and password, then allow or block access based on simple rules.",
     concepts: ["Scanner input", "Strings", "Conditionals", "Input validation"],
     repoUrl: ""
+  },
+  {
+    name: "LoginIntermediary",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Intermediate",
+    description: "Validate login credentials and limit the user to three attempts.",
+    concepts: ["Scanner input", "Strings", "While loops", "Boolean logic", "Attempt limits"],
+    repoUrl: ""
   }
 ];
 function LoadProjects() {
