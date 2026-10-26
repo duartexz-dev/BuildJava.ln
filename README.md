@@ -12,6 +12,8 @@ BuildJava.ln is a beginner project that combines a simple website with a growing
 
 > This repository is a work in progress. The roadmap describes ideas and planned learning steps, not 20 completed projects.
 
+The progress bar measures weighted progress across the learning roadmap, not the number or percentage of separate GitHub repositories created. Planned projects count as 0, in-progress projects as 0.5, and completed projects as 1, divided by the 20-project target. The catalog currently tracks four mini projects; their status reflects ongoing work, not completion.
+
 ## Contents
 
 - [About](#about)
@@ -44,15 +46,15 @@ The website is also a learning project. It uses HTML, CSS, Bootstrap, and plain 
 | Project links     | Some repository links and descriptions still need to be connected or verified               |
 | Documentation     | Being revised as the project develops                                                       |
 | GitHub Pages      | A Pages deployment has run successfully; the deployment setup should continue to be checked |
-| Automated checks  | No dedicated test or code-quality workflow has been documented yet                          |
+| Progress SVG      | Generated from project statuses by `.github/workflows/update-progress.yml`                 |
 
 ### Progress labels
 
 - **Planned** — an idea on the roadmap; implementation has not started.
-- **In progress** — work has started, but the project is not ready.
-- **Completed** — the code runs as intended and has been reviewed and documented.
+- **In progress** — the project is currently being developed.
+- **Completed** — the project is implemented, tested, and documented.
 
-These labels are a convention for tracking progress; they do not mean that a full status-tracking system has already been implemented in the website.
+Project statuses are stored in `js/projects.js` and used by the progress SVG generator. They are learning-roadmap indicators, not evidence that separate repositories have been created.
 
 ## Technologies
 
@@ -76,6 +78,10 @@ BuildJava.ln/
 ├── js/
 │   ├── app.js          # Theme and appearance controls
 │   └── projects.js     # Project card data and rendering
+├── scripts/
+│   └── update-progress.mjs # Generates the README progress SVG
+├── assets/
+│   └── progress.svg    # Generated learning-roadmap progress
 ├── projects/           # Java exercises
 ├── README.md
 ├── LICENSE
@@ -117,13 +123,14 @@ These are learning exercises, not production-ready applications. In particular, 
 
 ## How the Catalog Works
 
-The current catalog data is stored in `js/projects.js`. Each project is represented by a JavaScript object with fields such as its name, category, difficulty, description, concepts, and repository URL.
+The current catalog data is stored in `js/projects.js`. Each project is represented by a JavaScript object with fields such as its name, status, category, difficulty, description, concepts, and repository URL. Status must be `planned`, `in-progress`, or `completed`; completed means implemented, tested, and documented.
 
 Example of a catalog entry:
 
 ```js
 {
   name: "Calculator",
+  status: "planned",
   type: "Fundamentals",
   difficulty: "Beginner",
   description: "Build a calculator using basic Java concepts.",
@@ -132,13 +139,15 @@ Example of a catalog entry:
 }
 ```
 
-When adding an entry, update the description and link to match code that actually exists. A roadmap idea should not be presented as a completed project. The catalog can be expanded later with explicit progress fields and search or filter controls.
+When adding an entry, update the description and link to match code that actually exists. A roadmap idea should not be presented as a completed project. The progress generator reads this array, assigns weights of 0, 0.5, and 1 to planned, in-progress, and completed projects, respectively, and divides the weighted total by the 20-project roadmap target. The resulting percentage is capped at 100%. Run `node scripts/update-progress.mjs` to regenerate `assets/progress.svg`; the script validates project data and leaves the SVG unchanged when its output has not changed.
 
 ## GitHub Actions and Workflows
 
 A **workflow** is an automated process that GitHub runs when a defined event occurs. Workflows are written in YAML and are usually stored in `.github/workflows/`. They help reduce repetitive manual steps and make it easier to catch problems before or after code is published.
 
 For example, a workflow can run when code is pushed to `main` or when a pull request is opened. It can check files, run tests, build a site, or publish the result.
+
+The progress workflow runs when project data or its generator changes on `main`, and can also be started manually. It commits the generated SVG only when the file changes. For that push to work, repository administrators must allow read and write workflow permissions in **Settings → Actions → General → Workflow permissions**. The workflow uses the repository-provided `GITHUB_TOKEN`; no personal access token is needed.
 
 ### Common workflow terms
 

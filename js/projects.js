@@ -1,6 +1,7 @@
 const projects = [
   {
     name: "ReturnName",
+    status: "in-progress",
     type: "Fundamentals",
     difficulty: "Beginner",
     description: "Ask for a person's name and age, then display a message based on their age.",
@@ -9,6 +10,7 @@ const projects = [
   },
   {
     name: "DrivingCarWallet",
+    status: "in-progress",
     type: "Fundamentals",
     difficulty: "Beginner",
     description: "Check whether a person can legally drive based on their age and other conditions.",
@@ -17,6 +19,7 @@ const projects = [
   },
   {
     name: "WeekDay",
+    status: "in-progress",
     type: "Fundamentals",
     difficulty: "Beginner",
     description: "Read a number from 1 to 7 and display the corresponding day of the week.",
@@ -25,6 +28,7 @@ const projects = [
   },
   {
     name: "loginSystem",
+    status: "in-progress",
     type: "Fundamentals",
     difficulty: "Beginner",
     description: "Validate an email and password, then allow or block access based on simple rules.",
