@@ -52,6 +52,15 @@ const projects = [
     description: "Validate login credentials and limit the user to three attempts.",
     concepts: ["Scanner input", "Strings", "While loops", "Boolean logic", "Attempt limits"],
     repoUrl: ""
+  },
+  {
+    name: "bulletin",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Intermediate",
+    description: "Collect a student's grades in four subjects, calculate the average, and report whether they passed.",
+    concepts: ["Scanner input", "Classes and objects", "Constructors", "Arithmetic operations", "Conditionals"],
+    repoUrl: ""
   }
 ];
 function LoadProjects() {
