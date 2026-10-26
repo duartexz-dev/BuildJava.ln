@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg"
   width="720" height="164" viewBox="0 0 720 164" role="img"
   aria-labelledby="progress-title progress-description">
-  <title id="progress-title">BuildJava.ln learning roadmap progress: 12.5%</title>
-  <desc id="progress-description">12.5% weighted progress across 5 tracked mini projects, with a target of 20 projects. Planned projects count as 0, in-progress projects as 0.5, and completed projects as 1.</desc>
+  <title id="progress-title">BuildJava.ln learning roadmap progress: 15%</title>
+  <desc id="progress-description">15% weighted progress across 6 tracked mini projects, with a target of 20 projects. Planned projects count as 0, in-progress projects as 0.5, and completed projects as 1.</desc>
   <defs>
     <linearGradient id="progress-accent" x1="0" x2="1">
       <stop offset="0%" stop-color="#d97706"/>
@@ -13,12 +13,12 @@
   <text x="32" y="42" fill="#f3f4f6" font-family="Arial, sans-serif"
     font-size="20" font-weight="700">BuildJava.ln</text>
   <text x="688" y="42" fill="#f59e0b" font-family="Arial, sans-serif"
-    font-size="24" font-weight="700" text-anchor="end">12.5%</text>
+    font-size="24" font-weight="700" text-anchor="end">15%</text>
   <rect x="32" y="66" width="656" height="16" rx="8" fill="#343741"/>
-  <rect x="32" y="66" width="82" height="16" rx="8"
+  <rect x="32" y="66" width="98.4" height="16" rx="8"
     fill="url(#progress-accent)"/>
   <text x="32" y="123" fill="#b9bbc4" font-family="Arial, sans-serif"
-    font-size="14">5 tracked mini projects</text>
+    font-size="14">6 tracked mini projects</text>
   <text x="688" y="123" fill="#b9bbc4" font-family="Arial, sans-serif"
     font-size="14" text-anchor="end">Learning roadmap target: 20</text>
 </svg>
