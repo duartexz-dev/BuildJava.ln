@@ -47,7 +47,7 @@ function LoadProjects() {
     </div>
 
     <details class="project-disclosure">
-      <summary>Ver mais</summary>
+      <summary>See more</summary>
 
       <div class="project-card-details">
         <p>${projects[counter].description}</p>
@@ -57,8 +57,8 @@ function LoadProjects() {
         </ul>
 
         ${projects[counter].repoUrl
-        ? `<a class="project-repository-link" href="${projects[counter].repoUrl}" target="_blank" rel="noreferrer">Abrir repositório</a>`
-        : `<span class="source-unavailable">Repositório ainda não disponível</span>`}
+        ? `<a class="project-repository-link" href="${projects[counter].repoUrl}" target="_blank" rel="noreferrer">Open repository</a>`
+        : `<span class="source-unavailable">Repository not available yet</span>`}
       </div>
     </details>
   </div>

@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class WeekDay {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Say a number 1-7 and descobert your day in week:");
+        System.out.println("Enter a number from 1 to 7 to find the corresponding day of the week:");
         int number = scanner.nextInt();
         switch (number) {
             case 1:
@@ -31,6 +31,7 @@ public class WeekDay {
                 break;
 
             default:
+                System.out.println("You entered an invalid number.");
                 break;
         }
         scanner.close();

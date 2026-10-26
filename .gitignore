@@ -1,4 +1,4 @@
-# Sistema operacional
+# Operating system
 .DS_Store
 .DS_Store?
 ._*
@@ -22,17 +22,17 @@ bin/
 .project
 .settings/
 
-# Editores
+# Editors
 .vscode/
 .idea/
 *.iml
 *.swp
 *.swo
 
-# Node (caso venha a usar ferramentas de build no futuro)
+# Node (if build tools are added in the future)
 node_modules/
 npm-debug.log*
 
-# Ambiente
+# Environment
 .env
 .env.local
