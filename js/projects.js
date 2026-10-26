@@ -27,6 +27,15 @@ const projects = [
     repoUrl: ""
   },
   {
+    name: "Calculator",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Beginner",
+    description: "Perform basic arithmetic operations on two numbers using a selected operator.",
+    concepts: ["Scanner input", "Arithmetic operators", "Switch statements"],
+    repoUrl: ""
+  },
+  {
     name: "loginSystem",
     status: "in-progress",
     type: "Fundamentals",
