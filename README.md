@@ -1,96 +1,108 @@
 # BuildJava.ln
 
-![BuildJava.ln Progress](./assets/progress.svg)
-![Java](https://img.shields.io/badge/Java-learning%20journey-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
-![Status](https://img.shields.io/badge/status-early%20development-yellow?style=flat-square)
-![Frontend](https://img.shields.io/badge/frontend-HTML%20%7C%20CSS%20%7C%20JS-blue?style=flat-square)
+![Learning roadmap progress](./assets/progress.svg)
+![Java](https://img.shields.io/badge/Java-learning%20log-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![Frontend](https://img.shields.io/badge/frontend-HTML%20%7C%20CSS%20%7C%20JavaScript-3776AB?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-**Learning Java by building small projects, one step at a time.**
+**Learn Java by building, documenting, and improving small projects.**
 
-BuildJava.ln is a beginner project that combines a simple website with a growing collection of Java exercises. It is still in an early stage: the site, project catalog, documentation, and deployment setup are being improved as I learn.
+BuildJava.ln is a public learning log for practicing Java through small programs. The repository combines Java exercises with a lightweight website that organizes each exercise, the concepts it practices, and the next steps in the learning process.
 
-> This repository is a work in progress. The roadmap describes ideas and planned learning steps, not 20 completed projects.
-
-The progress bar measures weighted progress across the learning roadmap, not the number or percentage of separate GitHub repositories created. Planned projects count as 0, in-progress projects as 0.5, and completed projects as 1, divided by the 20-project target. The catalog currently tracks four mini projects; their status reflects ongoing work, not completion.
+This is a work in progress, not a finished course or a collection of production-ready applications. The catalog and roadmap can change as the code, understanding, and documentation improve. A planned exercise is an idea to explore; it should not be mistaken for completed code or a separate published repository.
 
 ## Contents
 
 - [About](#about)
-- [Current Progress](#current-progress)
+- [Project principles](#project-principles)
+- [Progress indicator](#progress-indicator)
 - [Technologies](#technologies)
-- [Repository Structure](#repository-structure)
-- [Run the Website Locally](#run-the-website-locally)
-- [Java Projects](#java-projects)
-- [How the Catalog Works](#how-the-catalog-works)
-- [GitHub Actions and Workflows](#github-actions-and-workflows)
-- [Roadmap](#roadmap)
-- [Contributing and Feedback](#contributing-and-feedback)
+- [Repository structure](#repository-structure)
+- [Run the website locally](#run-the-website-locally)
+- [Java exercise files](#java-exercise-files)
+- [How the project catalog works](#how-the-project-catalog-works)
+- [Automation and GitHub Pages](#automation-and-github-pages)
+- [Learning direction](#learning-direction)
+- [Feedback](#feedback)
 - [License](#license)
 
 ## About
 
-The goal of BuildJava.ln is to document my progress while learning Java through practical exercises. Instead of only collecting notes, I want to build small programs, explain what each one practices, and gradually organize them in a website.
+The purpose of BuildJava.ln is to make the learning process visible and easier to follow. Each exercise is an opportunity to practice a concept, run the code, notice what can be improved, and record the result.
 
-The website is also a learning project. It uses HTML, CSS, Bootstrap, and plain JavaScript to display project cards and provide appearance settings. I am keeping the implementation simple while I develop my programming fundamentals.
+The website is part of that practice. It uses standard web technologies to present the exercise catalog and provide ways to explore relationships between concepts. The website does not need a backend or database for its current functionality.
 
-## Current Progress
+## Project principles
 
-**Overall status: early development.** The project is not finished, and some features and documentation still need refinement.
+- **Practice before polish.** Exercises are built to develop understanding, not to claim production readiness.
+- **Explain the learning goal.** Descriptions and concept tags should help readers understand what an exercise is intended to practice.
+- **Keep progress honest.** A roadmap item is not complete just because it has been planned or added to the catalog.
+- **Improve in small steps.** Code, accessibility, validation, and documentation can be refined over time.
 
-| Area              | Current state                                                                               |
-| ----------------- | ------------------------------------------------------------------------------------------- |
-| Website structure | Basic page and styling are in place                                                         |
-| Project catalog   | Displays four Java exercise cards                                                           |
-| Java exercises    | Several starter exercises exist; the calculator is unfinished                               |
-| Project links     | Some repository links and descriptions still need to be connected or verified               |
-| Documentation     | Being revised as the project develops                                                       |
-| GitHub Pages      | A Pages deployment has run successfully; the deployment setup should continue to be checked |
-| Progress SVG      | Generated from project statuses by `.github/workflows/update-progress.yml`                 |
+## Progress indicator
 
-### Progress labels
+The progress graphic at the top of this README is generated from the catalog in `js/projects.js` by `scripts/update-progress.mjs`. It is a weighted indicator of the learning roadmap, not a measure of time spent, lines of code, course completion, or the number of separate GitHub repositories.
 
-- **Planned** — an idea on the roadmap; implementation has not started.
-- **In progress** — the project is currently being developed.
-- **Completed** — the project is implemented, tested, and documented.
+The generator uses the project statuses and the target configured in the script. Its current status weights are:
 
-Project statuses are stored in `js/projects.js` and used by the progress SVG generator. They are learning-roadmap indicators, not evidence that separate repositories have been created.
+| Status        | Weight | Meaning                                                      |
+| ------------- | -----: | ------------------------------------------------------------ |
+| `planned`     |      0 | Listed as a future exercise; implementation has not started. |
+| `in-progress` |    0.5 | Work is underway or the exercise is being improved.          |
+| `completed`   |      1 | The exercise is implemented, run or tested, and documented.  |
+
+The weighted total is compared with the configured roadmap target, and the result is capped at 100%. The graphic also reports how many exercises are currently tracked in the catalog. For the exact target and calculation, see `scripts/update-progress.mjs`; the script is the source of truth for those values.
+
+To regenerate the graphic locally, use Node.js:
+
+```bash
+node scripts/update-progress.mjs
+```
+
+The progress workflow can run automatically when the catalog or generator changes on `main`, and it can also be started manually from the **Actions** tab. It commits the SVG only when the generated file changes.
 
 ## Technologies
 
-- **Java** — language used for the learning exercises.
-- **HTML5** — website structure.
-- **CSS3** — layout, responsive styling, and visual themes.
-- **JavaScript** — project catalog and interactive behavior.
-- **Bootstrap 5 and Bootstrap Icons** — layout utilities and interface icons.
-- **Git and GitHub** — version control and source hosting.
-- **GitHub Pages** — static website hosting.
+| Technology      | Role in the repository                                      |
+| --------------- | ----------------------------------------------------------- |
+| Java            | Language used for the practice exercises.                   |
+| HTML5           | Website structure.                                          |
+| CSS3            | Layout, responsive styles, themes, and visual presentation. |
+| JavaScript      | Project catalog, rendering, and browser interactions.       |
+| Bootstrap 5     | Layout utilities and responsive components.                 |
+| Bootstrap Icons | Interface icons.                                            |
+| Node.js         | Runs the progress graphic generator.                        |
+| Git and GitHub  | Version control, source hosting, and automation.            |
+| GitHub Pages    | Static website deployment.                                  |
 
-The website currently does not require a backend, database, or JavaScript build step. Some external assets, such as Bootstrap and fonts, require an internet connection.
+The website loads Bootstrap, Bootstrap Icons, and web fonts from external CDNs. Those resources require an internet connection. Viewing the website does not require installing packages or running a build command.
 
-## Repository Structure
+## Repository structure
 
 ```text
 BuildJava.ln/
-├── index.html          # Main website page
-├── styles/
-│   └── style.css       # Website styles
-├── js/
-│   ├── app.js          # Theme and appearance controls
-│   └── projects.js     # Project card data and rendering
-├── scripts/
-│   └── update-progress.mjs # Generates the README progress SVG
+├── .github/
+│   └── workflows/
+│       ├── pages.yml                 # Deploys the static website
+│       └── update-progress.yml       # Regenerates the progress graphic
 ├── assets/
-│   └── progress.svg    # Generated learning-roadmap progress
-├── projects/           # Java exercises
-├── README.md
+│   └── progress.svg                  # Generated learning progress graphic
+├── js/
+│   ├── app.js                        # Theme and accent settings
+│   ├── knowledge-map.js              # Interactive concept map
+│   └── projects.js                   # Catalog data and card rendering
+├── projects/                         # Java practice exercises
+├── scripts/
+│   └── update-progress.mjs           # Generates assets/progress.svg
+├── styles/
+│   ├── knowledge-map.css             # Concept map styles
+│   └── style.css                     # Main website styles
+├── index.html                        # Website entry point
 ├── LICENSE
-└── .gitignore
+└── README.md
 ```
 
-GitHub Actions workflow files normally live in `.github/workflows/`. The repository currently uses GitHub Pages deployment, but a dedicated workflow file for project checks (such as syntax checks or tests) is not yet documented here.
-
-## Run the Website Locally
+## Run the website locally
 
 ### Requirements
 
@@ -105,114 +117,69 @@ git clone https://github.com/duartexz-dev/BuildJava.ln.git
 cd BuildJava.ln
 ```
 
-Open `index.html` in your browser, or launch it with Live Server in VS Code. No package installation or build command is required for the current static site.
+Open `index.html` in a browser, or open the folder in VS Code and start it with Live Server. No dependency installation is needed to view the current static website.
 
-## Java Projects
+### Running the Java exercises
 
-The website currently displays four entries in `js/projects.js`. The repository also contains Java exercise files, and not all of them should be considered finished projects yet.
+The Java source files are stored in `projects/`. Use a JDK compatible with the source code, open an exercise in your Java editor, and run its main class. Exercises are independent practice programs; check each file for its class name, input requirements, and implementation before running it. The code and instructions for an exercise should be kept aligned as it changes.
 
-| Exercise                | Current focus                                | Progress note                                            |
-| ----------------------- | -------------------------------------------- | -------------------------------------------------------- |
-| `ReturnName.java`       | Input, conditionals, loops, formatted output | Starter exercise                                         |
-| `DrivingCarWallet.java` | User input and conditional logic             | Basic implementation; input validation can improve       |
-| `WeekDay.java`          | `switch` statements                          | Basic implementation; invalid input feedback can improve |
-| `loginSystem.java`      | Strings, conditions, and limited attempts    | Basic login simulation, not real authentication          |
-| `Calculator.java`       | Calculator fundamentals                      | Incomplete starter file                                  |
+## How the project catalog works
 
-These are learning exercises, not production-ready applications. In particular, the login exercise only checks simple input rules and does not securely authenticate users or store accounts.
+The website reads its catalog data from `js/projects.js`. Each entry describes an exercise and includes fields for its name, status, type, difficulty, description, concepts, and repository URL.
 
-## How the Catalog Works
-
-The current catalog data is stored in `js/projects.js`. Each project is represented by a JavaScript object with fields such as its name, status, category, difficulty, description, concepts, and repository URL. Status must be `planned`, `in-progress`, or `completed`; completed means implemented, tested, and documented.
-
-Example of a catalog entry:
+A catalog entry follows this general shape:
 
 ```js
 {
-  name: "Calculator",
+  name: "ExampleExercise",
   status: "planned",
   type: "Fundamentals",
   difficulty: "Beginner",
-  description: "Build a calculator using basic Java concepts.",
-  concepts: ["Scanner input", "Operators", "Conditionals"],
-  repoUrl: "https://github.com/duartexz-dev/BuildJava.ln"
+  description: "Describe the problem the exercise is intended to solve.",
+  concepts: ["Input", "Conditionals"],
+  repoUrl: ""
 }
 ```
 
-When adding an entry, update the description and link to match code that actually exists. A roadmap idea should not be presented as a completed project. The progress generator reads this array, assigns weights of 0, 0.5, and 1 to planned, in-progress, and completed projects, respectively, and divides the weighted total by the 20-project roadmap target. The resulting percentage is capped at 100%. Run `node scripts/update-progress.mjs` to regenerate `assets/progress.svg`; the script validates project data and leaves the SVG unchanged when its output has not changed.
+Use one of the supported status values: `planned`, `in-progress`, or `completed`. Set `repoUrl` only when there is a real destination to link to; an empty value means a repository link is not available. Keep each description and concept list consistent with the actual exercise.
 
-## GitHub Actions and Workflows
+The **Knowledge map** view compares the concepts attached to catalog entries and visualizes their relationships. It also supports searching by project or concept and filtering by difficulty. These connections represent shared tags in the catalog; they are not a claim that the exercises depend on one another in code.
 
-A **workflow** is an automated process that GitHub runs when a defined event occurs. Workflows are written in YAML and are usually stored in `.github/workflows/`. They help reduce repetitive manual steps and make it easier to catch problems before or after code is published.
+Appearance preferences, including the color theme and accent selection, are stored in the current browser through `localStorage`. They are local preferences, not user accounts or server-side settings.
 
-For example, a workflow can run when code is pushed to `main` or when a pull request is opened. It can check files, run tests, build a site, or publish the result.
+## Automation and GitHub Pages
 
-The progress workflow runs when project data or its generator changes on `main`, and can also be started manually. It commits the generated SVG only when the file changes. For that push to work, repository administrators must allow read and write workflow permissions in **Settings → Actions → General → Workflow permissions**. The workflow uses the repository-provided `GITHUB_TOKEN`; no personal access token is needed.
+The repository contains two GitHub Actions workflows:
 
-### Common workflow terms
+- **`pages.yml`** publishes the static website to GitHub Pages when changes are pushed to `main`; it can also be started manually.
+- **`update-progress.yml`** runs the progress generator when relevant catalog or generator files change, or when manually started. If the SVG changes, the workflow attempts to commit the updated file.
 
-| Term                | Meaning                                                            |
-| ------------------- | ------------------------------------------------------------------ |
-| **Workflow**        | The complete automation described by a YAML file                   |
-| **Event / trigger** | What starts the workflow, such as a push or pull request           |
-| **Job**             | A group of steps that runs on a runner                             |
-| **Runner**          | The machine that executes the job, often an Ubuntu virtual machine |
-| **Step**            | One action or shell command inside a job                           |
-| **Action**          | A reusable unit of automation, such as checking out the repository |
-| **Artifact**        | A file or bundle produced by a workflow, such as a built website   |
-| **Deployment**      | Publishing the built website to a hosting environment              |
+To inspect a workflow run, open the repository's **Actions** tab and select the run. A successful deployment means the publishing workflow completed; it does not automatically verify every link, card, exercise, or visual detail.
 
-### How this relates to BuildJava.ln
+If the progress workflow cannot push its generated file, check **Settings → Actions → General → Workflow permissions** and any branch protection rules. The workflow uses GitHub's provided token, so a personal access token should not be added just for this task.
 
-GitHub Pages has successfully completed a deployment run for this repository. GitHub's Actions tab records the result of that deployment. However, deployment automation and code-quality automation are different things:
+To find the published website URL, open **Settings → Pages** in the repository. The configured publishing source and URL shown there are the source of truth if deployment settings change.
 
-- **Deployment workflow:** publishes the static website so visitors can access it.
-- **Quality-check workflow:** could later validate Java files, check website files, or run automated tests.
-- **Test workflow:** could run tests as the Java exercises become more structured.
+## Learning direction
 
-At this early stage, the main goal is to keep the static site deployable. A dedicated quality-check workflow is a future improvement, not a feature to claim as already implemented.
+The learning path is intentionally flexible rather than tied to a calendar. As the exercises evolve, useful areas to work on include:
 
-### Where to check a workflow
+- Strengthening fundamentals such as input, output, operators, conditions, and loops.
+- Practicing methods, arrays, classes, objects, and other object-oriented programming concepts.
+- Improving input validation, naming, code organization, and error handling.
+- Adding clear run instructions and useful explanations to exercises.
+- Introducing more structured tests and more involved exercises when the underlying concepts are understood.
 
-1. Open the repository's **Actions** tab.
-2. Select a workflow run to see whether it succeeded or failed.
-3. Open the run to inspect each job and step.
-4. If a run fails, read the first relevant error in the failed step, fix the cause, and push a new commit.
+These are learning priorities, not claims that every item is already implemented. The catalog and source files show the current state of the work.
 
-A green deployment run means that the deployment workflow completed successfully. It does **not** guarantee that every link, card, Java program, or visual detail is correct; those still need to be tested.
+## Feedback
 
-### GitHub Pages setup
-
-To review the site's publishing settings:
-
-1. Open **Settings → Pages** in the repository.
-2. Check which publishing source is selected.
-3. Open **Actions** and inspect the latest Pages deployment.
-4. Use the URL shown in the Pages settings to visit the published site.
-
-If the project later adds its own deployment YAML, keep that file under `.github/workflows/` and make sure its trigger, permissions, build path, and deployment steps match the repository's actual structure.
-
-## Roadmap
-
-This roadmap is intentionally small and may change as I learn.
-
-- [ ] Finish the calculator exercise.
-- [ ] Improve input validation and error messages in the current Java exercises.
-- [ ] Rename `loginSystem.java` and its class to follow Java naming conventions.
-- [ ] Make catalog descriptions and repository links match the actual files.
-- [ ] Add a screenshot of the website.
-- [ ] Review accessibility, responsive layout, and theme contrast.
-- [ ] Document how to compile and run each Java exercise.
-- [ ] Consider a dedicated GitHub Actions workflow for basic automated checks.
-
-## Contributing and Feedback
-
-This is primarily a personal learning project, but constructive feedback and beginner-friendly suggestions are welcome. If you spot a bug or documentation issue, you can open an issue in the repository.
+Constructive feedback, issue reports, and beginner-friendly suggestions are welcome. When reporting a problem, include the file or section involved and the steps needed to reproduce it when possible.
 
 ## License
 
-This project is licensed under the MIT License. See [`LICENSE`](LICENSE) for details.
+This project is distributed under the MIT License. See [LICENSE](./LICENSE) for the license text.
 
 ---
 
-**Learning in public, improving one step at a time.**
+_Learning in public, one improvement at a time._
