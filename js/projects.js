@@ -61,6 +61,15 @@ const projects = [
     description: "Collect four subject grades, calculate the average, and report whether the student passed.",
     concepts: ["Scanner input", "Classes and objects", "Constructors", "Arithmetic operations", "Conditionals"],
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/bulletin.java"
+  },
+  {
+    name: "DeveloperProfile",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Intermediate",
+    description: "Create a developer profile and use an ArrayList and a loop to collect and display multiple projects.",
+    concepts: ["Scanner input", "Classes and objects", "Constructors", "ArrayList", "While loops"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/DeveloperProfile.java"
   }
 ];
 function LoadProjects() {

@@ -10,7 +10,8 @@ public class bulletin {
         Double englishGrade;
         Double historyGrade;
 
-        public Student(String name, Double portugueseGrade, Double mathGrade, Double englishGrade, Double historyGrade) {
+        public Student(String name, Double portugueseGrade, Double mathGrade, Double englishGrade,
+                Double historyGrade) {
             this.name = name;
             this.portugueseGrade = portugueseGrade;
             this.mathGrade = mathGrade;
