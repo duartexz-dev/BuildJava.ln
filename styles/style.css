@@ -711,11 +711,27 @@ html[data-theme="dark"] .navbar-toggler-icon {
   border-top: 1px solid var(--line);
 }
 
+.project-card-details h4 {
+  margin: 0 0 -7px;
+  color: var(--ink);
+  font: 750 11px/1.5 "Manrope", sans-serif;
+}
+
 .project-card-details > p {
   margin: 0;
   color: var(--ink-soft);
   font-size: 11px;
   line-height: 1.75;
+}
+
+.project-learning-outcomes {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 17px;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.65;
 }
 
 .project-concepts {
