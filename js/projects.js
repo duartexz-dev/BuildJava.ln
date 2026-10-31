@@ -1,5 +1,14 @@
 const projects = [
   {
+    name: "TypeProfile",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Beginner",
+    description: "Collect a user's name, age, height, driving status, and first initial, then print a formatted profile. Use it to practice reading different data types with Scanner and displaying values with printf.",
+    concepts: ["Scanner input", "Primitive data types", "Strings", "Formatted output", "Newline escape sequences"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/TypeProfile.java"
+  },
+  {
     name: "ReturnName",
     status: "in-progress",
     type: "Fundamentals",
