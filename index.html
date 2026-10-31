@@ -4,13 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#faf9ff">
+  <meta name="theme-color" content="#f7f7fb">
   <meta name="description"
-    content="BuildJava.ln is a small learning log of Java exercises, practice notes, and progress updates for beginners.">
-  <meta property="og:title" content="BuildJava.ln — Learn Java by building small projects">
-  <meta property="og:description" content="Small steps, real practice, and notes for the next beginner.">
+    content="BuildJava.ln is a practical Java learning log with real projects, a map of shared concepts, and a flexible learning roadmap.">
+  <meta property="og:title" content="BuildJava.ln — Learn Java by building">
+  <meta property="og:description" content="A practical learning log for Java projects, concepts, and progress.">
   <meta property="og:type" content="website">
-  <title>BuildJava.ln — Learn Java by building small projects</title>
+  <title>BuildJava.ln — Learn Java by building</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -28,6 +28,7 @@
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+
   <nav class="navbar navbar-expand-lg site-nav sticky-top" aria-label="Main navigation">
     <div class="container nav-container">
       <a class="navbar-brand brand-lockup" href="#home" aria-label="BuildJava.ln home">
@@ -39,16 +40,20 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
           <li class="nav-item"><a class="nav-link" href="#roadmap">Roadmap</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#customize">Appearance</a></li>
-          <li class="nav-item ms-lg-2"><button class="btn btn-sm theme-toggle" id="themeToggle" type="button"
-              aria-label="Switch color theme"><i class="bi bi-moon-stars me-2" aria-hidden="true"></i><span>Dark
-                mode</span></button></li>
-          <li class="nav-item ms-lg-1"><a class="btn btn-sm btn-primary-soft" href="https://github.com/duartexz-dev"
-              target="_blank" rel="noreferrer"><i class="bi bi-github me-2" aria-hidden="true"></i>GitHub profile</a>
+          <li class="nav-item nav-theme-item">
+            <button class="btn btn-sm theme-toggle" id="themeToggle" type="button" aria-label="Switch color theme">
+              <i class="bi bi-moon-stars me-2" aria-hidden="true"></i><span>Dark mode</span>
+            </button>
+          </li>
+          <li class="nav-item nav-github-item">
+            <a class="btn btn-sm btn-primary-soft" href="https://github.com/duartexz-dev" target="_blank"
+              rel="noreferrer"><i class="bi bi-github me-2" aria-hidden="true"></i>GitHub</a>
           </li>
         </ul>
       </div>
@@ -56,50 +61,96 @@
   </nav>
 
   <main id="main">
-    <section class="hero-section" id="home">
-      <div class="container">
-        <p class="eyebrow">Learning log</p>
-        <h1>Browse Java projects.</h1>
-        <p class="hero-description">Seven Java exercises, built one step at a time. Small challenges, clear notes, and
-          honest progress for a beginner learning path.</p>
-        <a class="hero-link" href="#projects">Browse projects <i class="bi bi-arrow-down" aria-hidden="true"></i></a>
+    <section class="hero-section" id="home" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span>Java · learning in public</p>
+          <h1 id="hero-title">Learn Java by building, <span>one small program at a time.</span></h1>
+          <p class="hero-description">BuildJava.ln is a practical learning log: explore working Java exercises, see
+            which ideas connect, and use a flexible roadmap to choose what to practice next.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary-soft hero-primary-link" href="#projects">Explore projects
+              <i class="bi bi-arrow-down-right" aria-hidden="true"></i></a>
+            <a class="hero-secondary-link" href="#roadmap">View the roadmap</a>
+          </div>
+          <p class="hero-footnote"><i class="bi bi-check2-circle" aria-hidden="true"></i>Built from real files in this
+            repository.</p>
+        </div>
+
+        <aside class="hero-overview" aria-label="What you can explore">
+          <div class="hero-overview-heading">
+            <span class="overview-label">A practical learning space</span>
+            <span class="overview-language"><span aria-hidden="true"></span>Java</span>
+          </div>
+          <a class="overview-row" href="#projects">
+            <span class="overview-index">01</span>
+            <span class="overview-copy"><strong>Project catalog</strong><small>Small programs and the concepts they
+                practice</small></span>
+            <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+          </a>
+          <a class="overview-row" href="#projects">
+            <span class="overview-index overview-index-blue">02</span>
+            <span class="overview-copy"><strong>Knowledge map</strong><small>Shared ideas, connected across
+                projects</small></span>
+            <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+          </a>
+          <a class="overview-row" href="#roadmap">
+            <span class="overview-index overview-index-pink">03</span>
+            <span class="overview-copy"><strong>Learning roadmap</strong><small>A suggested path, with room to take
+                your time</small></span>
+            <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+          </a>
+          <div class="overview-footer"><span>START WITH THE BASICS</span><span class="overview-footer-line"></span>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section class="projects-section" id="projects">
+    <section class="projects-section" id="projects" aria-labelledby="projects-title">
       <div class="container">
-        <div class="section-heading">
+        <div class="section-heading projects-heading">
           <div>
-            <div class="eyebrow">Current catalog</div>
-            <h2>Java exercises in progress.</h2>
+            <p class="section-kicker"><span>01</span> Project catalog</p>
+            <h2 id="projects-title">Practice that you can <span>open and explore.</span></h2>
           </div>
-          <p>Each card reflects a real file in the repository and the current stage of practice.</p>
+          <p>Every entry comes from a real project file, with its current level, a short description, and the concepts
+            it practices.</p>
         </div>
 
-        <div class="knowledge-map-controls" aria-label="Project view controls">
-          <div class="knowledge-map-view-switch" role="group" aria-label="Choose project view">
-            <button class="knowledge-map-control is-active" type="button" data-map-view="list" aria-pressed="true">
-              List of projects
-            </button>
-            <button class="knowledge-map-control" type="button" data-map-view="map" aria-pressed="false">
-              Knowledge map
-            </button>
+        <div class="catalog-toolbar">
+          <div class="catalog-toolbar-copy">
+            <span class="catalog-label">Explore the collection</span>
+            <span class="catalog-caption">Switch between individual projects and their shared concepts.</span>
           </div>
-          <div class="knowledge-map-filters" data-map-filters hidden>
-            <label class="knowledge-map-search-label" for="knowledge-map-search">Search by project or concept</label>
-            <input class="knowledge-map-search" id="knowledge-map-search" type="search"
-              placeholder="e.g. Scanner input">
-            <label class="knowledge-map-filter-label" for="knowledge-map-difficulty">Difficulty</label>
-            <select class="knowledge-map-filter" id="knowledge-map-difficulty">
-              <option value="all">All levels</option>
-            </select>
+          <div class="knowledge-map-controls" aria-label="Project view controls">
+            <div class="knowledge-map-view-switch" role="group" aria-label="Choose project view">
+              <button class="knowledge-map-control is-active" type="button" data-map-view="list" aria-pressed="true"
+                aria-controls="projects-list">
+                <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i><span>Projects</span>
+              </button>
+              <button class="knowledge-map-control" type="button" data-map-view="map" aria-pressed="false"
+                aria-controls="knowledge-map-panel">
+                <i class="bi bi-diagram-3" aria-hidden="true"></i><span>Knowledge map</span>
+              </button>
+            </div>
+            <div class="knowledge-map-filters" data-map-filters hidden>
+              <label class="knowledge-map-search-label" for="knowledge-map-search">Search projects or concepts</label>
+              <input class="knowledge-map-search" id="knowledge-map-search" type="search"
+                placeholder="e.g. Scanner input">
+              <label class="knowledge-map-filter-label" for="knowledge-map-difficulty">Difficulty</label>
+              <select class="knowledge-map-filter" id="knowledge-map-difficulty">
+                <option value="all">All levels</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="knowledge-map-panel" id="knowledge-map-panel" hidden>
+
+        <div class="knowledge-map-panel" id="knowledge-map-panel" hidden aria-labelledby="knowledge-map-title">
           <div class="knowledge-map-heading">
             <div>
-              <h3>Explore project connections</h3>
-              <p>Lines connect projects that share concepts in the catalog.</p>
+              <p class="map-kicker">CONCEPT CONNECTIONS</p>
+              <h3 id="knowledge-map-title">See how projects build on one another.</h3>
+              <p>Connections represent concepts shared by projects in the catalog.</p>
             </div>
             <p class="knowledge-map-count" data-map-count aria-live="polite"></p>
           </div>
@@ -116,26 +167,26 @@
               <li><span class="knowledge-map-legend-dot" data-level="advanced"></span>Advanced</li>
               <li><span class="knowledge-map-legend-dot" data-level="challenge"></span>Complex challenges</li>
             </ul>
-            <p class="knowledge-map-hint">Drag neurons to move them. Select one to see shared concepts and related
-              projects.</p>
+            <p class="knowledge-map-hint"><i class="bi bi-arrows-move" aria-hidden="true"></i> Drag a node to move it.
+              Select one for concepts and related projects.</p>
           </div>
         </div>
-        <div class="row g-3 project-grid" id="projects-list"></div>
+        <div class="row g-3 project-grid" id="projects-list" aria-label="Java project catalog"></div>
       </div>
     </section>
 
-    <section class="roadmap-section section-space" id="roadmap">
+    <section class="roadmap-section section-space" id="roadmap" aria-labelledby="roadmap-title">
       <div class="container">
-        <div class="section-heading reveal">
+        <div class="section-heading roadmap-heading">
           <div>
-            <div class="eyebrow">THE 12-WEEK PLAN</div>
-            <h2>Go from syntax<br><span>to small applications.</span></h2>
+            <p class="section-kicker"><span>02</span> Learning roadmap</p>
+            <h2 id="roadmap-title">A direction for the next <span>small step.</span></h2>
           </div>
-          <p>The roadmap sets a direction, not a race. Spend longer on a concept when you need to; understanding the
-            code matters more than checking a box.</p>
+          <p>This 12-week outline groups topics and planned projects into stages. Treat the timing as a guide, not a
+            deadline: stay with a concept until it makes sense.</p>
         </div>
-        <div class="roadmap-grid row g-3">
-          <div class="col-md-4 reveal">
+        <div class="roadmap-grid row g-3" aria-label="Three stages in the Java learning roadmap">
+          <div class="col-md-4">
             <article class="roadmap-card h-100">
               <div class="roadmap-top"><span class="roadmap-number">01</span><span class="roadmap-weeks">Weeks
                   1–4</span></div>
@@ -144,8 +195,8 @@
               <div class="roadmap-footer"><span>Projects 01–08</span><span class="roadmap-line"></span></div>
             </article>
           </div>
-          <div class="col-md-4 reveal reveal-delay-1">
-            <article class="roadmap-card h-100">
+          <div class="col-md-4">
+            <article class="roadmap-card roadmap-card-blue h-100">
               <div class="roadmap-top"><span class="roadmap-number">02</span><span class="roadmap-weeks">Weeks
                   5–8</span></div>
               <h3>Model real problems</h3>
@@ -154,8 +205,8 @@
               <div class="roadmap-footer"><span>Projects 09–16</span><span class="roadmap-line"></span></div>
             </article>
           </div>
-          <div class="col-md-4 reveal reveal-delay-2">
-            <article class="roadmap-card h-100">
+          <div class="col-md-4">
+            <article class="roadmap-card roadmap-card-pink h-100">
               <div class="roadmap-top"><span class="roadmap-number">03</span><span class="roadmap-weeks">Weeks
                   9–12</span></div>
               <h3>Connect the pieces</h3>
@@ -167,88 +218,84 @@
       </div>
     </section>
 
-    <section class="about-section section-space" id="about">
+    <section class="about-section section-space" id="about" aria-labelledby="about-title">
       <div class="container">
-        <div class="about-panel reveal">
+        <div class="about-panel">
           <div class="about-copy">
-            <div class="eyebrow">WHY THIS EXISTS</div>
-            <h2>Learn it.<br><span>Build it. Explain it.</span></h2>
-            <p>This is a learning repository, not a collection of copied solutions. Each project is meant to start with
-              a problem, grow through practice, and end with notes that explain the decisions behind the code.</p><a
-              class="text-link" href="https://github.com/duartexz-dev" target="_blank" rel="noreferrer">Follow the work
-              on GitHub <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+            <p class="section-kicker"><span>03</span> About the project</p>
+            <h2 id="about-title">A learning log, built <span>in the open.</span></h2>
+            <p>BuildJava.ln documents hands-on Java practice as it happens. The focus is on making small programs,
+              keeping progress transparent, and giving other beginners a clear place to explore the code.</p>
+            <a class="text-link" href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank"
+              rel="noreferrer">Explore the repository <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
           </div>
-          <div class="principles-list">
-            <article class="principle-item"><span class="principle-icon"><i class="bi bi-hammer"
-                  aria-hidden="true"></i></span>
-              <div>
-                <h3>Made by practicing</h3>
-                <p>Write the code, test edge cases, and improve it in small steps.</p>
-              </div>
+          <div class="principles-list" aria-label="Project principles">
+            <article class="principle-item">
+              <span class="principle-icon"><i class="bi bi-code-slash" aria-hidden="true"></i></span>
+              <div><h3>Learn through practice</h3><p>Start with a problem, write the code, and test the result.</p></div>
             </article>
-            <article class="principle-item"><span class="principle-icon"><i class="bi bi-journal-text"
-                  aria-hidden="true"></i></span>
-              <div>
-                <h3>Documented for beginners</h3>
-                <p>Every project should explain what it does and how to run it.</p>
-              </div>
+            <article class="principle-item">
+              <span class="principle-icon"><i class="bi bi-journal-code" aria-hidden="true"></i></span>
+              <div><h3>Make ideas easier to follow</h3><p>Descriptions and concept links put each exercise in context.</p></div>
             </article>
-            <article class="principle-item"><span class="principle-icon"><i class="bi bi-graph-up-arrow"
-                  aria-hidden="true"></i></span>
-              <div>
-                <h3>Progress kept honest</h3>
-                <p>The project status reflects the work completed, not a planned milestone.</p>
-              </div>
+            <article class="principle-item">
+              <span class="principle-icon"><i class="bi bi-signpost-split" aria-hidden="true"></i></span>
+              <div><h3>Keep progress honest</h3><p>The catalog reflects work in progress, not an artificial finish line.</p></div>
             </article>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="customize-section section-space" id="customize">
+    <section class="customize-section section-space" id="customize" aria-labelledby="customize-title">
       <div class="container">
-        <div class="section-heading compact-heading reveal">
+        <div class="section-heading compact-heading">
           <div>
-            <div class="eyebrow">MAKE IT YOURS</div>
-            <h2>Set your own tone.</h2>
+            <p class="section-kicker"><span>04</span> Appearance</p>
+            <h2 id="customize-title">Make the space <span>feel like yours.</span></h2>
           </div>
-          <p>Choose a preset or pick your own accent. Your selection stays in this browser.</p>
+          <p>Choose a light or dark interface, then set an accent color. Your preferences stay in this browser.</p>
         </div>
-        <div class="customize-panel reveal">
-          <div>
-            <h3>Choose an accent</h3>
-            <p>Pick a palette or craft a color that is yours.</p>
+        <div class="customize-panel">
+          <div class="customize-intro">
+            <span class="customize-icon"><i class="bi bi-palette2" aria-hidden="true"></i></span>
+            <div><h3>Choose an accent</h3><p>Presets and a custom color are available.</p></div>
           </div>
           <div class="palette-options" role="group" aria-label="Choose a color palette">
-            <button class="palette-button active" type="button" data-palette-choice="purple" aria-pressed="true"><span
-                class="palette-swatch swatch-purple"></span><span>Violet</span></button>
-            <button class="palette-button" type="button" data-palette-choice="blue" aria-pressed="false"><span
-                class="palette-swatch swatch-blue"></span><span>Blue</span></button>
-            <button class="palette-button" type="button" data-palette-choice="pink" aria-pressed="false"><span
-                class="palette-swatch swatch-pink"></span><span>Pink</span></button>
-            <button class="palette-button" type="button" data-palette-choice="mono" aria-pressed="false"><span
-                class="palette-swatch swatch-mono"></span><span>Black & white</span></button>
+            <button class="palette-button active" type="button" data-palette-choice="purple" aria-pressed="true">
+              <span class="palette-swatch swatch-purple" aria-hidden="true"></span><span>Violet</span>
+            </button>
+            <button class="palette-button" type="button" data-palette-choice="blue" aria-pressed="false">
+              <span class="palette-swatch swatch-blue" aria-hidden="true"></span><span>Blue</span>
+            </button>
+            <button class="palette-button" type="button" data-palette-choice="pink" aria-pressed="false">
+              <span class="palette-swatch swatch-pink" aria-hidden="true"></span><span>Pink</span>
+            </button>
+            <button class="palette-button" type="button" data-palette-choice="mono" aria-pressed="false">
+              <span class="palette-swatch swatch-mono" aria-hidden="true"></span><span>Monochrome</span>
+            </button>
             <label class="custom-color-control" id="customColorControl">
-              <input id="customColor" type="color" value="#7856ff" aria-label="Choose a custom accent color">
-              <span>Custom tone</span>
+              <input id="customColor" type="color" value="#6741d9" aria-label="Choose a custom accent color">
+              <span>Custom</span>
             </label>
           </div>
         </div>
-        <p class="palette-ambient-note"><i class="bi bi-stars" aria-hidden="true"></i> Your color sets the mood — a soft
-          glow follows it across the page.</p>
         <p class="local-preference-note"><i class="bi bi-shield-check" aria-hidden="true"></i> Theme and palette
-          preferences stay in your browser. They are not sent to a server.</p>
+          preferences are saved locally in your browser.</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner"><a class="footer-brand" href="#home"><span class="brand-mark brand-mark-small"
+    <div class="container footer-inner">
+      <a class="footer-brand" href="#home"><span class="brand-mark brand-mark-small"
           aria-hidden="true">B.</span><span>BuildJava.ln</span></a>
-      <p>Made to learn in public. One project at a time.</p>
-      <div class="footer-links"><a href="#projects">Projects</a><a href="#roadmap">Roadmap</a><a
-          href="https://github.com/duartexz-dev" target="_blank" rel="noreferrer">GitHub <i class="bi bi-arrow-up-right"
-            aria-hidden="true"></i></a></div>
+      <p>Learn in public. One project at a time.</p>
+      <div class="footer-links">
+        <a href="#projects">Projects</a><a href="#roadmap">Roadmap</a>
+        <a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noreferrer">GitHub
+          <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+      </div>
     </div>
   </footer>
 
@@ -260,11 +307,13 @@
           <div>
             <div class="eyebrow mb-2" id="modalEyebrow">PROJECT PLAN</div>
             <h2 class="modal-title" id="projectModalTitle">Project title</h2>
-          </div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="projectModalBody"></div>
-        <div class="modal-footer" id="projectModalFooter"><button type="button" class="btn btn-outline-soft"
-            data-bs-dismiss="modal">Close</button></div>
+        <div class="modal-footer" id="projectModalFooter">
+          <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
