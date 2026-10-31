@@ -7,11 +7,11 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const projectDataPath = path.join(projectRoot, "js", "projects.js");
 const outputDirectory = path.join(projectRoot, "assets");
 const outputPath = path.join(outputDirectory, "progress.svg");
-const target = 10;
+const target = 20;
 const weights = {
   planned: 0,
-  "in-progress": 0.5,
-  completed: 1,
+  "in-progress": 1.0,
+  completed: 2,
 };
 
 function readProjects() {
