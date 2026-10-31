@@ -7,6 +7,7 @@ public class WeekDay {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a number from 1 to 7 to find the corresponding day of the week:");
         int number = scanner.nextInt();
+        // switch selects the case matching the number; break prevents fall-through to the next case.
         switch (number) {
             case 1:
                 System.out.println("Monday");
@@ -31,6 +32,7 @@ public class WeekDay {
                 break;
 
             default:
+                // default handles numbers that do not match any weekday.
                 System.out.println("You entered an invalid number.");
                 break;
         }
