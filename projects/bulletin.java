@@ -37,7 +37,7 @@ public class bulletin {
         Double historyGrade = scanner.nextDouble();
 
         Student student = new Student(name, portugueseGrade, mathGrade, englishGrade, historyGrade);
-        final Double passingGradeThreshold = 200.00;
+        final Double passingGradeThreshold = 60.00;
         Double totalGrades = student.englishGrade + student.historyGrade + student.mathGrade + student.portugueseGrade;
         Double averageGrade = totalGrades / 4;
 
