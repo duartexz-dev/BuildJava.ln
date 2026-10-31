@@ -134,13 +134,49 @@
               </button>
             </div>
             <div class="knowledge-map-filters" data-map-filters hidden>
-              <label class="knowledge-map-search-label" for="knowledge-map-search">Search projects or concepts</label>
-              <input class="knowledge-map-search" id="knowledge-map-search" type="search"
-                placeholder="e.g. Scanner input">
-              <label class="knowledge-map-filter-label" for="knowledge-map-difficulty">Difficulty</label>
-              <select class="knowledge-map-filter" id="knowledge-map-difficulty">
-                <option value="all">All levels</option>
-              </select>
+              <div class="knowledge-map-filter-fields">
+                <div class="knowledge-map-filter-field">
+                  <label class="knowledge-map-search-label" for="knowledge-map-search">Search projects or concepts</label>
+                  <input class="knowledge-map-search" id="knowledge-map-search" type="search"
+                    placeholder="e.g. Scanner input">
+                </div>
+                <div class="knowledge-map-filter-field">
+                  <label class="knowledge-map-filter-label" for="knowledge-map-difficulty">Difficulty</label>
+                  <select class="knowledge-map-filter" id="knowledge-map-difficulty">
+                    <option value="all">All levels</option>
+                  </select>
+                </div>
+                <div class="knowledge-map-filter-field">
+                  <label class="knowledge-map-filter-label" for="knowledge-map-status">Status</label>
+                  <select class="knowledge-map-filter" id="knowledge-map-status">
+                    <option value="all">All statuses</option>
+                  </select>
+                </div>
+                <div class="knowledge-map-filter-field">
+                  <label class="knowledge-map-filter-label" for="knowledge-map-category">Category</label>
+                  <select class="knowledge-map-filter" id="knowledge-map-category">
+                    <option value="all">All categories</option>
+                  </select>
+                </div>
+              </div>
+              <div class="knowledge-map-actions" role="group" aria-label="Graph controls">
+                <button class="knowledge-map-action" type="button" data-map-action="center"
+                  aria-label="Center the graph" title="Center graph">
+                  <i class="bi bi-crosshair" aria-hidden="true"></i><span>Center</span>
+                </button>
+                <button class="knowledge-map-action" type="button" data-map-action="fit"
+                  aria-label="Fit all projects in view" title="Fit all projects">
+                  <i class="bi bi-arrows-fullscreen" aria-hidden="true"></i><span>Fit</span>
+                </button>
+                <button class="knowledge-map-action" type="button" data-map-action="edges" aria-pressed="true"
+                  aria-label="Hide graph connections" title="Toggle connections">
+                  <i class="bi bi-bezier2" aria-hidden="true"></i><span>Connections</span>
+                </button>
+                <button class="knowledge-map-action" type="button" data-map-action="reset"
+                  aria-label="Restore the original graph layout" title="Restore original layout">
+                  <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i><span>Reset</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -153,8 +189,8 @@
           <div class="knowledge-map-heading">
             <div>
               <p class="map-kicker">CONCEPT CONNECTIONS</p>
-              <h3 id="knowledge-map-title">See how projects build on one another.</h3>
-              <p>Each connection represents concepts shared by two or more projects in the catalog.</p>
+              <h3 id="knowledge-map-title">Explore the project network.</h3>
+              <p>Distinctive shared topics connect projects. Broad fundamentals such as Scanner input are left out.</p>
             </div>
             <p class="knowledge-map-count" data-map-count aria-live="polite"></p>
           </div>
@@ -165,14 +201,14 @@
           </div>
           <div class="knowledge-map-footer">
             <ul class="knowledge-map-legend" aria-label="Difficulty legend">
-              <li><span class="knowledge-map-legend-dot" data-level="beginner"></span>Beginner / Fundamentals</li>
+              <li><span class="knowledge-map-legend-dot" data-level="beginner"></span>Beginner</li>
               <li><span class="knowledge-map-legend-dot" data-level="basic"></span>Basic</li>
               <li><span class="knowledge-map-legend-dot" data-level="intermediate"></span>Intermediate</li>
               <li><span class="knowledge-map-legend-dot" data-level="advanced"></span>Advanced</li>
               <li><span class="knowledge-map-legend-dot" data-level="challenge"></span>Complex challenges</li>
             </ul>
-            <p class="knowledge-map-hint"><i class="bi bi-arrows-move" aria-hidden="true"></i> Drag a node to move it.
-              Select one to view its concepts and related projects.</p>
+            <p class="knowledge-map-hint"><i class="bi bi-arrows-move" aria-hidden="true"></i> Drag nodes or empty space
+              to move the graph. Use the scroll wheel or pinch to zoom. Select a node for details.</p>
           </div>
         </div>
         <div class="row g-3 project-grid" id="projects-list" aria-label="Java project catalog"></div>

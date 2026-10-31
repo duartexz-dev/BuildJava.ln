@@ -1,34 +1,46 @@
 (() => {
   const projectData = projects;
   const viewButtons = [...document.querySelectorAll("[data-map-view]")];
+  const actionButtons = [...document.querySelectorAll("[data-map-action]")];
   const projectList = document.getElementById("projects-list");
   const mapPanel = document.getElementById("knowledge-map-panel");
   const filters = document.querySelector("[data-map-filters]");
   const searchInput = document.getElementById("knowledge-map-search");
   const difficultyFilter = document.getElementById("knowledge-map-difficulty");
+  const statusFilter = document.getElementById("knowledge-map-status");
+  const categoryFilter = document.getElementById("knowledge-map-category");
   const svg = document.querySelector("[data-map-svg]");
   const canvas = document.querySelector("[data-map-canvas]");
   const card = document.querySelector("[data-map-card]");
   const count = document.querySelector("[data-map-count]");
   const svgNamespace = "http://www.w3.org/2000/svg";
+  const positionStorageKey = "buildjava.knowledge-map.positions.v1";
   const levelColors = {
-    beginner: "#26966b",
-    basic: "#3478f6",
-    intermediate: "#7856ff",
-    advanced: "#e58a19",
-    challenge: "#dc4b55",
+    beginner: "#55c78d",
+    basic: "#60a5fa",
+    intermediate: "#a78bfa",
+    advanced: "#fbbf24",
+    challenge: "#fb7185",
   };
   const nodeElements = [];
   const edges = [];
   const positions = [];
+  const activePointers = new Map();
+  let graphLayer;
   let selectedIndex = -1;
-  let closeTimer;
   let lastPointerType = "";
-  let dragState = null;
+  let gesture = null;
   let suppressClickIndex = -1;
-  let layoutFrame = 0;
+  let renderFrame = 0;
+  let simulationFrame = 0;
+  let simulationAlpha = 0;
+  let simulationSteps = 0;
+  let graphWidth = 0;
+  let graphHeight = 0;
+  let transform = { x: 0, y: 0, scale: 1 };
+  let connectionsVisible = true;
 
-  const normalize = (value) => String(value).trim().toLocaleLowerCase();
+  const normalize = (value) => String(value ?? "").trim().toLocaleLowerCase();
   const getLevel = (difficulty) => {
     const level = normalize(difficulty);
     if (level.includes("beginner") || level.includes("fundamental")) return "beginner";
@@ -39,19 +51,26 @@
     return "unmapped";
   };
   const getConcepts = (project) => Array.isArray(project.concepts) ? project.concepts : [];
+  const getStatus = (project) => typeof project.status === "string" ? project.status : "";
+  const getCategory = (project) => (
+    typeof project.type === "string" ? project.type : (project.category || "")
+  );
   const makeSvgElement = (name, attributes = {}) => {
     const element = document.createElementNS(svgNamespace, name);
     Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
     return element;
   };
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function addDifficultyOptions() {
-    const levels = [...new Set(projectData.map((project) => project.difficulty).filter(Boolean))];
-    levels.forEach((level) => {
+  function populateOptions(select, values) {
+    [...new Set(values.filter(Boolean))].sort((first, second) => (
+      first.localeCompare(second, undefined, { sensitivity: "base" })
+    )).forEach((value) => {
       const option = document.createElement("option");
-      option.value = level;
-      option.textContent = level;
-      difficultyFilter.append(option);
+      option.value = value;
+      option.textContent = value.replace(/-/g, " ");
+      select.append(option);
     });
   }
 
@@ -60,276 +79,527 @@
     return getConcepts(first).filter((concept) => secondConcepts.has(normalize(concept)));
   }
 
-  function layoutGraph() {
-    const width = Math.max(canvas.clientWidth, 320);
-    const height = Math.max(460, Math.ceil(projectData.length / 2) * 145 + 80);
-    if (positions.length === 0) {
-      const radiusX = width < 460 ? 0.23 : 0.34;
-      const radiusY = 0.37;
-      projectData.forEach((project, index) => {
-        const angle = -Math.PI / 2 + (index * Math.PI * 2) / projectData.length;
-        positions.push({
-          x: 0.5 + Math.cos(angle) * radiusX,
-          y: 0.5 + Math.sin(angle) * radiusY,
-        });
-      });
+  function getCanvasPoint(event) {
+    const rect = svg.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      return { x: graphWidth / 2, y: graphHeight / 2 };
     }
+    return {
+      x: (event.clientX - rect.left) * graphWidth / rect.width,
+      y: (event.clientY - rect.top) * graphHeight / rect.height,
+    };
+  }
 
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    svg.style.height = `${height}px`;
-    svg.setAttribute("aria-label", `Map of ${projectData.length} Java projects and their shared concepts`);
-    positions.forEach((position) => {
-      position.x = Math.max(55 / width, Math.min(1 - 55 / width, position.x));
-      position.y = Math.max(48 / height, Math.min(1 - 55 / height, position.y));
-    });
-    edges.forEach(({ element, from, to }) => {
-      const startX = positions[from].x * width;
-      const startY = positions[from].y * height;
-      const endX = positions[to].x * width;
-      const endY = positions[to].y * height;
-      const bend = (from + to) % 2 === 0 ? 0.12 : -0.12;
-      const controlX = (startX + endX) / 2 - (endY - startY) * bend;
-      const controlY = (startY + endY) / 2 + (endX - startX) * bend;
-      element.setAttribute("d", `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`);
-    });
-    nodeElements.forEach((node, index) => {
-      node.setAttribute(
-        "transform",
-        `translate(${positions[index].x * width} ${positions[index].y * height})`
-      );
-    });
+  function getGraphPoint(event) {
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const matrix = graphLayer.getScreenCTM();
+    return matrix ? point.matrixTransform(matrix.inverse()) : { x: 0, y: 0 };
+  }
+
+  function clampTransform(x, y, scale) {
+    const horizontalLimit = graphWidth * 0.45;
+    const verticalLimit = graphHeight * 0.45;
+    transform = {
+      x: clamp(x, graphWidth * (1 - scale) - horizontalLimit, horizontalLimit),
+      y: clamp(y, graphHeight * (1 - scale) - verticalLimit, verticalLimit),
+      scale,
+    };
+  }
+
+  function applyTransform({ animate = false } = {}) {
+    if (!graphLayer) return;
+    if (animate && !reducedMotion) {
+      graphLayer.classList.add("is-view-transitioning");
+      window.setTimeout(() => graphLayer.classList.remove("is-view-transitioning"), 260);
+    }
+    graphLayer.setAttribute(
+      "transform",
+      `translate(${transform.x} ${transform.y}) scale(${transform.scale})`
+    );
     if (!card.hidden && selectedIndex >= 0) positionCard(nodeElements[selectedIndex]);
   }
 
-  function moveNodeToPointer(event, index) {
-    const svgPoint = svg.createSVGPoint();
-    svgPoint.x = event.clientX;
-    svgPoint.y = event.clientY;
-    const point = svgPoint.matrixTransform(svg.getScreenCTM().inverse());
-    const [, , width, height] = svg.getAttribute("viewBox").split(" ").map(Number);
-    const nextX = Math.max(55, Math.min(width - 55, point.x));
-    const nextY = Math.max(48, Math.min(height - 55, point.y));
-    const distance = Math.hypot(
-      event.clientX - dragState.startClientX,
-      event.clientY - dragState.startClientY
-    );
-
-    if (!dragState.moved && distance < 4) return;
-    dragState.moved = true;
-    nodeElements[index].classList.add("is-dragging");
-    suppressClickIndex = index;
-    positions[index] = { x: nextX / width, y: nextY / height };
-    scheduleGraphLayout();
+  function getNodeBounds(indices = projectData.map((_, index) => index)) {
+    const visible = indices.filter((index) => positions[index]);
+    if (!visible.length) {
+      return { minX: graphWidth / 2, maxX: graphWidth / 2, minY: graphHeight / 2, maxY: graphHeight / 2 };
+    }
+    return visible.reduce((bounds, index) => {
+      const position = positions[index];
+      return {
+        minX: Math.min(bounds.minX, position.x - position.radius),
+        maxX: Math.max(bounds.maxX, position.x + position.radius),
+        minY: Math.min(bounds.minY, position.y - position.radius),
+        maxY: Math.max(bounds.maxY, position.y + position.radius),
+      };
+    }, { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity });
   }
 
-  function scheduleGraphLayout() {
-    if (layoutFrame) return;
-    layoutFrame = window.requestAnimationFrame(() => {
-      layoutFrame = 0;
-      layoutGraph();
+  function centerGraph({ animate = true } = {}) {
+    if (!positions.length) return;
+    const bounds = getNodeBounds();
+    const centerX = (bounds.minX + bounds.maxX) / 2;
+    const centerY = (bounds.minY + bounds.maxY) / 2;
+    clampTransform(
+      graphWidth / 2 - centerX * transform.scale,
+      graphHeight / 2 - centerY * transform.scale,
+      transform.scale
+    );
+    applyTransform({ animate });
+  }
+
+  function fitGraph({ animate = true } = {}) {
+    if (!positions.length) return;
+    const visible = positions.map((_, index) => index).filter((index) => (
+      !nodeElements[index].classList.contains("is-filtered")
+    ));
+    const bounds = getNodeBounds(visible.length ? visible : undefined);
+    const width = Math.max(bounds.maxX - bounds.minX, 1);
+    const height = Math.max(bounds.maxY - bounds.minY, 1);
+    const scale = clamp(Math.min((graphWidth - 64) / width, (graphHeight - 64) / height), 0.4, 2.4);
+    const centerX = (bounds.minX + bounds.maxX) / 2;
+    const centerY = (bounds.minY + bounds.maxY) / 2;
+    clampTransform(
+      graphWidth / 2 - centerX * scale,
+      graphHeight / 2 - centerY * scale,
+      scale
+    );
+    applyTransform({ animate });
+  }
+
+  function drawGraph() {
+    if (!graphLayer) return;
+    edges.forEach(({ element, from, to }) => {
+      const start = positions[from];
+      const end = positions[to];
+      element.setAttribute("d", `M ${start.x} ${start.y} L ${end.x} ${end.y}`);
+    });
+    nodeElements.forEach((node, index) => {
+      const position = positions[index];
+      node.setAttribute("transform", `translate(${position.x} ${position.y})`);
+    });
+    applyTransform();
+  }
+
+  function scheduleDraw() {
+    if (renderFrame) return;
+    renderFrame = window.requestAnimationFrame(() => {
+      renderFrame = 0;
+      drawGraph();
+    });
+  }
+
+  function createInitialPositions(width, height) {
+    let saved = {};
+    try {
+      const raw = window.localStorage.getItem(positionStorageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) saved = parsed;
+        else console.error("Saved Knowledge Map positions are invalid.");
+      }
+    } catch (error) {
+      console.error("Could not read saved Knowledge Map positions.", error);
+    }
+
+    const spread = Math.min(width, height) * 0.35;
+    projectData.forEach((project, index) => {
+      const savedPosition = saved[project.name];
+      const hasSavedPosition = savedPosition &&
+        Number.isFinite(savedPosition.x) && Number.isFinite(savedPosition.y) &&
+        savedPosition.x >= 0 && savedPosition.x <= 1 &&
+        savedPosition.y >= 0 && savedPosition.y <= 1;
+      const angle = index * 2.399963229728653 + ((index * 37) % 17) / 17;
+      const radius = spread * Math.sqrt((index + 0.5) / Math.max(projectData.length, 1));
+      const x = hasSavedPosition ? savedPosition.x * width : width / 2 + Math.cos(angle) * radius;
+      const y = hasSavedPosition ? savedPosition.y * height : height / 2 + Math.sin(angle) * radius;
+      positions.push({
+        x: clamp(x, 32, width - 32),
+        y: clamp(y, 38, height - 38),
+        vx: 0,
+        vy: 0,
+        radius: 9,
+        pinned: Boolean(hasSavedPosition),
+      });
     });
   }
 
   function buildGraph() {
-    const relationships = [];
+    if (nodeElements.length || !projectData.length) return;
+    graphWidth = Math.max(canvas.clientWidth, 320);
+    graphHeight = Math.max(canvas.clientHeight, 360);
+    svg.setAttribute("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
+    svg.setAttribute("aria-label", `Map of ${projectData.length} Java projects and their shared concepts`);
+
+    const conceptFrequency = new Map();
+    projectData.forEach((project) => {
+      new Set(getConcepts(project).map(normalize)).forEach((concept) => {
+        conceptFrequency.set(concept, (conceptFrequency.get(concept) || 0) + 1);
+      });
+    });
+    const commonConceptThreshold = Math.max(3, Math.ceil(projectData.length * 0.5));
+
+    const edgesLayer = makeSvgElement("g", { "aria-hidden": "true" });
+    const nodesLayer = makeSvgElement("g");
+    graphLayer = makeSvgElement("g", { class: "knowledge-map-graph-layer" });
+    graphLayer.append(edgesLayer, nodesLayer);
+    svg.replaceChildren(graphLayer);
+
     projectData.forEach((project, firstIndex) => {
       for (let secondIndex = firstIndex + 1; secondIndex < projectData.length; secondIndex += 1) {
-        const sharedConcepts = getSharedConcepts(project, projectData[secondIndex]);
-        if (sharedConcepts.length) {
-          relationships.push({ from: firstIndex, to: secondIndex, sharedConcepts });
-        }
-      }
-    });
-    relationships.sort((first, second) => (
-      second.sharedConcepts.length - first.sharedConcepts.length ||
-      first.from - second.from ||
-      first.to - second.to
-    ));
-    const connections = [];
-    const connected = new Set(projectData.length ? [0] : []);
-    while (connected.size < projectData.length) {
-      const nextConnection = relationships.find(({ from, to }) => (
-        connected.has(from) !== connected.has(to)
-      ));
-      if (!nextConnection) break;
-      connections.push(nextConnection);
-      connected.add(nextConnection.from);
-      connected.add(nextConnection.to);
-    }
-    const connectionKeys = new Set(
-      connections.map(({ from, to }) => `${from}-${to}`)
-    );
-    relationships.forEach((relationship) => {
-      const key = `${relationship.from}-${relationship.to}`;
-      if (relationship.sharedConcepts.length > 1 && !connectionKeys.has(key)) {
-        connections.push(relationship);
-        connectionKeys.add(key);
+        const sharedConcepts = getSharedConcepts(project, projectData[secondIndex]).filter((concept) => (
+          conceptFrequency.get(normalize(concept)) < commonConceptThreshold
+        ));
+        if (!sharedConcepts.length) continue;
+        const weight = sharedConcepts.reduce((sum, concept) => (
+          sum + 1 / Math.log2(1 + conceptFrequency.get(normalize(concept)))
+        ), 0);
+        const strength = weight / sharedConcepts.length;
+        const element = makeSvgElement("path", {
+          class: "knowledge-map-edge",
+          "data-strength": strength.toFixed(3),
+          "aria-label": `${project.name} and ${projectData[secondIndex].name} share ${sharedConcepts.join(", ")}`,
+        });
+        element.style.setProperty("--edge-opacity", String(clamp(0.24 + strength * 0.55, 0.28, 0.82)));
+        const title = makeSvgElement("title");
+        title.textContent = `Shared concepts: ${sharedConcepts.join(", ")}`;
+        element.append(title);
+        edgesLayer.append(element);
+        edges.push({ element, from: firstIndex, to: secondIndex, sharedConcepts, strength });
       }
     });
 
-    connections.forEach(({ from, to, sharedConcepts }) => {
-      const path = makeSvgElement("path", {
-        class: `knowledge-map-edge${sharedConcepts.length > 1 ? " is-strong" : ""}`,
-        "data-from": from,
-        "data-to": to,
-      });
-      const title = makeSvgElement("title");
-      title.textContent = `Shared concepts: ${sharedConcepts.join(", ")}`;
-      path.append(title);
-      svg.append(path);
-      edges.push({ element: path, from, to });
+    const degree = projectData.map(() => 0);
+    edges.forEach(({ from, to, strength }) => {
+      degree[from] += strength;
+      degree[to] += strength;
     });
+    createInitialPositions(graphWidth, graphHeight);
 
     projectData.forEach((project, index) => {
-      const group = makeSvgElement("g", {
+      const level = getLevel(project.difficulty);
+      const radius = clamp(9 + Math.sqrt(degree[index]) * 2.2, 9, 15);
+      positions[index].radius = radius;
+      const node = makeSvgElement("g", {
         class: "knowledge-map-node",
-        tabindex: "0",
         role: "button",
-        "aria-label": `${project.name}, ${project.type}, ${project.difficulty}. Select for details. Drag to move, or use arrow keys.`,
-        "data-index": index,
+        tabindex: "0",
+        "aria-label": `${project.name}, ${project.difficulty || "difficulty not specified"}`,
+        "data-level": level,
+        "data-project-index": index,
       });
-      const title = makeSvgElement("title");
-      title.textContent = `${project.name} — ${project.difficulty}`;
-      const ring = makeSvgElement("circle", {
-        class: "knowledge-map-node-ring",
-        r: 19,
-      });
-      const nodeColor = levelColors[getLevel(project.difficulty)] || "#7c8798";
-      const core = makeSvgElement("circle", {
+      const circle = makeSvgElement("circle", {
         class: "knowledge-map-node-core",
-        r: 9,
-        fill: nodeColor,
-        style: `color: ${nodeColor}`,
+        r: radius,
+        fill: levelColors[level] || "#94a3b8",
       });
       const label = makeSvgElement("text", {
         class: "knowledge-map-node-label",
-        y: 34,
+        y: radius + 15,
+        "text-anchor": "middle",
       });
       label.textContent = project.name;
-      group.append(title, ring, core, label);
-      group.addEventListener("pointerdown", (event) => {
-        lastPointerType = event.pointerType;
-        if (event.button !== undefined && event.button !== 0) return;
-        dragState = {
-          index,
-          startClientX: event.clientX,
-          startClientY: event.clientY,
-          moved: false,
-        };
-        suppressClickIndex = -1;
-        group.setPointerCapture(event.pointerId);
-        event.preventDefault();
-      });
-      group.addEventListener("pointermove", (event) => {
-        if (dragState?.index === index) moveNodeToPointer(event, index);
-      });
-      group.addEventListener("pointerup", (event) => {
-        if (dragState?.index !== index) return;
-        if (dragState.moved || event.pointerType === "touch") {
-          suppressClickIndex = index;
-          if (event.pointerType === "touch" && !dragState.moved) {
-            selectNode(index, group);
-          }
-        }
-        if (dragState.moved) {
-          if (layoutFrame) {
-            window.cancelAnimationFrame(layoutFrame);
-            layoutFrame = 0;
-            layoutGraph();
-          }
-          group.classList.remove("is-dragging");
-        }
-        dragState = null;
-        if (group.hasPointerCapture(event.pointerId)) group.releasePointerCapture(event.pointerId);
-      });
-      group.addEventListener("pointercancel", () => {
-        if (dragState?.index === index) {
-          dragState = null;
-          group.classList.remove("is-dragging");
-        }
-      });
-      group.addEventListener("pointerenter", (event) => {
-        if (event.pointerType !== "touch") openCard(index, group);
-      });
-      group.addEventListener("pointerleave", (event) => {
-        if (event.pointerType !== "touch") scheduleClose();
-      });
-      group.addEventListener("focus", () => {
-        if (lastPointerType !== "touch") openCard(index, group);
-      });
-      group.addEventListener("blur", scheduleClose);
-      group.addEventListener("click", (event) => {
-        event.stopPropagation();
-        if (suppressClickIndex === index && event.detail > 0) {
+      const title = makeSvgElement("title");
+      title.textContent = `${project.name} — ${project.difficulty || "Difficulty not specified"}`;
+      node.append(circle, label, title);
+      nodesLayer.append(node);
+      nodeElements.push(node);
+
+      node.addEventListener("pointerdown", (event) => startNodeDrag(event, index));
+      node.addEventListener("click", () => {
+        if (suppressClickIndex === index) {
           suppressClickIndex = -1;
           return;
         }
-        if (event.detail === 0 || lastPointerType === "mouse" || lastPointerType === "pen") {
-          openCard(index, group);
-        } else {
-          selectNode(index, group);
-        }
+        selectNode(index, node);
       });
-      group.addEventListener("keydown", (event) => {
-        const arrowOffsets = {
-          ArrowUp: [0, -18],
-          ArrowDown: [0, 18],
-          ArrowLeft: [-18, 0],
-          ArrowRight: [18, 0],
-        };
-        if (arrowOffsets[event.key]) {
-          event.preventDefault();
-          const [offsetX, offsetY] = arrowOffsets[event.key];
-          const [, , width, height] = svg.getAttribute("viewBox").split(" ").map(Number);
-          positions[index] = {
-            x: Math.max(55 / width, Math.min(1 - 55 / width, positions[index].x + offsetX / width)),
-            y: Math.max(48 / height, Math.min(1 - 55 / height, positions[index].y + offsetY / height)),
-          };
-          layoutGraph();
-          return;
-        }
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openCard(index, group);
-        } else if (event.key === "Escape") {
-          closeCard();
-          group.focus();
-        }
+      node.addEventListener("pointerenter", (event) => {
+        lastPointerType = event.pointerType;
+        if (event.pointerType === "mouse") updateSelection(index);
       });
-      svg.append(group);
-      nodeElements.push(group);
+      node.addEventListener("focus", () => {
+        if (lastPointerType === "keyboard") openCard(index, node);
+      });
+      node.addEventListener("keydown", (event) => handleNodeKeydown(event, index, node));
     });
 
-    svg.addEventListener("click", (event) => {
-      if (event.target === svg) closeCard();
-    });
-    card.addEventListener("pointerenter", () => clearTimeout(closeTimer));
-    card.addEventListener("pointerleave", scheduleClose);
-    card.addEventListener("focusout", (event) => {
-      if (!card.contains(event.relatedTarget)) scheduleClose();
-    });
-    card.addEventListener("click", (event) => event.stopPropagation());
-    card.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeCard();
-    });
     layoutGraph();
+    if (positions.some((position) => !position.pinned)) startSimulation(1);
+    else drawGraph();
+  }
+
+  function layoutGraph() {
+    if (!graphLayer || !canvas.clientWidth) return;
+    const width = Math.max(canvas.clientWidth, 320);
+    const height = Math.max(canvas.clientHeight, 360);
+    if (width !== graphWidth || height !== graphHeight) {
+      const oldWidth = graphWidth;
+      const oldHeight = graphHeight;
+      graphWidth = width;
+      graphHeight = height;
+      positions.forEach((position) => {
+        position.x = oldWidth ? position.x * width / oldWidth : width / 2;
+        position.y = oldHeight ? position.y * height / oldHeight : height / 2;
+        position.vx = 0;
+        position.vy = 0;
+      });
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      transform.x = width / 2 - (width / 2 - transform.x) * width / oldWidth;
+      transform.y = height / 2 - (height / 2 - transform.y) * height / oldHeight;
+      if (positions.length) startSimulation(0.45);
+    }
+    drawGraph();
+  }
+
+  function simulationTick() {
+    const alpha = simulationAlpha;
+    const centerX = graphWidth / 2;
+    const centerY = graphHeight / 2;
+    positions.forEach((position, index) => {
+      if (position.pinned) return;
+      position.vx += (centerX - position.x) * 0.00055 * alpha;
+      position.vy += (centerY - position.y) * 0.00055 * alpha;
+      edges.forEach((edge) => {
+        if (edge.from !== index && edge.to !== index) return;
+        const other = positions[edge.from === index ? edge.to : edge.from];
+        const dx = other.x - position.x;
+        const dy = other.y - position.y;
+        const distance = Math.max(Math.hypot(dx, dy), 0.01);
+        const target = 132 - edge.strength * 28;
+        const pull = (distance - target) * 0.0009 * edge.strength * alpha;
+        position.vx += dx / distance * pull;
+        position.vy += dy / distance * pull;
+      });
+    });
+
+    for (let first = 0; first < positions.length; first += 1) {
+      for (let second = first + 1; second < positions.length; second += 1) {
+        const a = positions[first];
+        const b = positions[second];
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let distance = Math.hypot(dx, dy);
+        if (distance < 0.01) {
+          dx = (second - first) * 0.1;
+          dy = 0.1;
+          distance = Math.hypot(dx, dy);
+        }
+        const minDistance = a.radius + b.radius + 22;
+        const overlap = Math.max(minDistance - distance, 0);
+        const repulsion = (250 / (distance * distance) + overlap * 0.018) * alpha;
+        const forceX = dx / distance * repulsion;
+        const forceY = dy / distance * repulsion;
+        if (!a.pinned) {
+          a.vx -= forceX;
+          a.vy -= forceY;
+        }
+        if (!b.pinned) {
+          b.vx += forceX;
+          b.vy += forceY;
+        }
+      }
+    }
+
+    positions.forEach((position) => {
+      if (position.pinned) return;
+      position.vx *= 0.82;
+      position.vy *= 0.82;
+      position.vx = clamp(position.vx, -5, 5);
+      position.vy = clamp(position.vy, -5, 5);
+      position.x = clamp(position.x + position.vx, 28, graphWidth - 28);
+      position.y = clamp(position.y + position.vy, 32, graphHeight - 32);
+    });
+    simulationAlpha *= 0.972;
+    simulationSteps += 1;
+  }
+
+  function startSimulation(alpha = 1, onComplete) {
+    if (simulationFrame) window.cancelAnimationFrame(simulationFrame);
+    simulationFrame = 0;
+    simulationAlpha = alpha;
+    simulationSteps = 0;
+    if (positions.every((position) => position.pinned)) {
+      drawGraph();
+      if (onComplete) onComplete();
+      return;
+    }
+    if (reducedMotion) {
+      while (simulationAlpha > 0.025 && simulationSteps < 240) simulationTick();
+      drawGraph();
+      if (onComplete) onComplete();
+      return;
+    }
+    const animate = () => {
+      simulationTick();
+      drawGraph();
+      if (simulationAlpha > 0.025 && simulationSteps < 240) {
+        simulationFrame = window.requestAnimationFrame(animate);
+      } else {
+        simulationFrame = 0;
+        drawGraph();
+        if (onComplete) onComplete();
+      }
+    };
+    simulationFrame = window.requestAnimationFrame(animate);
+  }
+
+  function persistPositions() {
+    const saved = {};
+    projectData.forEach((project, index) => {
+      saved[project.name] = {
+        x: positions[index].x / graphWidth,
+        y: positions[index].y / graphHeight,
+      };
+    });
+    try {
+      window.localStorage.setItem(positionStorageKey, JSON.stringify(saved));
+    } catch (error) {
+      console.error("Could not save Knowledge Map positions.", error);
+    }
+  }
+
+  function startNodeDrag(event, index) {
+    if (event.button !== undefined && event.button !== 0) return;
+    event.preventDefault();
+    lastPointerType = event.pointerType;
+    gesture = {
+      kind: "node",
+      index,
+      startClientX: event.clientX,
+      startClientY: event.clientY,
+      startPosition: { x: positions[index].x, y: positions[index].y },
+      wasPinned: positions[index].pinned,
+      moved: false,
+    };
+    positions[index].pinned = true;
+    svg.setPointerCapture(event.pointerId);
+  }
+
+  function startCanvasGesture(event) {
+    if (event.target.closest && event.target.closest(".knowledge-map-node")) return;
+    if (event.button !== undefined && event.button !== 0) return;
+    lastPointerType = event.pointerType;
+    activePointers.set(event.pointerId, getCanvasPoint(event));
+    svg.setPointerCapture(event.pointerId);
+    if (activePointers.size === 1) {
+      const point = activePointers.get(event.pointerId);
+      gesture = {
+        kind: "pan",
+        pointerId: event.pointerId,
+        startPoint: point,
+        startX: transform.x,
+        startY: transform.y,
+      };
+    } else if (activePointers.size === 2) {
+      const [first, second] = [...activePointers.values()];
+      const center = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
+      gesture = {
+        kind: "pinch",
+        startDistance: Math.max(Math.hypot(second.x - first.x, second.y - first.y), 1),
+        startScale: transform.scale,
+        worldX: (center.x - transform.x) / transform.scale,
+        worldY: (center.y - transform.y) / transform.scale,
+      };
+    }
+    event.preventDefault();
+  }
+
+  function moveGesture(event) {
+    if (gesture?.kind === "node" && gesture.index >= 0) {
+      const distance = Math.hypot(
+        event.clientX - gesture.startClientX,
+        event.clientY - gesture.startClientY
+      );
+      if (!gesture.moved && distance < 4) return;
+      gesture.moved = true;
+      const point = getGraphPoint(event);
+      const position = positions[gesture.index];
+      position.x = clamp(point.x, position.radius + 8, graphWidth - position.radius - 8);
+      position.y = clamp(point.y, position.radius + 8, graphHeight - position.radius - 8);
+      nodeElements[gesture.index].classList.add("is-dragging");
+      scheduleDraw();
+      return;
+    }
+
+    if (!activePointers.has(event.pointerId)) return;
+    activePointers.set(event.pointerId, getCanvasPoint(event));
+    if (gesture?.kind === "pinch" && activePointers.size >= 2) {
+      const [first, second] = [...activePointers.values()];
+      const centerX = (first.x + second.x) / 2;
+      const centerY = (first.y + second.y) / 2;
+      const distance = Math.max(Math.hypot(second.x - first.x, second.y - first.y), 1);
+      const scale = clamp(gesture.startScale * distance / gesture.startDistance, 0.4, 2.4);
+      clampTransform(centerX - gesture.worldX * scale, centerY - gesture.worldY * scale, scale);
+      scheduleDraw();
+    } else if (gesture?.kind === "pan") {
+      const point = activePointers.get(event.pointerId);
+      clampTransform(
+        gesture.startX + point.x - gesture.startPoint.x,
+        gesture.startY + point.y - gesture.startPoint.y,
+        transform.scale
+      );
+      scheduleDraw();
+    }
+  }
+
+  function endGesture(event) {
+    if (gesture?.kind === "node") {
+      const current = gesture;
+      nodeElements[current.index].classList.remove("is-dragging");
+      if (current.moved) {
+        suppressClickIndex = current.index;
+        window.setTimeout(() => {
+          if (suppressClickIndex === current.index) suppressClickIndex = -1;
+        }, 0);
+        startSimulation(0.25, persistPositions);
+      } else {
+        positions[current.index].pinned = current.wasPinned;
+      }
+      gesture = null;
+    } else if (activePointers.has(event.pointerId)) {
+      activePointers.delete(event.pointerId);
+      if (activePointers.size === 1) {
+        const [pointerId, point] = [...activePointers.entries()][0];
+        gesture = {
+          kind: "pan",
+          pointerId,
+          startPoint: point,
+          startX: transform.x,
+          startY: transform.y,
+        };
+      } else if (!activePointers.size) {
+        gesture = null;
+      }
+    }
+    if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+  }
+
+  function zoomAt(point, scale) {
+    const nextScale = clamp(scale, 0.4, 2.4);
+    const worldX = (point.x - transform.x) / transform.scale;
+    const worldY = (point.y - transform.y) / transform.scale;
+    clampTransform(point.x - worldX * nextScale, point.y - worldY * nextScale, nextScale);
+    scheduleDraw();
   }
 
   function positionCard(node) {
+    if (window.matchMedia("(max-width: 640px)").matches) return;
     const canvasRect = canvas.getBoundingClientRect();
     const nodeRect = node.getBoundingClientRect();
     const cardRect = card.getBoundingClientRect();
-    const margin = 10;
-    let left = nodeRect.left - canvasRect.left + nodeRect.width / 2 + 14;
-    let top = nodeRect.top - canvasRect.top - 18;
-    if (left + cardRect.width > canvas.clientWidth - margin) {
-      left = nodeRect.left - canvasRect.left - cardRect.width - 14;
+    const margin = 12;
+    let left = nodeRect.right - canvasRect.left + margin;
+    if (left + cardRect.width > canvasRect.width - margin) {
+      left = nodeRect.left - canvasRect.left - cardRect.width - margin;
     }
-    if (left < margin) left = margin;
-    if (top + cardRect.height > canvas.clientHeight - margin) {
-      top = canvas.clientHeight - cardRect.height - margin;
-    }
-    if (top < margin) top = margin;
+    left = clamp(left, margin, Math.max(margin, canvasRect.width - cardRect.width - margin));
+    const top = clamp(
+      nodeRect.top - canvasRect.top + nodeRect.height / 2 - cardRect.height / 2,
+      margin,
+      Math.max(margin, canvasRect.height - cardRect.height - margin)
+    );
     card.style.left = `${left}px`;
     card.style.top = `${top}px`;
   }
@@ -356,10 +626,8 @@
 
     const meta = document.createElement("p");
     meta.className = "knowledge-map-card-meta";
-    const status = typeof project.status === "string"
-      ? project.status.replace(/-/g, " ")
-      : "";
-    meta.textContent = [project.type, project.difficulty, status].filter(Boolean).join(" · ");
+    const status = getStatus(project).replace(/-/g, " ");
+    meta.textContent = [getCategory(project), project.difficulty, status].filter(Boolean).join(" · ");
     const description = document.createElement("p");
     description.textContent = project.description;
     card.replaceChildren(header, meta, description);
@@ -377,24 +645,20 @@
       card.append(list);
     }
 
-    const related = projectData
-      .map((other, otherIndex) => ({
-        project: other,
-        concepts: otherIndex === index ? [] : getSharedConcepts(project, other),
-      }))
-      .filter((entry) => entry.concepts.length);
+    const related = edges.filter((edge) => edge.from === index || edge.to === index);
     appendSectionTitle(card, "Related projects and shared concepts");
     if (related.length) {
       const list = document.createElement("ul");
-      related.forEach((entry) => {
+      related.forEach((edge) => {
+        const relatedIndex = edge.from === index ? edge.to : edge.from;
         const item = document.createElement("li");
-        item.textContent = `${entry.project.name} — ${entry.concepts.join(", ")}`;
+        item.textContent = `${projectData[relatedIndex].name} — ${edge.sharedConcepts.join(", ")}`;
         list.append(item);
       });
       card.append(list);
     } else {
       const none = document.createElement("p");
-      none.textContent = "No shared concepts listed in the catalog.";
+      none.textContent = "No distinctive shared concepts are represented in this project network.";
       card.append(none);
     }
 
@@ -444,7 +708,6 @@
   }
 
   function openCard(index, node) {
-    clearTimeout(closeTimer);
     renderCard(index);
     card.hidden = false;
     positionCard(node);
@@ -452,47 +715,101 @@
   }
 
   function selectNode(index, node) {
-    if (selectedIndex === index && !card.hidden) {
-      closeCard();
-      return;
-    }
-    openCard(index, node);
+    if (selectedIndex === index && !card.hidden) closeCard();
+    else openCard(index, node);
   }
 
   function closeCard() {
-    clearTimeout(closeTimer);
     card.hidden = true;
     updateSelection(-1);
   }
 
-  function scheduleClose() {
-    clearTimeout(closeTimer);
-    closeTimer = window.setTimeout(() => {
-      if (!card.matches(":hover") && !card.contains(document.activeElement)) closeCard();
-    }, 180);
+  function handleNodeKeydown(event, index, node) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      suppressClickIndex = index;
+      window.setTimeout(() => {
+        if (suppressClickIndex === index) suppressClickIndex = -1;
+      }, 0);
+      openCard(index, node);
+      return;
+    }
+    if (event.key === "Escape") {
+      closeCard();
+      return;
+    }
+    const offsets = {
+      ArrowLeft: [-12, 0],
+      ArrowRight: [12, 0],
+      ArrowUp: [0, -12],
+      ArrowDown: [0, 12],
+    };
+    if (offsets[event.key]) {
+      event.preventDefault();
+      positions[index].x = clamp(positions[index].x + offsets[event.key][0], 24, graphWidth - 24);
+      positions[index].y = clamp(positions[index].y + offsets[event.key][1], 28, graphHeight - 28);
+      positions[index].pinned = true;
+      scheduleDraw();
+      persistPositions();
+    }
   }
 
   function updateFilters() {
     const query = normalize(searchInput.value);
     const difficulty = difficultyFilter.value;
+    const status = statusFilter.value;
+    const category = categoryFilter.value;
     let visibleCount = 0;
     projectData.forEach((project, index) => {
-      const matchesQuery = normalize(`${project.name} ${getConcepts(project).join(" ")}`)
-        .includes(query);
+      const searchable = normalize(`${project.name} ${getConcepts(project).join(" ")}`);
+      const matchesQuery = searchable.includes(query);
       const matchesDifficulty = difficulty === "all" || project.difficulty === difficulty;
-      const visible = matchesQuery && matchesDifficulty;
+      const matchesStatus = status === "all" || getStatus(project) === status;
+      const matchesCategory = category === "all" || getCategory(project) === category;
+      const visible = matchesQuery && matchesDifficulty && matchesStatus && matchesCategory;
       nodeElements[index].classList.toggle("is-filtered", !visible);
       if (visible) visibleCount += 1;
     });
     edges.forEach(({ element, from, to }) => {
-      const fromVisible = !nodeElements[from].classList.contains("is-filtered");
-      const toVisible = !nodeElements[to].classList.contains("is-filtered");
-      element.style.display = fromVisible && toVisible ? "" : "none";
+      const visible = !nodeElements[from].classList.contains("is-filtered") &&
+        !nodeElements[to].classList.contains("is-filtered");
+      element.style.display = visible && connectionsVisible ? "" : "none";
     });
     count.textContent = `${visibleCount} of ${projectData.length} projects`;
-    if (selectedIndex >= 0 && nodeElements[selectedIndex].classList.contains("is-filtered")) {
-      closeCard();
+    if (selectedIndex >= 0 && nodeElements[selectedIndex].classList.contains("is-filtered")) closeCard();
+  }
+
+  function restoreOriginalLayout() {
+    try {
+      window.localStorage.removeItem(positionStorageKey);
+    } catch (error) {
+      console.error("Could not clear saved Knowledge Map positions.", error);
     }
+    searchInput.value = "";
+    difficultyFilter.value = "all";
+    statusFilter.value = "all";
+    categoryFilter.value = "all";
+    connectionsVisible = true;
+    const edgeButton = actionButtons.find((button) => button.dataset.mapAction === "edges");
+    if (edgeButton) {
+      edgeButton.setAttribute("aria-pressed", "true");
+      edgeButton.setAttribute("aria-label", "Hide graph connections");
+    }
+    positions.forEach((position, index) => {
+      const angle = index * 2.399963229728653 + ((index * 37) % 17) / 17;
+      const radius = Math.min(graphWidth, graphHeight) * 0.35 *
+        Math.sqrt((index + 0.5) / Math.max(projectData.length, 1));
+      position.x = graphWidth / 2 + Math.cos(angle) * radius;
+      position.y = graphHeight / 2 + Math.sin(angle) * radius;
+      position.vx = 0;
+      position.vy = 0;
+      position.pinned = false;
+    });
+    closeCard();
+    updateFilters();
+    clampTransform(0, 0, 1);
+    startSimulation(1);
+    window.setTimeout(() => fitGraph(), reducedMotion ? 0 : 280);
   }
 
   function setView(view) {
@@ -507,23 +824,67 @@
     });
     if (!showMap) closeCard();
     else {
-      if (nodeElements.length === 0 && projectData.length) buildGraph();
+      if (!nodeElements.length) buildGraph();
       layoutGraph();
       updateFilters();
+      fitGraph({ animate: false });
     }
   }
 
-  addDifficultyOptions();
+  populateOptions(difficultyFilter, projectData.map((project) => project.difficulty));
+  populateOptions(statusFilter, projectData.map(getStatus));
+  populateOptions(categoryFilter, projectData.map(getCategory));
   viewButtons.forEach((button) => {
     button.addEventListener("click", () => setView(button.dataset.mapView));
   });
-  searchInput.addEventListener("input", updateFilters);
-  difficultyFilter.addEventListener("change", updateFilters);
+  actionButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      switch (button.dataset.mapAction) {
+        case "center":
+          centerGraph();
+          break;
+        case "fit":
+          fitGraph();
+          break;
+        case "edges":
+          connectionsVisible = !connectionsVisible;
+          button.setAttribute("aria-pressed", String(connectionsVisible));
+          button.setAttribute(
+            "aria-label",
+            connectionsVisible ? "Hide graph connections" : "Show graph connections"
+          );
+          updateFilters();
+          break;
+        case "reset":
+          restoreOriginalLayout();
+          break;
+        default:
+          break;
+      }
+    });
+  });
+  [searchInput, difficultyFilter, statusFilter, categoryFilter].forEach((control) => {
+    control.addEventListener(control === searchInput ? "input" : "change", updateFilters);
+  });
+  svg.addEventListener("pointerdown", startCanvasGesture);
+  svg.addEventListener("pointermove", moveGesture);
+  svg.addEventListener("pointerup", endGesture);
+  svg.addEventListener("pointercancel", endGesture);
+  svg.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const point = getCanvasPoint(event);
+    zoomAt(point, transform.scale * Math.exp(-event.deltaY * 0.0012));
+  }, { passive: false });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Tab" || event.key === "Enter" || event.key === " ") {
       lastPointerType = "keyboard";
     }
+    if (event.key === "Escape" && !card.hidden) closeCard();
   });
-  window.addEventListener("resize", scheduleGraphLayout);
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(layoutGraph).observe(canvas);
+  } else {
+    window.addEventListener("resize", layoutGraph);
+  }
   setView("list");
 })();
