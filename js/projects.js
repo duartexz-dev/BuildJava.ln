@@ -119,6 +119,18 @@ const projects = [
     learningOutcomes: ["Group profile data in a class and initialize its project list in a constructor.", "Use an ArrayList to store a collection that can grow as projects are added.", "Repeat prompts with while and compare answers without case sensitivity using equalsIgnoreCase().", "Visit and print each list item with an enhanced for loop."],
     concepts: ["Scanner input", "Classes and objects", "Constructors", "ArrayList", "While loops", "Enhanced for loops"],
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/DeveloperProfile.java"
+  },
+  {
+    name: "JoKenPo",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Beginner",
+    focus: ["input", "collections", "decisions", "output"],
+    codePreview: ['String[] options = {"Rock", "Paper", "Scissors"};', 'int computerChoice = random.nextInt(options.length);', 'if (userSelect == computerChoice) {', '    System.out.println("It\'s a tie!");'],
+    description: "Play Rock, Paper, Scissors against the computer. Choose Rock, Paper, or Scissors by entering 0, 1, or 2; the computer selects a move at random, and the program announces the result.",
+    learningOutcomes: ["Read a numeric choice from the console with Scanner.", "Store the available moves in a String array and access them by index.", "Generate a random array index with Random.nextInt().", "Use comparisons and logical operators to determine the winner."],
+    concepts: ["Scanner input", "Arrays", "Random numbers", "If/else conditions", "Comparison operators", "Logical operators"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/JoKenPo.java"
   }
 ];
 function LoadProjects() {
