@@ -1,4 +1,4 @@
-package projects;
+package projects.Intermediate;
 
 import java.util.Scanner;
 
@@ -33,7 +33,8 @@ public class LoginIntermediary {
 
         }
 
-        // ! reverses the boolean; this checks whether all attempts were used without a match.
+        // ! reverses the boolean; this checks whether all attempts were used without a
+        // match.
         boolean attmeptsLost = attempts == 3 && !validLogin;
         String resultAttempts = attmeptsLost
                 ? "Attempts is lost , try again after"

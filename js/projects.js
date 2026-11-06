@@ -59,8 +59,7 @@ const projects = [
     learningOutcomes: ["Read a numeric choice with Scanner.", "Use switch and case labels to select one result from several options.", "Handle unmatched values with default and end each traditional case with break."],
     concepts: ["Scanner input", "Switch statements", "Cases and default", "Integer input"],
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/WeekDay.java"
-  },
-  {
+  }, {
     name: "Calculator",
     status: "in-progress",
     type: "Fundamentals",
@@ -71,18 +70,6 @@ const projects = [
     learningOutcomes: ["Apply +, -, *, and / to integer values and understand integer division.", "Use switch to choose a calculation based on a String operator.", "Format a calculation and its result with printf. Division by zero is not handled in this exercise."],
     concepts: ["Scanner input", "Integer arithmetic", "Arithmetic operators", "Switch statements", "Formatted output"],
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/Calculator.java"
-  },
-  {
-    name: "loginSystem",
-    status: "in-progress",
-    type: "Fundamentals",
-    difficulty: "Beginner",
-    focus: ["input", "strings", "boolean", "loops"],
-    codePreview: ['while (errors < 3) {', '    if (email.contains("@") && password.length() >= 8) {', '        System.out.println("Login successful!");'],
-    description: "Repeatedly ask for an email and password. Accept the input when the email contains @ and the password has at least eight characters; otherwise count a failed attempt and stop after three. These are deliberately basic checks, not secure authentication.",
-    learningOutcomes: ["Inspect text with String methods such as contains() and length().", "Combine boolean checks with && so both requirements must pass.", "Use a while loop, a counter, and break to control retries and exit after success."],
-    concepts: ["Scanner input", "Strings", "String methods", "Boolean logic", "While loops", "Attempt limits"],
-    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/loginSystem.java"
   },
   {
     name: "LoginIntermediary",
