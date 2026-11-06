@@ -1,4 +1,3 @@
-package projects;
 
 import java.util.Scanner;
 
@@ -7,7 +6,8 @@ public class loginSystem {
         int errors = 0;
         Scanner scanner = new Scanner(System.in);
 
-        // Keep prompting until login succeeds or the user has made three failed attempts.
+        // Keep prompting until login succeeds or the user has made three failed
+        // attempts.
         while (errors < 3) {
             System.out.println("Hello! Please provide two things: first, your email:");
             String email = scanner.nextLine();

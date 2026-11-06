@@ -1,4 +1,4 @@
-package projects.Intermediate;
+package Intermediate;
 
 import java.util.Scanner;
 

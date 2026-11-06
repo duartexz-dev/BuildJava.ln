@@ -1,6 +1,4 @@
 
-package projects;
-
 import java.util.Scanner;
 
 /** Greets a user and reports whether they are an adult or a minor. */

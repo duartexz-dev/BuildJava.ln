@@ -1,4 +1,4 @@
-package projects.Intermediate;
+package Intermediate;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -7,8 +7,9 @@ public class library {
     public static void main(String[] args) {
         ArrayList<String> books = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        Boolean AddAgain = false; // atribui o valor false á variável usando =
-        do {// aqui eu condicionei usando == para ver se é igual
+        Boolean AddAgain = false; // Controls whether the book-entry loop repeats.
+        // A do-while loop runs the body before checking whether to repeat.
+        do {
 
             System.out.println("olá usuário , adicione um livre escrevendo seu nome abaixo");
             System.out.print("Nome:");

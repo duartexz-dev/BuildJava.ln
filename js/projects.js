@@ -108,6 +108,18 @@ const projects = [
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/DeveloperProfile.java"
   },
   {
+    name: "library",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Intermediate",
+    focus: ["input", "collections", "loops", "decisions", "output"],
+    codePreview: ['ArrayList<String> books = new ArrayList<>();', 'do {', '    books.add(nameBook);', '    AddAgain = scanner.nextBoolean();', '} while (AddAgain == true);'],
+    description: "Build a console book list by repeatedly reading book titles into an ArrayList. After each entry, ask whether to add another book and print the list; the do-while loop guarantees at least one title is entered.",
+    learningOutcomes: ["Create an ArrayList<String> and append book titles with add().", "Use a do-while loop when an action must happen at least once.", "Read a boolean with Scanner and use it to decide whether to repeat.", "Consume the newline left by nextBoolean() before reading the next title with nextLine()."],
+    concepts: ["Scanner input", "ArrayList", "Do-while loops", "Boolean conditions", "Formatted output"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/library.java"
+  },
+  {
     name: "JoKenPo",
     status: "in-progress",
     type: "Fundamentals",

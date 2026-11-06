@@ -1,4 +1,4 @@
-package projects;
+package Intermediate;
 
 import java.util.Scanner;
 
@@ -13,7 +13,8 @@ public class bulletin {
 
         public Student(String name, Double portugueseGrade, Double mathGrade, Double englishGrade,
                 Double historyGrade) {
-            // this refers to the current object; assign each constructor argument to its matching field.
+            // this refers to the current object; assign each constructor argument to its
+            // matching field.
             this.name = name;
             this.portugueseGrade = portugueseGrade;
             this.mathGrade = mathGrade;
@@ -44,9 +45,11 @@ public class bulletin {
         Double totalGrades = student.englishGrade + student.historyGrade + student.mathGrade + student.portugueseGrade;
         Double averageGrade = totalGrades / 4;
 
-        // Add the four grades, divide by four, then compare the average with the passing threshold.
+        // Add the four grades, divide by four, then compare the average with the
+        // passing threshold.
         boolean passed = averageGrade >= passingGradeThreshold;
-        // The ternary operator chooses a message based on whether passed is true or false.
+        // The ternary operator chooses a message based on whether passed is true or
+        // false.
         String result = passed
                 ? "Congratulations! Your average grade is " + averageGrade
                 : "You did not pass. Your average grade is " + averageGrade;

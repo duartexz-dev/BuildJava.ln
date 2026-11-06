@@ -1,4 +1,3 @@
-package projects.Beginner;
 
 import java.util.Scanner;
 
@@ -20,7 +19,8 @@ public class Calculator {
 
         var sign = scanner.next(); // var lets Java infer the variable's type; here, sign is a String.
 
-        // switch checks sign and runs the matching case; break prevents the next case from running.
+        // switch checks sign and runs the matching case; break prevents the next case
+        // from running.
         switch (sign) {
             case "+":
                 // The + operator adds the two numbers.
@@ -31,11 +31,13 @@ public class Calculator {
                 System.out.printf("Result: %d - %d = %d%n", number1, number2, number1 - number2);
                 break;
             case "/":
-                // The / operator divides the first number by the second; integer division drops the decimal part.
+                // The / operator divides the first number by the second; integer division drops
+                // the decimal part.
                 System.out.printf("Result: %d / %d = %d%n", number1, number2, number1 / number2);
                 break;
             case "x":
-                // The * operator multiplies the numbers; users enter "x" to select multiplication.
+                // The * operator multiplies the numbers; users enter "x" to select
+                // multiplication.
                 System.out.printf("Result: %d x %d = %d%n", number1, number2, number1 * number2);
                 break;
 
