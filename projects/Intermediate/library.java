@@ -11,19 +11,19 @@ public class library {
         // A do-while loop runs the body before checking whether to repeat.
         do {
 
-            System.out.println("olá usuário , adicione um livre escrevendo seu nome abaixo");
-            System.out.print("Nome:");
+            System.out.println("Hello, user. Add a book by typing its title below.");
+            System.out.print("Book title: ");
             String nameBook = scanner.nextLine();
             books.add(nameBook);
-            System.out.printf("biblioteca atual:%s\n", books);
+            System.out.printf("Current library: %s\n", books);
 
-            System.out.println("Quer adicionar mais um ?(Escreva true para sim e false para não.)\n");
+            System.out.println("Would you like to add another? (Type true for yes or false for no.)\n");
             AddAgain = scanner.nextBoolean();
             scanner.nextLine();
         } while (AddAgain == true);
 
         if (AddAgain == false) {
-            System.out.printf("biblioteca atual:%s\n", books);
+            System.out.printf("Current library: %s\n", books);
         }
         scanner.close();
     }
