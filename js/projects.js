@@ -120,6 +120,18 @@ const projects = [
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/library.java"
   },
   {
+    name: "CandidateManager",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Intermediate",
+    focus: ["input", "output", "selection", "loops", "collections", "strings", "boolean"],
+    codePreview: ['if (candidates.contains(nameSearch)) {', '    int position = candidates.indexOf(nameSearch);', '    System.out.printf("- %s [index %s]%n", nameSearch, position);', '} else {', '    System.out.println("Candidate not found.");', '}'],
+    description: "Manage a console-based candidate list initialized with sample names. Add, list, search for, remove, and count candidates, then choose whether to continue using a menu loop.",
+    learningOutcomes: ["Store and update names in an ArrayList.", "Use switch cases to route menu choices to different operations.", "Search a list with contains() and indexOf(), and remove an item using its position.", "Repeat a menu with a do-while loop and a boolean condition.", "Read menu choices, names, and removal positions with Scanner."],
+    concepts: ["Scanner input", "ArrayList", "Switch statements", "Do-while loops", "For loops", "Boolean logic", "String comparison", "List search", "List indexing"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/CandidateManager.java"
+  },
+  {
     name: "JoKenPo",
     status: "in-progress",
     type: "Fundamentals",
