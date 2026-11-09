@@ -48,8 +48,8 @@ The generator uses the project statuses and the target configured in the script.
 | Status        | Weight | Meaning                                                      |
 | ------------- | -----: | ------------------------------------------------------------ |
 | `planned`     |      0 | Listed as a future exercise; implementation has not started. |
-| `in-progress` |    0.5 | Work is underway or the exercise is being improved.          |
-| `completed`   |      1 | The exercise is implemented, run or tested, and documented.  |
+| `in-progress` |    1.0 | Work is underway or the exercise is being improved.          |
+| `completed`   |      2 | The exercise is implemented, run or tested, and documented.  |
 
 The weighted total is compared with the configured roadmap target, and the result is capped at 100%. The graphic also reports how many exercises are currently tracked in the catalog. For the exact target and calculation, see `scripts/update-progress.mjs`; the script is the source of truth for those values.
 
