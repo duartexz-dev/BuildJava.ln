@@ -136,12 +136,14 @@ const projects = [
     status: "in-progress",
     type: "Fundamentals",
     difficulty: "Beginner",
-    focus: ["input", "collections", "decisions", "output"],
-    codePreview: ['String[] options = {"Rock", "Paper", "Scissors"};', 'int computerChoice = random.nextInt(options.length);', 'if (userSelect == computerChoice) {', '    System.out.println("It\'s a tie!");'],
-    description: "Play Rock, Paper, Scissors against the computer. Choose Rock, Paper, or Scissors by entering 0, 1, or 2; the computer selects a move at random, and the program announces the result.",
-    learningOutcomes: ["Read a numeric choice from the console with Scanner.", "Store the available moves in a String array and access them by index.", "Generate a random array index with Random.nextInt().", "Use comparisons and logical operators to determine the winner."],
-    concepts: ["Scanner input", "Arrays", "Random numbers", "If/else conditions", "Comparison operators", "Logical operators"],
-    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/JoKenPo.java"
+    focus: ["input", "decisions", "loops", "boolean", "output"],
+    codePreview: ['String[] options = new String[3];', 'int computerChoice = random.nextInt(options.length);', 'if (userSelect == computerChoice) {', '    winsUser++;'],
+    description: "Play Rock, Paper, Scissors against the computer. Enter 0 for Rock, 1 for Paper, or 2 for Scissors; the computer chooses randomly, the program reports the result and keeps win counts, then asks whether to play another round. The input is not validated.",
+    learningOutcomes: ["Read a numeric choice from the console with Scanner.", "Store move names in a String array and use the numeric choices as array indexes.", "Generate a random valid array index with Random.nextInt(bound).", "Use comparisons and logical operators to determine the winner.", "Use a do-while loop and boolean input to repeat rounds while keeping score."],
+    concepts: ["Scanner input", "Arrays", "Random numbers", "If/else conditions", "Comparison operators", "Logical operators", "Do-while loops", "Boolean conditions", "Score counters"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/JoKenPo.java",
+    roadmapOrder: 6,
+    documentationPath: "projects/md/JoKenPo.md"
   }
 ];
 function LoadProjects() {
@@ -185,6 +187,9 @@ function LoadProjects() {
         ${projects[counter].repoUrl
         ? `<a class="project-repository-link" href="${projects[counter].repoUrl}" target="_blank" rel="noreferrer">Open repository</a>`
         : `<span class="source-unavailable">Repository not available yet</span>`}
+        ${projects[counter].documentationPath
+        ? `<a class="project-repository-link" href="./${projects[counter].documentationPath}">Read lesson guide</a>`
+        : ""}
       </div>
     </details>
   </div>

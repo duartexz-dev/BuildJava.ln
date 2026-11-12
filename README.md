@@ -91,7 +91,11 @@ BuildJava.ln/
 │   ├── app.js                        # Theme and accent settings
 │   ├── knowledge-map.js              # Interactive concept map
 │   └── projects.js                   # Catalog data and card rendering
-├── projects/                         # Java practice exercises
+├── projects/
+│   ├── Beginner/                     # Beginner Java exercises
+│   ├── Intermediate/                 # Intermediate Java exercises
+│   ├── Advanced/                     # Advanced Java exercises
+│   └── md/                           # Exercise lesson guides and their index
 ├── scripts/
 │   └── update-progress.mjs           # Generates assets/progress.svg
 ├── styles/
@@ -127,6 +131,8 @@ The Java source files are stored in `projects/`. Use a JDK compatible with the s
 
 The website reads its catalog data from `js/projects.js`. Each entry describes an exercise and includes fields for its name, status, type, difficulty, description, concepts, and repository URL.
 
+Exercise guides live in `projects/md/`; the folder's `README.md` indexes the available guides. When an entry has a `documentationPath`, its project card links to that guide. `roadmapOrder` is a positive, unique sequence number for entries assigned a place in the learning path; it expresses teaching order rather than creation date. The current roadmap on the website is a stage overview and does not yet render individual catalog entries.
+
 A catalog entry follows this general shape:
 
 ```js
@@ -137,7 +143,9 @@ A catalog entry follows this general shape:
   difficulty: "Beginner",
   description: "Describe the problem the exercise is intended to solve.",
   concepts: ["Input", "Conditionals"],
-  repoUrl: ""
+  repoUrl: "",
+  roadmapOrder: 1,
+  documentationPath: "projects/md/ExampleExercise.md"
 }
 ```
 
