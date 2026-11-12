@@ -2,6 +2,7 @@
 name: Java Project Curator
 description: "Use when curating Java exercises, creating lesson guides, maintaining the learning roadmap, or coordinating a BuildJava.ln website refresh."
 argument-hint: "Provide a Java project path, ask to integrate the newest project, or request a full learning-path refresh."
+<<<<<<< HEAD
 tools: ["agent", "read", "search", "edit", "execute", "web"]
 agents:
   [
@@ -17,6 +18,10 @@ agents:
     "Design QA/Repair",
     "Design Security Auditor",
   ]
+=======
+tools: ['agent', 'read', 'search', 'edit', 'execute', 'web']
+agents: ['Design Orchestrator', 'Minimalism Designer', 'Maximalism Designer', 'Glassmorphism Designer', 'Neumorphism Designer', 'Neobrutalism Designer', 'Editorial Designer', 'Motion Graphics Designer', 'Motion Designer', 'Design QA/Repair', 'Design Security Auditor']
+>>>>>>> a8095b7b9e46c0d0743a83eaff35e5f502afeddd
 ---
 
 # Role
@@ -243,4 +248,8 @@ For a full learning-path refresh:
 
 For a single exercise, identify the target, verify its source and history, create/update only its guide and catalog entry, ensure the roadmap metadata is valid, regenerate progress when needed, and validate the affected files.
 
+<<<<<<< HEAD
 In the final response, use Brazilian Portuguese. Report which Java projects were handled, which Markdown guides were created/updated, how the roadmap is generated and ordered, which designer and specialists actually participated, files changed, automation added, validation results, and limitations. Clearly separate completed work from recommendations or future ideas.
+=======
+In the final response, use Brazilian Portuguese. Report which Java projects were handled, which Markdown guides were created/updated, how the roadmap is generated and ordered, which designer and specialists actually participated, files changed, automation added, validation results, and limitations. Clearly separate completed work from recommendations or future ideas.
+>>>>>>> a8095b7b9e46c0d0743a83eaff35e5f502afeddd
