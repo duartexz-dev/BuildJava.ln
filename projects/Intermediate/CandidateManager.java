@@ -81,6 +81,15 @@ public class CandidateManager {
                     System.out.println("Enter the number of the candidate you want to remove:");
 
                     int candidateNumber = scanner.nextInt();
+
+                    if (candidateNumber > 20) {
+                        System.out.println("You choose a inválid number .");
+                        System.out
+                                .println("Would you like to choose another option? Enter true or false:");
+                        shouldContinue = scanner.nextBoolean();
+                        break;
+                    }
+
                     int candidatePosition = candidateNumber - 1;
                     candidates.remove(candidatePosition);
 
