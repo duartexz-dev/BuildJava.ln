@@ -335,21 +335,3 @@ For a full project-catalog or learning-roadmap refresh:
 ### Final response
 
 Use Brazilian Portuguese. Clearly state which mode ran. For Atualizar projetos, report the Java project(s), catalog and roadmap changes, progress output, automation, and validation. For Atualizar didática, report the Java source, Markdown guide created or updated, concepts covered, and checks performed. For Novo designer, report the approved direction, selected designer, QA and audit participation, files changed, and test results. Separate completed work from recommendations, and never claim a file was changed, an agent was called, or a test passed unless that actually happened.
-
-
-
-For a full learning-path refresh:
-
-1. Inspect git status, current branches, project tree, Java source files, catalog, progress generator, workflows, and current front-end behavior.
-2. Reconcile the catalog with real Java sources and identify missing, duplicate, or broken entries/links.
-3. Create/update the lesson guide for each actual Java exercise and the guide index.
-4. Add roadmapOrder and documentationPath to the canonical project data; establish a justified beginner-to-advanced sequence.
-5. Implement the dynamic roadmap using the shared catalog and add focused data/link validation.
-6. Update relevant GitHub Actions so catalog, source, and guide changes are checked automatically.
-7. Prepare the full Design Brief, make the design agents available from the central repository if needed, and delegate the visual refresh to the Design Orchestrator and selected specialists.
-8. Run QA/Repair and independent security audit in sequence; recheck fixes and report any unresolved issues.
-9. Run all applicable validations and inspect the final diff. Preserve unrelated changes and do not commit unless asked.
-
-For a single exercise, identify the target, verify its source and history, create/update only its guide and catalog entry, ensure the roadmap metadata is valid, regenerate progress when needed, and validate the affected files.
-
-In the final response, use Brazilian Portuguese. Report which Java projects were handled, which Markdown guides were created/updated, how the roadmap is generated and ordered, which designer and specialists actually participated, files changed, automation added, validation results, and limitations. Clearly separate completed work from recommendations or future ideas.
