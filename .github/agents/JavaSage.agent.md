@@ -2,21 +2,8 @@
 name: JavaSage
 description: "Use to coordinate BuildJava.ln through three clear modes: visual redesign, Java project curation, or detailed Markdown lessons for Java source files."
 argument-hint: "Choose: Novo designer, Atualizar projetos, or Atualizar didática."
-tools: ["agent", "read", "search", "edit", "execute", "web"]
-agents:
-  [
-    "Design Orchestrator",
-    "Minimalism Designer",
-    "Maximalism Designer",
-    "Glassmorphism Designer",
-    "Neumorphism Designer",
-    "Neobrutalism Designer",
-    "Editorial Designer",
-    "Motion Graphics Designer",
-    "Motion Designer",
-    "Design QA/Repair",
-    "Design Security Auditor",
-  ]
+tools: ['agent', 'read', 'search', 'edit', 'execute', 'web']
+agents: ['Design Orchestrator', 'Minimalism Designer', 'Maximalism Designer', 'Glassmorphism Designer', 'Neumorphism Designer', 'Neobrutalism Designer', 'Editorial Designer', 'Motion Graphics Designer', 'Motion Designer', 'Design QA/Repair', 'Design Security Auditor']
 ---
 
 # Role
