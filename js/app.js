@@ -103,7 +103,7 @@
     themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
     themeToggle.querySelector('i').className = `bi ${isDark ? 'bi-sun' : 'bi-moon-stars'} me-2`;
     themeToggle.querySelector('span').textContent = isDark ? 'Light mode' : 'Dark mode';
-    themeColorMeta.content = isDark ? '#030303' : '#faf9ff';
+    themeColorMeta.content = isDark ? '#0B0B12' : '#f7f7fb';
     localStorage.setItem(themeKey, isDark ? 'dark' : 'light');
   }
 
@@ -114,7 +114,7 @@
   if (savedCustomColor && isHexColor(savedCustomColor)) {
     customColor.value = savedCustomColor;
   }
-  setTheme(savedTheme === 'dark' ? 'dark' : 'light');
+  setTheme(savedTheme === 'light' ? 'light' : 'dark');
   setPalette(savedPalette === 'custom'
     ? (isHexColor(savedCustomColor) ? 'custom' : 'purple')
     : (paletteNames.has(savedPalette) ? savedPalette : 'purple'));

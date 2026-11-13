@@ -16,11 +16,11 @@
   const svgNamespace = "http://www.w3.org/2000/svg";
   const positionStorageKey = "buildjava.knowledge-map.positions.v1";
   const levelColors = {
-    beginner: "#55c78d",
-    basic: "#60a5fa",
-    intermediate: "#a78bfa",
-    advanced: "#fbbf24",
-    challenge: "#fb7185",
+    beginner: "var(--accent)",
+    basic: "var(--accent)",
+    intermediate: "var(--accent)",
+    advanced: "var(--accent)",
+    challenge: "var(--accent)",
   };
   const nodeElements = [];
   const edges = [];
@@ -262,7 +262,7 @@
           "data-strength": strength.toFixed(3),
           "aria-label": `${project.name} and ${projectData[secondIndex].name} share ${sharedConcepts.join(", ")}`,
         });
-        element.style.setProperty("--edge-opacity", String(clamp(0.24 + strength * 0.55, 0.28, 0.82)));
+        element.style.setProperty("--edge-opacity", String(clamp(0.75 + strength * 0.1, 0.75, 0.9)));
         const title = makeSvgElement("title");
         title.textContent = `Shared concepts: ${sharedConcepts.join(", ")}`;
         element.append(title);
@@ -631,6 +631,13 @@
     const description = document.createElement("p");
     description.textContent = project.description;
     card.replaceChildren(header, meta, description);
+    if (project.sourceAvailability === "unavailable") {
+      const sourceStatus = document.createElement("p");
+      sourceStatus.className = "knowledge-map-source-status";
+      sourceStatus.setAttribute("role", "note");
+      sourceStatus.textContent = project.sourceAvailabilityNote;
+      card.append(sourceStatus);
+    }
 
     const concepts = getConcepts(project);
     if (concepts.length) {

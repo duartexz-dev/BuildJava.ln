@@ -11,6 +11,8 @@ const focusLabels = {
   boolean: "Boolean logic"
 };
 
+const projectAnchorId = (name) => `project-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
 const projects = [
   {
     name: "TypeProfile",
@@ -30,6 +32,8 @@ const projects = [
     type: "Fundamentals",
     difficulty: "Beginner",
     focus: ["input", "decisions", "loops", "output"],
+    sourceAvailability: "unavailable",
+    sourceAvailabilityNote: "This Java file was removed as obsolete in commit 73b0689. Its archived version demonstrates nextInt() followed by nextLine() and an if/else age check; it is not part of the current checkout.",
     codePreview: ['if (age >= 18) {', '    System.out.printf("%s, you are an adult!%n", name);', '}'],
     description: "Ask for a person's name and age, use 18 as the cutoff to decide whether they are an adult or a minor, and print three numbered progress messages for either result.",
     learningOutcomes: ["Read a full name and an integer age from the console.", "Use >= and if/else to choose between two outcomes.", "Repeat an action with a for loop and insert values into formatted output with printf."],
@@ -42,6 +46,8 @@ const projects = [
     type: "Fundamentals",
     difficulty: "Beginner",
     focus: ["input", "decisions", "output"],
+    sourceAvailability: "unavailable",
+    sourceAvailabilityNote: "This Java file was removed as obsolete in commit 73b0689. Its archived version demonstrates an if/else age check and a counted for loop; it is not part of the current checkout.",
     codePreview: ['int age = scanner.nextInt();', 'if (age >= 18) {', '    System.out.printf("Okay, %s. You can drive.%n", name);'],
     description: "Ask for a person's age and name, then print a personalized message indicating whether they meet this exercise's age threshold of 18. The example demonstrates a simple age check, not a complete legal eligibility check.",
     learningOutcomes: ["Read an integer and then a full line of text with Scanner.", "Consume the pending newline after nextInt() before reading the name with nextLine().", "Compare the age with >= and use if/else to print the matching message."],
@@ -146,27 +152,161 @@ const projects = [
     documentationPath: "projects/md/JoKenPo.md"
   }
 ];
+
+const learningPathStages = [
+  {
+    title: "Read, store, and present values",
+    projectNames: ["TypeProfile"],
+    teaches: "Begin with console input and output: the guide moves through String, numeric, boolean, and char values, then formats a readable summary.",
+    connection: "This gives later exercises a shared starting point: reading values before selecting what a program should do."
+  },
+  {
+    title: "Choose an outcome",
+    projectNames: ["WeekDay"],
+    teaches: "WeekDay maps one integer to one of several named results with switch, case, break, and a default branch.",
+    connection: "It makes selection explicit before Calculator uses switch to choose between arithmetic operations."
+  },
+  {
+    title: "Apply operations to input",
+    projectNames: ["Calculator"],
+    teaches: "Calculator combines Scanner, integer arithmetic, switch selection, and formatted output; its guide calls out integer division and unhandled division by zero.",
+    connection: "The exercise builds on reading and selection, then prepares the reader to follow more stateful conditional behavior."
+  },
+  {
+    title: "Keep track of a decision",
+    projectNames: ["LoginIntermediary"],
+    teaches: "Its guide describes a while loop controlled by an attempt count and a boolean success flag, with String.equals() and a conditional expression.",
+    connection: "The guide expects line input, if-style conditions, and loops. TypeProfile provides line input; the archived ReturnName source demonstrates if/else and a counted loop, but neither archived exercise is part of the current checkout."
+  },
+  {
+    title: "Combine repetition, choices, and arrays",
+    projectNames: ["JoKenPo"],
+    teaches: "The guide and source show a do-while game loop, indexed String choices, a bounded random selection, comparisons, and win counters.",
+    connection: "The guide expects if/else and basic comparisons; the archived ReturnName source demonstrates those ideas, while LoginIntermediary introduces a while loop. The array and random selection are new here. Its existing roadmapOrder is 6; the other catalog entries have no numbered positions."
+  },
+  {
+    title: "Group related data in an object",
+    projectNames: ["bulletin"],
+    teaches: "The lesson guide introduces a Student object, fields, a constructor, arithmetic over four grades, and a threshold comparison.",
+    connection: "It shifts from values handled in main to related values grouped in a class; the stated grade range is not validated by the program."
+  },
+  {
+    title: "Build a collection",
+    projectNames: ["library"],
+    teaches: "The library guide practices ArrayList<String>, adding titles, and a do-while loop that runs at least once.",
+    connection: "DeveloperProfile extends the collection idea by keeping project names inside a profile object and printing them with an enhanced for loop."
+  },
+  {
+    title: "Model a profile with a collection",
+    projectNames: ["DeveloperProfile"],
+    teaches: "The guide connects a nested class and constructor with an ArrayList, a repeat-until-answer pattern, and an enhanced for loop.",
+    connection: "Its stored profile collection gives a useful comparison point for the next project, which adds menu-driven list operations."
+  },
+  {
+    title: "Operate on a collection",
+    projectNames: ["CandidateManager"],
+    teaches: "CandidateManager brings together an ArrayList, menu selection, loops, searching, indexing, addition, and removal.",
+    connection: "The guide identifies it as a broader combination of list operations and menu flow; its documented removal edge cases remain part of the exercise."
+  }
+];
+
+function LoadLearningPath() {
+  const path = document.getElementById("learning-path-stages");
+  if (!path) return;
+
+  const pathSection = path.closest(".learning-path-section");
+  pathSection?.addEventListener("click", (event) => {
+    if (!event.target.closest('a[href^="#project-"]')) return;
+    const listView = document.querySelector('[data-map-view="list"]');
+    const mapPanel = document.getElementById("knowledge-map-panel");
+    if (mapPanel && !mapPanel.hidden && listView) listView.click();
+  });
+
+  const projectsByName = new Map(projects.map((project) => [project.name, project]));
+  path.replaceChildren();
+
+  learningPathStages.forEach((stage, index) => {
+    const item = document.createElement("li");
+    item.className = "learning-path-stage";
+    item.style.setProperty("--stage-index", String(index));
+    const article = document.createElement("article");
+    article.className = "path-stage-card";
+
+    const header = document.createElement("div");
+    header.className = "path-stage-header";
+    const marker = document.createElement("span");
+    marker.className = "path-stage-marker";
+    marker.setAttribute("aria-hidden", "true");
+    marker.textContent = String(index + 1).padStart(2, "0");
+    const level = document.createElement("span");
+    level.className = "path-stage-label";
+    level.textContent = `Stage ${String(index + 1).padStart(2, "0")}`;
+    header.append(marker, level);
+
+    const heading = document.createElement("h3");
+    heading.textContent = stage.title;
+    const teaches = document.createElement("p");
+    teaches.className = "path-stage-teaches";
+    teaches.textContent = stage.teaches;
+    const connection = document.createElement("p");
+    connection.className = "path-stage-connection";
+    const connectionLabel = document.createElement("span");
+    connectionLabel.textContent = "How it connects";
+    connection.append(connectionLabel, document.createTextNode(stage.connection));
+
+    const projectLinks = document.createElement("ul");
+    projectLinks.className = "path-stage-projects";
+    stage.projectNames.forEach((projectName) => {
+      const project = projectsByName.get(projectName);
+      if (!project) return;
+      const linkItem = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `#${projectAnchorId(project.name)}`;
+      link.textContent = project.name;
+      linkItem.append(link);
+      if (project.sourceAvailability === "unavailable") {
+        const status = document.createElement("span");
+        status.className = "source-availability";
+        status.textContent = "Source unavailable in this checkout";
+        linkItem.append(status);
+      }
+      projectLinks.append(linkItem);
+    });
+
+    article.append(header, heading, teaches, connection, projectLinks);
+    item.append(article);
+    path.append(item);
+  });
+}
+
 function LoadProjects() {
   let ProjectsBase = document.getElementById("projects-list");
+  if (!ProjectsBase) return;
 
   for (let counter = 0; counter < projects.length; counter++) {
     ProjectsBase.innerHTML += `<div class="col-sm-6 col-lg-4 project-entry">
-  <div class="project-card">
+  <article class="project-card" id="${projectAnchorId(projects[counter].name)}">
     <div class="project-card-top">
       <div class="project-title-group">
         <span class="project-type">${projects[counter].type}</span>
         <h3>${projects[counter].name}</h3>
       </div>
 
-      <span class="project-difficulty" data-level="${projects[counter].difficulty.toLowerCase()}">${projects[counter].difficulty}</span>
+      <div class="project-labels">
+        <span class="project-difficulty" data-level="${projects[counter].difficulty.toLowerCase()}">${projects[counter].difficulty}</span>
+        <span class="project-status">${projects[counter].status.replace(/-/g, " ")}</span>
+      </div>
     </div>
 
     <p class="project-summary">${projects[counter].description}</p>
-    <div class="project-focus-list" aria-label="Learning focus">
+    <div class="project-focus-list" role="group" aria-label="Learning focus">
       ${projects[counter].focus.map((focus) => `<span class="project-focus-tag">${focusLabels[focus]}</span>`).join("")}
     </div>
+    ${projects[counter].sourceAvailability === "unavailable"
+      ? `<p class="source-availability-note" role="note"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>${projects[counter].sourceAvailabilityNote}</p>`
+      : ""}
     <figure class="project-code-preview" data-level="${projects[counter].difficulty.toLowerCase()}">
-      <figcaption><span>Code preview</span><span>${projects[counter].difficulty} · illustrative excerpt</span></figcaption>
+      <figcaption><span>Code preview</span><span>${projects[counter].difficulty} · ${projects[counter].sourceAvailability === "unavailable" ? "catalog excerpt; source not verified" : "illustrative excerpt"}</span></figcaption>
       <pre aria-label="${projects[counter].difficulty} level code example"><code>${projects[counter].codePreview.map((line) => `<span class="project-code-line">${line}</span>`).join("")}</code></pre>
     </figure>
 
@@ -184,6 +324,9 @@ function LoadProjects() {
           ${projects[counter].concepts.map((concept) => `<li>${concept}</li>`).join("")}
         </ul>
 
+        ${projects[counter].sourceAvailability === "unavailable"
+        ? `<p class="source-availability-note" role="note">${projects[counter].sourceAvailabilityNote}</p>`
+        : ""}
         ${projects[counter].repoUrl
         ? `<a class="project-repository-link" href="${projects[counter].repoUrl}" target="_blank" rel="noreferrer">Open repository</a>`
         : `<span class="source-unavailable">Repository not available yet</span>`}
@@ -192,9 +335,102 @@ function LoadProjects() {
         : ""}
       </div>
     </details>
-  </div>
+  </article>
 </div>`;
   }
 }
 
 LoadProjects();
+LoadLearningPath();
+
+function LoadRoadmap() {
+  const roadmap = document.getElementById("roadmap-levels");
+  if (!roadmap) return;
+
+  const difficultyOrder = ["beginner", "basic", "intermediate", "advanced", "challenge"];
+  const groups = new Map();
+  projects.forEach((project) => {
+    const level = project.difficulty || "Difficulty not specified";
+    if (!groups.has(level)) groups.set(level, []);
+    groups.get(level).push(project);
+  });
+
+  const orderedGroups = [...groups.entries()].sort(([first], [second]) => {
+    const firstOrder = difficultyOrder.indexOf(first.toLowerCase());
+    const secondOrder = difficultyOrder.indexOf(second.toLowerCase());
+    if (firstOrder !== secondOrder) {
+      return (firstOrder < 0 ? difficultyOrder.length : firstOrder)
+        - (secondOrder < 0 ? difficultyOrder.length : secondOrder);
+    }
+    return first.localeCompare(second, undefined, { sensitivity: "base" });
+  });
+
+  roadmap.replaceChildren();
+  orderedGroups.forEach(([difficulty, groupProjects], index) => {
+    const column = document.createElement("div");
+    column.className = "col-lg-6";
+
+    const section = document.createElement("section");
+    section.className = `roadmap-card roadmap-level-card${index % 2 ? " roadmap-card-blue" : ""}`;
+    section.setAttribute("aria-label", `${difficulty} projects`);
+
+    const header = document.createElement("div");
+    header.className = "roadmap-top";
+    const number = document.createElement("span");
+    number.className = "roadmap-number";
+    number.textContent = "LEVEL";
+    const count = document.createElement("span");
+    count.className = "roadmap-weeks";
+    count.textContent = `${groupProjects.length} ${groupProjects.length === 1 ? "project" : "projects"}`;
+    header.append(number, count);
+
+    const title = document.createElement("h3");
+    title.textContent = difficulty;
+    const explanation = document.createElement("p");
+    explanation.className = "roadmap-group-note";
+    explanation.textContent = "Catalog difficulty label. Items below retain their catalog order; no prerequisite order is specified.";
+
+    const list = document.createElement("ul");
+    list.className = "roadmap-project-list";
+    groupProjects.forEach((project) => {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `#${projectAnchorId(project.name)}`;
+      link.textContent = project.name;
+      link.dataset.roadmapProject = "";
+      const type = document.createElement("span");
+      type.className = "roadmap-project-type";
+      type.textContent = project.type;
+      const focus = document.createElement("span");
+      focus.className = "roadmap-project-focus";
+      focus.textContent = `Topics: ${project.focus.map((topic) => focusLabels[topic]).join(", ")}`;
+      item.append(link, type, focus);
+      if (project.sourceAvailability === "unavailable") {
+        const source = document.createElement("span");
+        source.className = "roadmap-source-status";
+        source.textContent = "Java source unavailable in this checkout";
+        item.append(source);
+      }
+      list.append(item);
+    });
+
+    section.append(header, title, explanation, list);
+    column.append(section);
+    roadmap.append(column);
+  });
+
+  const orderedProjects = projects.filter((project) => Number.isInteger(project.roadmapOrder));
+  const note = document.getElementById("roadmap-note");
+  if (note && orderedProjects.length !== projects.length) {
+    note.textContent = `${orderedProjects.length} of ${projects.length} projects have a catalog roadmapOrder. This grouping uses difficulty instead; it does not fill in missing positions.`;
+  }
+
+  roadmap.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-roadmap-project]")) return;
+    const listView = document.querySelector('[data-map-view="list"]');
+    const mapPanel = document.getElementById("knowledge-map-panel");
+    if (mapPanel && !mapPanel.hidden && listView) listView.click();
+  });
+}
+
+LoadRoadmap();
