@@ -666,10 +666,6 @@ function animate() {
 
 window.addEventListener("scroll", updateScrollProgress, { passive: true });
 window.addEventListener("resize", resize);
-window.addEventListener("pagehide", () => {
-  window.cancelAnimationFrame(frameHandle);
-  renderer.dispose();
-});
 reducedMotion.addEventListener?.("change", () => {
   if (reducedMotion.matches) {
     for (const node of nodes) node.group.scale.setScalar(node.targetScale);
