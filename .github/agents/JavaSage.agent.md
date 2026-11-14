@@ -170,8 +170,7 @@ The current website is a static Java project catalogue and source-and-guide stud
 - data/projects.json is the canonical project catalog.
 - js/project-data.js is a small JSON-import wrapper that exports projects and getProject(id).
 - js/landing.js renders project cards from the catalog.
-- project.html and js/project-study.js load the selected Java source and its Markdown guide.
-- js/project-study.js loads the complete Java source and renders the study guide beside it.
+- project.html and js/project-study.js load the complete Java source and its Markdown guide, then display them side by side.
 - projects/md/ stores one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs for new Java projects.
 - tests/ validates catalogue links, study-guide structure, and ID generation.
