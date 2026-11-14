@@ -312,6 +312,9 @@ function LoadProjects() {
       <figcaption><span>Code preview</span><span>${project.difficulty} · ${project.sourceAvailability === "unavailable" ? "catalog excerpt; source not verified" : "illustrative excerpt"}</span></figcaption>
       <pre aria-label="${project.difficulty} level code example"><code>${project.codePreview.map((line) => `<span class="project-code-line">${line}</span>`).join("")}</code></pre>
     </figure>
+    <a class="project-study-link" href="./project.html?project=${encodeURIComponent(project.name)}">
+      Open project study <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+    </a>
 
     <details class="project-disclosure">
       <summary>Explore what this project teaches</summary>
@@ -425,7 +428,7 @@ function LoadRoadmap() {
 
   const orderedProjects = activeProjects.filter((project) => Number.isInteger(project.roadmapOrder));
   const note = document.getElementById("roadmap-note");
-  if (note && orderedProjects.length !== projects.length) {
+  if (note && orderedProjects.length !== activeProjects.length) {
     note.textContent = `${orderedProjects.length} of ${activeProjects.length} active projects have a catalog roadmapOrder. This grouping uses difficulty instead; it does not fill in missing positions.`;
   }
 
