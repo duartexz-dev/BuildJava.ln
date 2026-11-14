@@ -39,10 +39,17 @@ test("getProject resolves known ids and safely rejects unknown ids", () => {
   assert.equal(getProject("not-a-real-project"), null);
 });
 
-test("the landing page explains the project without loading the old 3D scene", () => {
+test("the landing page is a plain introduction without CSS or a 3D scene", () => {
   const html = readFileSync(resolve(root, "index.html"), "utf8");
-  assert.match(html, /Learning Java/);
-  assert.match(html, /public record of my progress/);
+  assert.match(html, /What is BuildJava\.ln/);
+  assert.match(html, /learning repository/);
   assert.match(html, /project\.html\?project=TypeProfile/);
-  assert.doesNotMatch(html, /trail-world\.js|trail-canvas|three\.module\.js|<canvas/i);
+  assert.doesNotMatch(html, /stylesheet|<style|<script|trail-world|three\.module\.js|<canvas/i);
+});
+
+test("the study page uses no stylesheet and keeps a Java source code block", () => {
+  const html = readFileSync(resolve(root, "project.html"), "utf8");
+  assert.doesNotMatch(html, /stylesheet|<style/i);
+  assert.match(html, /id="java-source"/);
+  assert.match(html, /project-study\.js/);
 });
