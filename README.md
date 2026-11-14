@@ -1,97 +1,138 @@
 # BuildJava.ln
 
-![Learning roadmap progress](./assets/progress.svg)
-![Java](https://img.shields.io/badge/Java-learning%20log-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+![Java](https://img.shields.io/badge/Java-learning%20repository-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![Exercises](https://img.shields.io/badge/exercises-10-315B48?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square)
 
-**A personal log of learning Java through practical exercises.**
+**A practical record of learning Java through small programs, study notes, and continuous improvement.**
 
-BuildJava.ln is a learning repository focused on Java. Each exercise is a small program with its original Java source code and a study guide explaining the concepts being practiced.
+[Open the project website](https://duartexz-dev.github.io/BuildJava.ln/) · [Browse the Java source](./projects/)
 
-The website is deliberately plain. Its only purpose is to explain the repository and provide a direct way to open an exercise. The focus of the project is the Java code, not the website design.
+## What this repository is
+
+BuildJava.ln is a Java-first learning repository. Each exercise focuses on a concrete programming task and keeps three things together:
+
+1. The problem being practiced.
+2. A study guide explaining the relevant concepts and program flow.
+3. The Java source code that implements the exercise.
+
+The projects move from core language fundamentals into object-oriented programming and collections. The repository is a record of learning, not a claim that these console exercises are production-ready applications.
 
 ## Current exercises
 
-1. **TypeProfile** — data types and console input.
-2. **WeekDay** — selection with switch.
-3. **Calculator** — arithmetic and operators.
-4. **JoKenPo** — random choices, conditions, and repetition.
-5. **LoginIntermediary** — strings, boolean logic, and limited attempts.
-6. **bulletin** — classes, objects, and averages.
-7. **Vehicle** — constructors and object attributes.
-8. **DeveloperProfile** — objects and ArrayList.
-9. **library** — collection operations.
-10. **CandidateManager** — searching, removing, and menu-driven collections.
+| # | Project | Main concepts | Level |
+| --- | --- | --- | --- |
+| 01 | [TypeProfile](./projects/Beginner/TypeProfile.java) | Data types, Scanner, formatted output | Beginner |
+| 02 | [WeekDay](./projects/Beginner/WeekDay.java) | switch, selection, input | Beginner |
+| 03 | [Calculator](./projects/Beginner/Calculator.java) | Arithmetic, operators, switch | Beginner |
+| 04 | [JoKenPo](./projects/Beginner/JoKenPo.java) | Random, conditions, loops | Beginner |
+| 05 | [LoginIntermediary](./projects/Intermediate/LoginIntermediary.java) | String comparison, boolean logic, while | Intermediate |
+| 06 | [bulletin](./projects/Intermediate/bulletin.java) | Classes, objects, constructors | Intermediate |
+| 07 | [Vehicle](./projects/Intermediate/Vehicle.java) | Object state, constructors, toString | Intermediate |
+| 08 | [DeveloperProfile](./projects/Intermediate/DeveloperProfile.java) | Objects, ArrayList, enhanced for | Intermediate |
+| 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
+| 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | Methods, collections, validation, menu flow | Intermediate |
 
-The order represents the current learning progression, from beginner fundamentals to intermediate object-oriented programming and collections.
+Every entry has a companion guide in [projects/md](./projects/md/). The guides cover learning goals, execution flow, concepts, examples, limitations, and possible extensions.
 
-## How to use an exercise
+## How to explore an exercise
 
-Each exercise has two parts:
+The [website](https://duartexz-dev.github.io/BuildJava.ln/) is a small index for the repository. Open any exercise to read its Markdown guide next to the Java implementation.
 
-- **Study guide:** the Markdown file in the projects/md/ directory.
-- **Java implementation:** the original .java file in projects/Beginner/ or projects/Intermediate/.
+The study page also links directly to both source files on GitHub. The project data is maintained in one place so the overview and study pages use the same project names, descriptions, levels, and paths.
 
-Open the website's first exercise or navigate directly to another exercise using its project ID:
+## What the exercises demonstrate
 
-    project.html?project=TypeProfile
-    project.html?project=Vehicle
-    project.html?project=library
+**Java fundamentals:** console input, primitive types, strings, formatted output, arithmetic, selection, loops, and random values.
+
+**Object-oriented programming:** classes, attributes, constructors, object creation, encapsulation, and object representation.
+
+**Collections and program structure:** ArrayList, iteration, methods, menu-driven programs, and validation of user input.
+
+## Technology
+
+| Technology | Purpose |
+| --- | --- |
+| Java | Main learning content and console exercises |
+| HTML and CSS | Accessible project overview and study layout |
+| JavaScript | Project catalogue, Markdown rendering, and source display |
+| Node.js | JavaScript syntax checks and repository integrity tests |
+| GitHub Actions | Java compilation, smoke tests, and GitHub Pages deployment |
+
+The website has no backend, database, framework, or third-party runtime package dependency. Google Fonts are used for the presentation and fall back to local system fonts if unavailable.
+
+## Run locally
+
+Requirements: Java 21 or later, Node.js 22 or later for repository checks, and a local HTTP server to view the website.
+
+Clone the repository:
+
+    git clone https://github.com/duartexz-dev/BuildJava.ln.git
+    cd BuildJava.ln
+
+Compile and run an individual exercise:
+
+    javac -d out projects/Intermediate/CandidateManager.java
+    java -cp out Intermediate.CandidateManager
+
+Another example:
+
+    javac -d out projects/Beginner/Calculator.java
+    java -cp out Calculator
+
+Start a local server for the website:
+
+    python -m http.server 8000
+
+Open http://localhost:8000 in a browser. The study page fetches the Markdown and Java files, so opening the HTML files directly from the file system is not supported.
+
+## Automated checks
+
+Run the JavaScript checks:
+
+    npm run check
+    npm test
+
+The GitHub Actions workflow also:
+
+- Compiles every Java source file.
+- Runs smoke tests for CandidateManager removal validation and Vehicle object output.
+- Checks project metadata and the existence of all referenced source and guide files.
+- Deploys the static website after the checks pass on the main branch.
+
+These checks establish that the sources compile and selected behaviors work. They do not imply that every exercise has comprehensive automated test coverage.
 
 ## Repository structure
 
     BuildJava.ln/
     ├── .github/
-    │   ├── agents/
+    │   ├── agents/                 # Personal learning and workflow agents
     │   └── workflows/
-    ├── assets/
-    │   └── progress.svg
+    │       └── pages.yml           # Validation and GitHub Pages deployment
     ├── js/
-    │   ├── project-data.js
-    │   ├── project-study.js
-    │   └── projects.js
+    │   ├── project-data.js         # Single source for exercise metadata
+    │   ├── landing.js              # Project overview rendering
+    │   └── project-study.js        # Guide and source loading
     ├── projects/
-    │   ├── Beginner/
-    │   ├── Intermediate/
-    │   └── md/
-    ├── scripts/
-    │   └── update-progress.mjs
+    │   ├── Beginner/               # Four introductory Java exercises
+    │   ├── Intermediate/           # Six combined and object-oriented exercises
+    │   └── md/                     # Ten Markdown study guides
+    ├── styles/
+    │   ├── landing.css             # Project overview styling
+    │   └── study.css               # Exercise study-page styling
     ├── tests/
-    │   └── project-data.test.js
+    │   └── project-data.test.js    # Data, file, page, and source checks
     ├── index.html
     ├── project.html
     └── package.json
 
-## Run locally
-
-Requirements: a modern browser and Node.js 22 or later for checks.
-
-    git clone https://github.com/duartexz-dev/BuildJava.ln.git
-    cd BuildJava.ln
-    python -m http.server 8000
-
-Open http://localhost:8000. The pages load the study guides and Java source files over HTTP, so opening the HTML files directly from the file system is not supported.
-
-## Quality checks
-
-No third-party Node.js packages are required.
-
-    npm run check
-    npm test
-
-The automated tests verify the exercise metadata, ordering, and the existence of every referenced Java source and Markdown guide. They also verify that the landing page remains a simple introduction without a 3D scene or stylesheet.
-
-## Progress indicator
-
-The progress graphic is generated from js/projects.js by scripts/update-progress.mjs. It represents the current status of the learning roadmap. It is not a measure of time spent or lines of code.
-
 ## Learning principles
 
-- Practice by writing code.
-- Keep the original Java implementation available.
-- Explain the concepts being practiced.
-- Be honest about what is planned and what is complete.
+- Build small programs to practice specific concepts.
+- Keep explanations connected to the actual source code.
+- Record limitations instead of hiding them.
+- Improve the implementation as understanding grows.
 
 ## License
 
-This project is distributed under the MIT License. See LICENSE.
+This project is distributed under the MIT License. See [LICENSE](./LICENSE).
