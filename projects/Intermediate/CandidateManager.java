@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class CandidateManager {
 
     public static void main(String[] args) {
+        // Copy the initial names into a resizable list so entries can be added and removed.
         List<String> candidates = new ArrayList<>(Arrays.asList(
                 "Ana Silva", "Bruno Costa", "Carla Souza", "Daniel Oliveira",
                 "Eduarda Santos", "Felipe Pereira", "Gabriela Almeida", "Henrique Lima",
@@ -15,9 +16,11 @@ public class CandidateManager {
                 "Mariana Carvalho", "Nicolas Gomes", "Lais Mirelle", "Pedro Barbosa",
                 "Rafaela Nunes", "Samuel Cardoso", "Thais Moreira", "Vinicius Teixeira"));
 
+        // The Scanner is closed automatically when the try block finishes.
         try (Scanner scanner = new Scanner(System.in)) {
             boolean running = true;
 
+            // Keep showing the menu until the user chooses the exit option.
             while (running) {
                 showMenu();
                 int option = readInt(scanner, "Choose an option: ");
@@ -54,6 +57,7 @@ public class CandidateManager {
         }
     }
 
+    // Display the available actions; this method does not return a value.
     private static void showMenu() {
         System.out.println("========================================");
         System.out.println("       CANDIDATE MANAGEMENT SYSTEM");
@@ -66,6 +70,7 @@ public class CandidateManager {
         System.out.println("[0] Exit");
     }
 
+    // Keep reading until a whole number is entered, then return that number.
     private static int readInt(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -81,11 +86,13 @@ public class CandidateManager {
         }
     }
 
+    // Read a full name and remove accidental spaces at its edges.
     private static String readName(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
 
+    // Add one name to the shared list after checking that it is not empty.
     private static void addCandidate(List<String> candidates, Scanner scanner) {
         String name = readName(scanner, "Enter the candidate's name: ");
 
@@ -98,6 +105,7 @@ public class CandidateManager {
         System.out.printf("Candidate added: %s%n", name);
     }
 
+    // Print each candidate with a human-friendly position starting at 1.
     private static void listCandidates(List<String> candidates) {
         if (candidates.isEmpty()) {
             System.out.println("There are no candidates in the list.");
@@ -110,6 +118,7 @@ public class CandidateManager {
         }
     }
 
+    // Find a candidate by name and report the position when it exists.
     private static void searchCandidate(List<String> candidates, Scanner scanner) {
         String name = readName(scanner, "Enter the candidate's full name: ");
         int index = candidates.indexOf(name);
@@ -122,6 +131,7 @@ public class CandidateManager {
         System.out.printf("Found: %s (position %d)%n", candidates.get(index), index + 1);
     }
 
+    // Validate the chosen position before converting it to a zero-based list index.
     private static void removeCandidate(List<String> candidates, Scanner scanner) {
         if (candidates.isEmpty()) {
             System.out.println("There are no candidates to remove.");
