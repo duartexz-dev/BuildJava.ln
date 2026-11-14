@@ -1,4 +1,4 @@
-import { getProject } from "./trail-data.js";
+import { getProject } from "./project-data.js";
 
 const params = new URLSearchParams(window.location.search);
 const project = getProject(params.get("project"));
@@ -19,40 +19,6 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
-}
-
-const JAVA_KEYWORDS = new Set([
-  "abstract","assert","boolean","break","byte","case","catch","char","class","const","continue",
-  "default","do","double","else","enum","extends","final","finally","float","for","if","implements",
-  "import","instanceof","int","interface","long","native","new","package","private","protected",
-  "public","return","short","static","strictfp","super","switch","synchronized","this","throw",
-  "throws","transient","try","void","volatile","while","true","false","null"
-]);
-const JAVA_TYPES = new Set([
-  "String","Scanner","ArrayList","Integer","Double","Float","Character","Boolean","Object",
-  "Random","Math","System","List","Map","Set"
-]);
-const JAVA_TOKEN_PATTERN = /\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|@[A-Za-z_$][\w$]*|\b[A-Za-z_$][\w$]*\b|\b\d+(?:\.\d+)?[fFdDlL]?\b/g;
-
-function highlightJava(source) {
-  let output = "";
-  let cursor = 0;
-  for (const match of String(source).matchAll(JAVA_TOKEN_PATTERN)) {
-    const token = match[0];
-    output += escapeHtml(source.slice(cursor, match.index));
-    let tokenType = "";
-    if (token.startsWith("//") || token.startsWith("/*")) tokenType = "comment";
-    else if (token[0] === '"' || token[0] === "'") tokenType = "string";
-    else if (token[0] === "@") tokenType = "annotation";
-    else if (JAVA_KEYWORDS.has(token)) tokenType = "keyword";
-    else if (JAVA_TYPES.has(token)) tokenType = "type";
-    else if (/^\d/.test(token)) tokenType = "number";
-    output += tokenType
-      ? '<span class="tok-' + tokenType + '">' + escapeHtml(token) + "</span>"
-      : escapeHtml(token);
-    cursor = match.index + token.length;
-  }
-  return output + escapeHtml(source.slice(cursor));
 }
 
 function renderInline(value) {
@@ -225,23 +191,18 @@ function showError(container, message) {
 if (!project) {
   document.title = "Project not found — BuildJava.ln";
   title.textContent = "Project not found";
-  description.textContent = "This island could not be found on the current trail.";
+  description.textContent = "This exercise could not be found in the project data.";
   kicker.textContent = "NO MATCHING STOP";
-  showError(markdownContainer, "Return to the trail and choose one of the available islands.");
+  showError(markdownContainer, "Return to the home page and open an available exercise.");
   javaSource.textContent = "No source file is associated with this address.";
 } else {
   document.title = project.name + " — BuildJava.ln";
   title.textContent = project.name;
   description.textContent = project.description;
-  kicker.textContent = "STOP " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
-  concepts.replaceChildren(...project.concepts.map((concept) => {
-    const tag = document.createElement("span");
-    tag.textContent = concept;
-    return tag;
-  }));
+  kicker.textContent = "PROJECT " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
+  concepts.textContent = project.concepts.join(", ");
   markdownLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.markdownPath;
   codePath.textContent = project.javaPath;
-  document.querySelector("#code-heading").textContent = project.name + ".java";
 
   const markdownPromise = loadFile(project.markdownPath)
     .then((markdown) => {
@@ -251,8 +212,7 @@ if (!project) {
 
   const sourcePromise = loadFile(project.javaPath)
     .then((source) => {
-      javaSource.innerHTML = highlightJava(source);
-      javaSource.classList.remove("loading-state");
+      javaSource.textContent = source;
       copyButton.disabled = false;
     })
     .catch((error) => {
