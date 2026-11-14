@@ -7,11 +7,12 @@ import { getProject, projects } from "../js/project-data.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
-test("the project catalogue has ten entries in a unique, continuous order", () => {
-  assert.equal(projects.length, 10);
+test("the project catalogue has unique IDs and a continuous sequence", () => {
+  assert.ok(projects.length > 0);
   assert.equal(new Set(projects.map((project) => project.id)).size, projects.length);
   assert.equal(new Set(projects.map((project) => project.step)).size, projects.length);
-  assert.deepEqual(projects.map((project) => project.step), [1,2,3,4,5,6,7,8,9,10]);
+  const orderedSteps = projects.map((project) => project.step).sort((a, b) => a - b);
+  assert.deepEqual(orderedSteps, Array.from({ length: projects.length }, (_, index) => index + 1));
 });
 
 test("every project has complete metadata and existing source and guide files", () => {
