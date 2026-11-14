@@ -10,11 +10,12 @@
 
 ## What this repository is
 
-BuildJava.ln is a Java-first learning repository. Each exercise focuses on a concrete programming task and keeps three things together:
+BuildJava.ln is a Java-first learning repository. Each exercise focuses on a concrete programming task and connects four learning resources:
 
 1. The problem being practiced.
-2. A study guide explaining the relevant concepts and program flow.
-3. The Java source code that implements the exercise.
+2. The complete Java source code, shown in selectable sections.
+3. An interactive explanation beside the selected code, covering variables, methods, parameters, operators, and program flow.
+4. A full study guide with examples, limitations, and practice ideas.
 
 The projects move from core language fundamentals into object-oriented programming and collections. The repository is a record of learning, not a claim that these console exercises are production-ready applications.
 
@@ -33,13 +34,13 @@ The projects move from core language fundamentals into object-oriented programmi
 | 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
 | 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | Methods, collections, validation, menu flow | Intermediate |
 
-Every entry has a companion guide in [projects/md](./projects/md/). The guides cover learning goals, execution flow, concepts, examples, limitations, and possible extensions.
+Every entry has a companion guide in [projects/md](./projects/md/) and a guided walkthrough defined in [js/code-notes.js](./js/code-notes.js). The walkthrough is anchored to real lines in the Java source so each explanation stays connected to the code it describes.
 
 ## How to explore an exercise
 
-The [website](https://duartexz-dev.github.io/BuildJava.ln/) is a small index for the repository. Open any exercise to read its Markdown guide next to the Java implementation.
+The [website](https://duartexz-dev.github.io/BuildJava.ln/) is a small index for the repository. Open any exercise to read the complete Java code in selectable sections and see the matching explanation beside it. The full Markdown guide remains available below the walkthrough.
 
-The study page also links directly to both source files on GitHub. The project data is maintained in one place so the overview and study pages use the same project names, descriptions, levels, and paths.
+The study page links directly to both source files on GitHub and includes previous/next navigation. Project metadata is kept in one place, while code explanations are maintained separately and checked against the actual source anchors.
 
 ## What the exercises demonstrate
 
@@ -111,8 +112,9 @@ These checks establish that the sources compile and selected behaviors work. The
     │       └── pages.yml           # Validation and GitHub Pages deployment
     ├── js/
     │   ├── project-data.js         # Single source for exercise metadata
+    │   ├── code-notes.js           # Guided explanations for all ten exercises
     │   ├── landing.js              # Project overview rendering
-    │   └── project-study.js        # Guide and source loading
+    │   └── project-study.js        # Interactive code and guide loading
     ├── projects/
     │   ├── Beginner/               # Four introductory Java exercises
     │   ├── Intermediate/           # Six combined and object-oriented exercises
@@ -120,7 +122,8 @@ These checks establish that the sources compile and selected behaviors work. The
     ├── styles/
     │   └── site.css                 # Shared overview and study-page styling
     ├── tests/
-    │   └── project-data.test.js    # Data, file, page, and source checks
+    │   ├── project-data.test.js    # Data, file, page, and source checks
+    │   └── code-notes.test.js     # Explanation-to-source anchor checks
     ├── index.html
     ├── project.html
     └── package.json

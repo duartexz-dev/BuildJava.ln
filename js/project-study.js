@@ -1,9 +1,11 @@
 import { getProject, projects } from "./project-data.js";
+import { getCodeNotes } from "./code-notes.js";
 
 const params = new URLSearchParams(window.location.search);
 const project = getProject(params.get("project"));
 const title = document.querySelector("#study-title");
 const description = document.querySelector("#study-description");
+const studyFlow = document.querySelector("#study-flow");
 const kicker = document.querySelector("#study-kicker");
 const concepts = document.querySelector("#study-concepts");
 const markdownContainer = document.querySelector("#markdown-content");
@@ -16,6 +18,14 @@ const breadcrumb = document.querySelector("#study-breadcrumb");
 const level = document.querySelector("#study-level");
 const previousProject = document.querySelector("#previous-project");
 const nextProject = document.querySelector("#next-project");
+const guidedCode = document.querySelector("#guided-code");
+const codeExplanation = document.querySelector("#code-explanation");
+const explanationIndex = document.querySelector("#explanation-index");
+const sectionCounter = document.querySelector("#section-counter");
+const previousSection = document.querySelector("#previous-section");
+const nextSection = document.querySelector("#next-section");
+let currentSections = [];
+let activeSectionIndex = 0;
 
 function escapeHtml(value) {
   return String(value)
@@ -193,25 +203,142 @@ function showError(container, message) {
   container.innerHTML = '<p class="study-error">' + escapeHtml(message) + "</p>";
 }
 
+function renderGuidedCode(source, notes) {
+  const lines = source.replace(/\r\n/g, "\n").split("\n");
+
+  if (!notes || !Array.isArray(notes.sections) || notes.sections.length === 0) {
+    guidedCode.innerHTML = '<p class="study-error">As explicações deste projeto ainda não estão disponíveis.</p>';
+    return;
+  }
+
+  const starts = [];
+  let searchFrom = 0;
+
+  notes.sections.forEach((section) => {
+    const anchorIndex = lines.findIndex((line, index) => index >= searchFrom && line.includes(section.anchor));
+    if (anchorIndex === -1) {
+      throw new Error("Trecho de referência não encontrado: " + section.anchor);
+    }
+    starts.push(anchorIndex);
+    searchFrom = anchorIndex + 1;
+  });
+
+  currentSections = notes.sections.map((section, index) => {
+    const firstLine = index === 0 ? 0 : starts[index];
+    const lastLine = index < starts.length - 1 ? starts[index + 1] - 1 : lines.length - 1;
+    return { ...section, firstLine, lastLine };
+  });
+
+  guidedCode.innerHTML = currentSections.map((section, index) => {
+    const lineMarkup = lines.slice(section.firstLine, section.lastLine + 1).map((line, offset) => {
+      const lineNumber = section.firstLine + offset + 1;
+      const isComment = /^\s*(\/\/|\/\*|\*|\*\/)/.test(line);
+      const className = isComment ? "source-line is-comment" : "source-line";
+      return '<span class="' + className + '"><span class="line-number">' + lineNumber +
+        '</span><span class="line-content">' + (line ? escapeHtml(line) : " ") + "</span></span>";
+    }).join("");
+
+    return '<div class="code-segment" role="button" tabindex="0" data-section-index="' + index +
+      '" aria-pressed="false"><span class="code-segment-heading"><b>' + escapeHtml(section.title) +
+      '</b><small>LINHAS ' + (section.firstLine + 1) + "–" + (section.lastLine + 1) +
+      '</small></span><pre><code>' + lineMarkup + "</code></pre></div>";
+  }).join("");
+
+  explanationIndex.innerHTML = currentSections.map((section, index) => {
+    return '<button class="explanation-index-item" type="button" data-section-index="' + index +
+      '" aria-current="false"><span>' + String(index + 1).padStart(2, "0") +
+      '</span><b>' + escapeHtml(section.title) + '</b><small>LINHAS ' +
+      (section.firstLine + 1) + "–" + (section.lastLine + 1) + "</small></button>";
+  }).join("");
+
+  activeSectionIndex = 0;
+  selectExplanation(0, false);
+}
+
+function selectExplanation(index, scrollToCode = true) {
+  if (!currentSections.length) return;
+  activeSectionIndex = Math.max(0, Math.min(index, currentSections.length - 1));
+  const section = currentSections[activeSectionIndex];
+
+  sectionCounter.textContent = "TRECHO " + (activeSectionIndex + 1) + " / " + currentSections.length;
+  const items = (section.items || []).map((item) => {
+    return "<li><code>" + escapeHtml(item.term) + "</code><span>" +
+      escapeHtml(item.meaning) + "</span></li>";
+  }).join("");
+
+  codeExplanation.innerHTML =
+    '<p class="explanation-flow">TRECHO SELECIONADO</p>' +
+    "<h3>" + escapeHtml(section.title) + "</h3>" +
+    "<p>" + escapeHtml(section.explanation) + "</p>" +
+    (items ? '<div class="term-list-title">ELEMENTOS DESTE TRECHO</div><ul class="term-list">' + items + "</ul>" : "");
+
+  guidedCode.querySelectorAll(".code-segment").forEach((button, buttonIndex) => {
+    const selected = buttonIndex === activeSectionIndex;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+
+  explanationIndex.querySelectorAll(".explanation-index-item").forEach((button, buttonIndex) => {
+    button.classList.toggle("is-active", buttonIndex === activeSectionIndex);
+    button.setAttribute("aria-current", buttonIndex === activeSectionIndex ? "step" : "false");
+  });
+
+  previousSection.disabled = activeSectionIndex === 0;
+  nextSection.disabled = activeSectionIndex === currentSections.length - 1;
+
+  if (scrollToCode) {
+    const activeCode = guidedCode.querySelector('[data-section-index="' + activeSectionIndex + '"]');
+    activeCode?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+guidedCode.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-section-index]");
+  if (button) selectExplanation(Number(button.dataset.sectionIndex), false);
+});
+
+guidedCode.addEventListener("keydown", (event) => {
+  const segment = event.target.closest(".code-segment");
+  if (segment && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    selectExplanation(Number(segment.dataset.sectionIndex), false);
+  }
+});
+
+explanationIndex.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-section-index]");
+  if (button) {
+    selectExplanation(Number(button.dataset.sectionIndex));
+    guidedCode.querySelector('[data-section-index="' + activeSectionIndex + '"]')?.focus();
+  }
+});
+
+previousSection.addEventListener("click", () => selectExplanation(activeSectionIndex - 1));
+nextSection.addEventListener("click", () => selectExplanation(activeSectionIndex + 1));
+
 if (!project) {
-  document.title = "Project not found — BuildJava.ln";
-  title.textContent = "Project not found";
-  description.textContent = "This exercise could not be found in the project data.";
-  kicker.textContent = "PROJECT NOT FOUND";
-  breadcrumb.textContent = "Not found";
-  level.textContent = "NO MATCH";
+  document.title = "Projeto não encontrado — BuildJava.ln";
+  title.textContent = "Projeto não encontrado";
+  description.textContent = "Este exercício não foi encontrado no catálogo.";
+  studyFlow.textContent = "";
+  kicker.textContent = "PROJETO NÃO ENCONTRADO";
+  breadcrumb.textContent = "Não encontrado";
+  level.textContent = "SEM RESULTADO";
   previousProject.href = "./index.html#projects";
   nextProject.href = "./index.html#projects";
-  showError(markdownContainer, "Return to the home page and open an available exercise.");
-  javaSource.textContent = "No source file is associated with this address.";
+  showError(markdownContainer, "Volte à página inicial e abra um dos exercícios disponíveis.");
+  showError(guidedCode, "Nenhum código está associado a este endereço.");
+  javaSource.textContent = "Nenhum arquivo Java está associado a este endereço.";
 } else {
   document.title = project.name + " — BuildJava.ln";
   title.textContent = project.name;
-  description.textContent = project.description;
-  kicker.textContent = "PROJECT " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
+  const lessonNotes = getCodeNotes(project.id);
+  description.textContent = lessonNotes?.purpose || project.description;
+  studyFlow.textContent = lessonNotes?.flow || "";
+  kicker.textContent = "PROJETO " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
   breadcrumb.textContent = project.name;
   concepts.textContent = project.concepts.join(" · ");
-  level.textContent = project.difficulty.toUpperCase() + " / EXERCISE";
+  level.textContent = "NÍVEL " + project.difficulty.toUpperCase() + " / EXERCÍCIO";
   markdownLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.markdownPath;
   sourceFileLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.javaPath;
   codePath.textContent = project.javaPath;
@@ -222,33 +349,35 @@ if (!project) {
 
   if (previous) {
     previousProject.href = "./project.html?project=" + encodeURIComponent(previous.id);
-    previousProject.querySelector("strong").textContent = previous.name;
+    previousProject.querySelector("b").textContent = previous.name;
   } else {
     previousProject.href = "./index.html#projects";
-    previousProject.querySelector("strong").textContent = "All projects";
+    previousProject.querySelector("b").textContent = "Todos os projetos";
   }
 
   if (next) {
     nextProject.href = "./project.html?project=" + encodeURIComponent(next.id);
-    nextProject.querySelector("strong").textContent = next.name;
+    nextProject.querySelector("b").textContent = next.name;
   } else {
     nextProject.href = "./index.html#projects";
-    nextProject.querySelector("strong").textContent = "All projects";
+    nextProject.querySelector("b").textContent = "Todos os projetos";
   }
 
   const markdownPromise = loadFile(project.markdownPath)
     .then((markdown) => {
       markdownContainer.innerHTML = renderMarkdown(markdown);
     })
-    .catch((error) => showError(markdownContainer, "The guide could not be loaded. " + error.message));
+    .catch((error) => showError(markdownContainer, "O guia não pôde ser carregado. " + error.message));
 
   const sourcePromise = loadFile(project.javaPath)
     .then((source) => {
       javaSource.textContent = source;
+      renderGuidedCode(source, getCodeNotes(project.id));
       copyButton.disabled = false;
     })
     .catch((error) => {
-      javaSource.textContent = "The Java source could not be loaded. " + error.message;
+      javaSource.textContent = "O código Java não pôde ser carregado. " + error.message;
+      showError(guidedCode, javaSource.textContent);
     });
 
   Promise.all([markdownPromise, sourcePromise]).catch((error) => {
@@ -262,12 +391,12 @@ copyButton.addEventListener("click", async () => {
 
   try {
     await navigator.clipboard.writeText(source);
-    copyButton.textContent = "Copied";
+    copyButton.textContent = "Copiado";
     window.setTimeout(() => {
-      copyButton.textContent = "Copy code";
+      copyButton.textContent = "Copiar código";
     }, 1600);
   } catch (error) {
-    copyButton.textContent = "Copy unavailable";
+    copyButton.textContent = "Cópia indisponível";
     console.warn("Clipboard permission was unavailable.", error);
   }
 });
