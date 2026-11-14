@@ -32,7 +32,7 @@ test("every Java project has the same complete study-guide structure", () => {
 
     let previousHeadingIndex = -1;
     guideSections.forEach((heading, index) => {
-      const expression = new RegExp("^##\\s+" + (index + 1) + "\\.\\s+" + heading.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&") + "$", "m");
+      const expression = new RegExp("^##\\s+" + (index + 1) + "\\.\\s+" + heading + "$", "m");
       const match = expression.exec(guide);
       assert.ok(match, project.id + " is missing guide section " + (index + 1) + ": " + heading);
       assert.ok(match.index > previousHeadingIndex, project.id + " has guide sections out of order");
