@@ -3,115 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090A0E">
-  <meta name="description" content="A hands-on Java learning log, explored through ten colorful 3D project islands.">
-  <meta property="og:title" content="BuildJava.ln — Java, one island at a time">
-  <meta property="og:description" content="Explore ten Java projects through a free-roaming 3D trail.">
-  <meta property="og:type" content="website">
-  <title>BuildJava.ln — Java, one island at a time</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/trail-world.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
-      }
-    }
-  </script>
-  <script type="module" src="./js/trail-world.js"></script>
+  <meta name="description" content="BuildJava.ln is a personal record of learning Java through practical programming exercises.">
+  <title>BuildJava.ln — Learning Java</title>
 </head>
 <body>
-  <a class="skip-link" href="#trail-stage">Skip to the project trail</a>
-
-  <header class="site-header">
-    <a class="brand" href="./index.html">BuildJava<span>.ln</span></a>
-    <a class="header-link" href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  <header>
+    <h1>BuildJava.ln</h1>
+    <p>A personal log of learning Java through practice.</p>
   </header>
 
   <main>
-    <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">BUILDJAVA.LN <span>/</span> JAVA PROJECT LOG</p>
-      <h1 id="page-title">Java, one island at a time.</h1>
-      <p class="intro-copy">A hands-on record of my Java learning. Explore each island to see the idea behind a project, its study guide, and the original source code.</p>
+    <section>
+      <h2>What is BuildJava.ln?</h2>
+      <p>
+        BuildJava.ln is a learning repository where I practice Java by building
+        small programs. Each exercise focuses on programming concepts and keeps
+        the Java source code together with a study guide.
+      </p>
+      <p>
+        The goal is to understand how the language works by writing, reviewing,
+        and improving code — not just collecting finished tutorials.
+      </p>
     </section>
 
-    <section class="trail-section" aria-labelledby="trail-heading">
-      <div class="trail-heading">
-        <div>
-          <p class="section-label">THE PROJECTS</p>
-          <h2 id="trail-heading">Explore the trail</h2>
-        </div>
-        <span class="trail-count">10 projects <i>·</i> beginner to intermediate</span>
-      </div>
+    <section>
+      <h2>How the project works</h2>
+      <ol>
+        <li>Choose a practical programming exercise.</li>
+        <li>Write a Java program to solve it.</li>
+        <li>Study the concepts and document what the code does.</li>
+      </ol>
+      <p>
+        The current collection has ten exercises, from beginner fundamentals
+        to intermediate object-oriented programming and collections.
+      </p>
+    </section>
 
-      <div class="trail-stage" id="trail-stage">
-        <canvas id="trail-canvas" tabindex="0" aria-label="Interactive 3D Java project trail. Use arrow keys to move between islands and Enter to open a project. Drag to rotate, right-drag to pan, and the wheel to zoom."></canvas>
-
-        <div class="stage-topline" aria-hidden="true">
-          <span>THE PROJECT MAP</span>
-          <span>FREE EXPLORATION</span>
-        </div>
-
-        <div class="island-hotspots" id="island-hotspots" aria-label="Project islands"></div>
-
-        <aside class="island-preview" id="island-preview" hidden aria-live="polite" aria-atomic="true">
-          <div class="preview-meta">
-            <span id="preview-step">01 / 10</span>
-            <span id="preview-level">BEGINNER</span>
-          </div>
-          <h3 id="preview-title">Project name</h3>
-          <p id="preview-description"></p>
-          <div class="preview-concepts" id="preview-concepts"></div>
-          <a id="preview-link" href="project.html">Open study <span aria-hidden="true">↗</span></a>
-        </aside>
-
-        <div class="scene-fallback" id="scene-fallback" hidden>
-          <h2>3D view unavailable</h2>
-          <p>The 3D scene could not start, but every project remains available below.</p>
-          <nav class="fallback-links" aria-label="Open a project without the 3D scene">
-            <a href="project.html?project=TypeProfile">TypeProfile</a>
-            <a href="project.html?project=WeekDay">WeekDay</a>
-            <a href="project.html?project=Calculator">Calculator</a>
-            <a href="project.html?project=JoKenPo">JoKenPo</a>
-            <a href="project.html?project=LoginIntermediary">LoginIntermediary</a>
-            <a href="project.html?project=bulletin">bulletin</a>
-            <a href="project.html?project=Vehicle">Vehicle</a>
-            <a href="project.html?project=DeveloperProfile">DeveloperProfile</a>
-            <a href="project.html?project=library">library</a>
-            <a href="project.html?project=CandidateManager">CandidateManager</a>
-          </nav>
-        </div>
-
-        <div class="stage-controls">
-          <p class="interaction-help"><span>Drag</span> rotate <i>·</i> <span>Right-drag</span> pan <i>·</i> <span>Wheel</span> zoom <i>·</i> <span>← / →</span> choose <i>·</i> <span>Enter</span> open</p>
-          <button class="reset-view" id="reset-view" type="button">Reset view <span aria-hidden="true">↺</span></button>
-        </div>
-      </div>
+    <section>
+      <h2>Start learning</h2>
+      <p>
+        <a href="./project.html?project=TypeProfile">Open the first Java exercise: TypeProfile</a>
+      </p>
+      <p>
+        <a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">View the repository on GitHub</a>
+      </p>
     </section>
   </main>
 
-  <script>
-    (() => {
-      const showFallback = () => {
-        const fallback = document.querySelector("#scene-fallback");
-        const canvas = document.querySelector("#trail-canvas");
-        const reset = document.querySelector("#reset-view");
-        if (!fallback) return;
-        fallback.hidden = false;
-        if (canvas) canvas.hidden = true;
-        if (reset) reset.disabled = true;
-      };
-      window.addEventListener("error", showFallback, true);
-      window.addEventListener("unhandledrejection", showFallback);
-    })();
-  </script>
-
-  <footer class="site-footer">
-    <span>BuildJava.ln</span>
-    <span>Learning in public</span>
+  <footer>
+    <p>BuildJava.ln — Learning in public.</p>
   </footer>
 </body>
 </html>
