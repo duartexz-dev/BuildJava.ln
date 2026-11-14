@@ -283,31 +283,34 @@ function LoadProjects() {
   let ProjectsBase = document.getElementById("projects-list");
   if (!ProjectsBase) return;
 
-  for (let counter = 0; counter < projects.length; counter++) {
+  const activeProjects = projects.filter((project) => project.sourceAvailability !== "unavailable");
+
+  for (let counter = 0; counter < activeProjects.length; counter++) {
+    const project = activeProjects[counter];
     ProjectsBase.innerHTML += `<div class="col-sm-6 col-lg-4 project-entry">
-  <article class="project-card" id="${projectAnchorId(projects[counter].name)}">
+  <article class="project-card" id="${projectAnchorId(project.name)}">
     <div class="project-card-top">
       <div class="project-title-group">
-        <span class="project-type">${projects[counter].type}</span>
-        <h3>${projects[counter].name}</h3>
+        <span class="project-type">${project.type}</span>
+        <h3>${project.name}</h3>
       </div>
 
       <div class="project-labels">
-        <span class="project-difficulty" data-level="${projects[counter].difficulty.toLowerCase()}">${projects[counter].difficulty}</span>
-        <span class="project-status">${projects[counter].status.replace(/-/g, " ")}</span>
+        <span class="project-difficulty" data-level="${project.difficulty.toLowerCase()}">${project.difficulty}</span>
+        <span class="project-status">${project.status.replace(/-/g, " ")}</span>
       </div>
     </div>
 
-    <p class="project-summary">${projects[counter].description}</p>
+    <p class="project-summary">${project.description}</p>
     <div class="project-focus-list" role="group" aria-label="Learning focus">
-      ${projects[counter].focus.map((focus) => `<span class="project-focus-tag">${focusLabels[focus]}</span>`).join("")}
+      ${project.focus.map((focus) => `<span class="project-focus-tag">${focusLabels[focus]}</span>`).join("")}
     </div>
-    ${projects[counter].sourceAvailability === "unavailable"
-      ? `<p class="source-availability-note" role="note"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>${projects[counter].sourceAvailabilityNote}</p>`
+    ${project.sourceAvailability === "unavailable"
+      ? `<p class="source-availability-note" role="note"><i class="bi bi-exclamation-circle" aria-hidden="true"></i>${project.sourceAvailabilityNote}</p>`
       : ""}
-    <figure class="project-code-preview" data-level="${projects[counter].difficulty.toLowerCase()}">
-      <figcaption><span>Code preview</span><span>${projects[counter].difficulty} · ${projects[counter].sourceAvailability === "unavailable" ? "catalog excerpt; source not verified" : "illustrative excerpt"}</span></figcaption>
-      <pre aria-label="${projects[counter].difficulty} level code example"><code>${projects[counter].codePreview.map((line) => `<span class="project-code-line">${line}</span>`).join("")}</code></pre>
+    <figure class="project-code-preview" data-level="${project.difficulty.toLowerCase()}">
+      <figcaption><span>Code preview</span><span>${project.difficulty} · ${project.sourceAvailability === "unavailable" ? "catalog excerpt; source not verified" : "illustrative excerpt"}</span></figcaption>
+      <pre aria-label="${project.difficulty} level code example"><code>${project.codePreview.map((line) => `<span class="project-code-line">${line}</span>`).join("")}</code></pre>
     </figure>
 
     <details class="project-disclosure">
@@ -316,22 +319,22 @@ function LoadProjects() {
       <div class="project-card-details">
         <h4>What this project teaches</h4>
         <ul class="project-learning-outcomes">
-          ${projects[counter].learningOutcomes.map((outcome) => `<li>${outcome}</li>`).join("")}
+          ${project.learningOutcomes.map((outcome) => `<li>${outcome}</li>`).join("")}
         </ul>
 
         <h4>Concepts practiced</h4>
         <ul class="project-concepts">
-          ${projects[counter].concepts.map((concept) => `<li>${concept}</li>`).join("")}
+          ${project.concepts.map((concept) => `<li>${concept}</li>`).join("")}
         </ul>
 
-        ${projects[counter].sourceAvailability === "unavailable"
-        ? `<p class="source-availability-note" role="note">${projects[counter].sourceAvailabilityNote}</p>`
+        ${project.sourceAvailability === "unavailable"
+        ? `<p class="source-availability-note" role="note">${project.sourceAvailabilityNote}</p>`
         : ""}
-        ${projects[counter].repoUrl
-        ? `<a class="project-repository-link" href="${projects[counter].repoUrl}" target="_blank" rel="noreferrer">Open repository</a>`
+        ${project.repoUrl
+        ? `<a class="project-repository-link" href="${project.repoUrl}" target="_blank" rel="noreferrer">Open repository</a>`
         : `<span class="source-unavailable">Repository not available yet</span>`}
-        ${projects[counter].documentationPath
-        ? `<a class="project-repository-link" href="./${projects[counter].documentationPath}">Read lesson guide</a>`
+        ${project.documentationPath
+        ? `<a class="project-repository-link" href="./${project.documentationPath}">Read lesson guide</a>`
         : ""}
       </div>
     </details>
@@ -349,7 +352,8 @@ function LoadRoadmap() {
 
   const difficultyOrder = ["beginner", "basic", "intermediate", "advanced", "challenge"];
   const groups = new Map();
-  projects.forEach((project) => {
+  const activeProjects = projects.filter((project) => project.sourceAvailability !== "unavailable");
+  activeProjects.forEach((project) => {
     const level = project.difficulty || "Difficulty not specified";
     if (!groups.has(level)) groups.set(level, []);
     groups.get(level).push(project);
@@ -419,10 +423,10 @@ function LoadRoadmap() {
     roadmap.append(column);
   });
 
-  const orderedProjects = projects.filter((project) => Number.isInteger(project.roadmapOrder));
+  const orderedProjects = activeProjects.filter((project) => Number.isInteger(project.roadmapOrder));
   const note = document.getElementById("roadmap-note");
   if (note && orderedProjects.length !== projects.length) {
-    note.textContent = `${orderedProjects.length} of ${projects.length} projects have a catalog roadmapOrder. This grouping uses difficulty instead; it does not fill in missing positions.`;
+    note.textContent = `${orderedProjects.length} of ${activeProjects.length} active projects have a catalog roadmapOrder. This grouping uses difficulty instead; it does not fill in missing positions.`;
   }
 
   roadmap.addEventListener("click", (event) => {
