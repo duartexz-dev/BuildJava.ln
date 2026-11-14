@@ -318,8 +318,9 @@ if (!project) {
   level.textContent = "SEM RESULTADO";
   previousProject.href = "./index.html#projects";
   nextProject.href = "./index.html#projects";
-  showError(markdownContainer, "Return to the home page and open an available exercise.");
-  javaSource.textContent = "No source file is associated with this address.";
+  showError(markdownContainer, "Volte à página inicial e abra um dos exercícios disponíveis.");
+  showError(guidedCode, "Nenhum código está associado a este endereço.");
+  javaSource.textContent = "Nenhum arquivo Java está associado a este endereço.";
 } else {
   document.title = project.name + " — BuildJava.ln";
   title.textContent = project.name;
@@ -358,7 +359,7 @@ if (!project) {
     .then((markdown) => {
       markdownContainer.innerHTML = renderMarkdown(markdown);
     })
-    .catch((error) => showError(markdownContainer, "The guide could not be loaded. " + error.message));
+    .catch((error) => showError(markdownContainer, "O guia não pôde ser carregado. " + error.message));
 
   const sourcePromise = loadFile(project.javaPath)
     .then((source) => {
