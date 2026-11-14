@@ -37,11 +37,11 @@ This mode is the only workflow for introducing a genuinely new Java exercise. It
 
 1. Identify the new .java file in the current workspace or Git diff. If no unambiguous source exists, ask one short question for its path. Do not ask the user to paste source code into chat.
 2. Read the complete Java source file and every directly relevant class. Treat the actual file contents as the source context for the AI explanation. This is the automatic code handoff: read the file directly; do not rely on the operating-system clipboard, manually copy fragments, or ask the user to copy/paste code.
-3. Confirm that the source is a real exercise and has not already been added. Inspect js/project-data.js and existing Java/Markdown files to prevent duplicate entries.
-4. Generate the unique ID by executing node scripts/project-id.mjs <javaPath>. Use the exact ID printed by the script. If the script fails, resolve the issue rather than guessing an ID.
+3. Confirm that the source is a real exercise and has not already been added. Inspect data/projects.json and existing Java/Markdown files to prevent duplicate entries.
+4. Generate the unique ID by executing bash scripts/project-id.sh <javaPath>. Use the exact ID printed by the script. If the script fails, resolve the issue rather than guessing an ID.
 5. Create one Markdown guide at the stable path projects/md/<JavaFileName>.md. Explain the actual program, not the intended program. Keep the repository's English documentation convention unless the user asks otherwise.
 6. Generate the interactive walkthrough with AI from the complete Java source. It must use the exact Markdown format documented in the "Guided walkthrough format" section below. Each source anchor must be an exact substring from a real Java source line, and anchors must appear in the same order as the code.
-7. Add one project object to js/project-data.js with the generated id, an unused sequential step, an accurate description, a learning goal, concepts, and the exact Java and Markdown paths. Do not paste the Java source into any JavaScript data file.
+7. Add one project object to data/projects.json with the generated id, an unused sequential step, an accurate description, a learning goal, concepts, and the exact Java and Markdown paths. Do not paste the Java source into any JavaScript data file.
 8. Validate that every walkthrough anchor exists in the source, every term has a useful explanation, the ID is unique, and the project appears on the landing page and opens its study page.
 9. Update README.md only where the project list or project count needs to stay accurate. Run npm run check, npm test, Java compilation for the new file, and git diff --check. Report any validation that could not be performed.
 10. Do not change the Java program's behavior, the existing study-page design, or unrelated projects as part of this workflow. Do not commit unless the user explicitly asks.
@@ -101,7 +101,7 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 
 - Treat the current workspace as the source of truth for edits. Never replace local work with older GitHub content.
 - Before editing project files, consult https://github.com/duartexz-dev/BuildJava.ln using the available GitHub or web tools. Compare relevant files for architecture and conventions. If the repository cannot be consulted, explain the limitation in Brazilian Portuguese and pause before editing project files.
-- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, js/lesson-parser.js, scripts/project-id.mjs, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
+- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, js/lesson-parser.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
 - Inspect git status before editing. Preserve unrelated local changes and never overwrite user work with remote contents.
 - Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, lesson guide, and roadmap status.
 - Do not assume a GitHub Pages deployment succeeded merely because the workflow file exists. Check actual workflow results when accessible.
@@ -110,7 +110,7 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 
 1. Inspect git status, the Java files under projects/, and Git history to identify newly added or untracked candidates.
 2. Use Git history and file-addition records, not modification timestamps, to determine which project was created most recently. Inspect candidate-specific history and distinguish real project additions from baseline/checkpoint commits that list many existing files as added.
-3. Check whether the candidate already has an object in js/project-data.js. For Adicionar projeto, use the new-project workflow below; for Atualizar projetos, do not create a new catalog entry.
+3. Check whether the candidate already has an object in data/projects.json. For Adicionar projeto, use the new-project workflow below; for Atualizar projetos, do not create a new catalog entry.
 4. If multiple plausible new projects remain and history cannot establish which is newest, ask the user which project to curate and make no project changes until clarified.
 5. If there is no new candidate and the user has not named a project, ask for its path instead of choosing an older project.
 6. Before describing behavior, read the complete relevant Java source and any directly used classes. Do not infer features from the filename, catalog text, or README alone.
@@ -161,7 +161,7 @@ Use this structure, adapting sections to the actual program:
 
 ## Canonical project catalog and automatic IDs
 
-The single source of truth for the current website is js/project-data.js. Preserve its existing named export, projects, its getProject(id) helper, the existing fields, and the array order.
+The canonical project metadata lives in data/projects.json. The small js/project-data.js module imports that JSON and preserves the projects and getProject(id) interface used by the site. Keep the JSON as the only source of project metadata.
 
 Each project object uses this schema:
 
@@ -169,65 +169,35 @@ Each project object uses this schema:
 2. name — display name.
 3. step — positive sequence number.
 4. difficulty — the existing level label, such as Beginner or Intermediate.
-5. description — concise explanation of what the program does.
+5. description — concise explanation of what the program actually does.
 6. lesson — one-sentence learning goal or execution context.
 7. concepts — array of relevant Java concepts.
 8. javaPath — repository-relative path to the exact Java source file.
 9. markdownPath — repository-relative path to that project's Markdown guide.
 
-For every new Java exercise, generate id automatically by running:
+For every new Java exercise, generate its ID by running:
 
-    node scripts/project-id.mjs path/to/Project.java
+    bash scripts/project-id.sh path/to/Project.java
 
-The helper reads the public Java class name when available, otherwise uses the file name, and adds a numeric suffix if that ID already exists. Use its exact output. Never ask the user to invent an ID, never reuse an existing ID, and never generate a random or unstable identifier.
+The helper reads the public Java class name when available, otherwise uses the file name, and adds a numeric suffix when that ID already exists. Use its exact output. Never ask the user to invent an ID, reuse an existing ID, or generate a random or unstable identifier.
 
-When adding a project, assign step as the next unused positive number after inspecting the current catalog. Preserve every existing entry and do not maintain a second project list.
-
-Rules:
-
-- roadmapOrder is a positive, unique integer for each catalog entry that participates in the learning sequence. It expresses the intended teaching order, not Git creation date or alphabetical order.
-- Assign roadmapOrder by prerequisite knowledge and increasing conceptual difficulty. Beginner foundations come first, then exercises that reuse those foundations, followed by more involved object-oriented and application-level work. Review the complete sequence instead of assigning numbers arbitrarily.
-- Do not leave duplicate or missing roadmapOrder values among active roadmap entries. Planned ideas may still have a place in the sequence if their role is clear.
-- documentationPath is the repository-relative path to a didactic guide when one already exists, for example projects/md/Library.md. In Atualizar projetos mode, do not create a guide just to populate this field; preserve a valid existing path or leave it empty until Atualizar didática creates the guide.
-- Keep repoUrl pointed to the exact Java source path. Use an empty string when no source exists.
-- Do not add arbitrary properties or invent values for focus. Use only keys declared in focusLabels.
-- Set status only to planned, in-progress, or completed, as accepted by scripts/update-progress.mjs. A catalog entry or lesson guide alone does not make a project completed. Use completed only when the source has been implemented, compiled or tested as appropriate, documented, and checked against its intended behavior.
-- Follow existing conventions for type and difficulty. Do not label a project Advanced merely because it has many lines of code.
-- Base description, learning outcomes, concepts, codePreview, documentationPath, and repoUrl on the actual source and file tree.
-- Select a short, representative codePreview that teaches the main idea and matches the source. The project cards render preview lines through HTML; avoid markup and escape HTML-sensitive characters when needed.
-- Concepts should use meaningful, consistent English labels so related exercises can connect in the knowledge map.
-- Keep comments concise and educational. Explain concepts that are new relative to earlier exercises; do not narrate obvious lines or change program behavior just to add comments.
+When adding a project, assign step as the next unused positive number after inspecting data/projects.json. Preserve every existing entry and do not maintain a second catalog.
 
 ## Current website data flow
 
-The current site does not use the old js/projects.js, knowledge-map, progress SVG, or roadmap generator architecture. Do not recreate or reference those retired systems unless the user explicitly requests a roadmap feature.
+The current website is a static project catalog and guided study page. It does not have a separate knowledge map, roadmap, or progress generator. Do not recreate those retired systems unless the user explicitly requests them.
 
-- js/project-data.js is the canonical catalog.
-- js/landing.js renders the project cards from that catalog.
-- project.html and js/project-study.js load the selected Java file and its Markdown guide.
-- js/lesson-parser.js reads the structured walkthrough from the guide and builds the interactive code/explanation layout.
-- projects/md/ stores the study guide and interactive walkthrough for each project.
-- scripts/project-id.mjs generates unique IDs for new Java projects.
+- data/projects.json is the canonical project catalog.
+- js/project-data.js is a small JSON-import wrapper that exports projects and getProject(id).
+- js/landing.js renders project cards from the catalog.
+- project.html and js/project-study.js load the selected Java source and its Markdown guide.
+- js/lesson-parser.js reads the guided walkthrough from that Markdown guide and builds the interactive code/explanation layout.
+- projects/md/ stores each complete study guide and its interactive walkthrough.
+- scripts/project-id.sh generates unique IDs for new Java projects.
 - tests/ validates catalog links, Markdown walkthroughs, source anchors, and ID generation.
 - .github/workflows/pages.yml runs JavaScript checks, tests, compiles the Java exercises, and deploys the static website.
 
-Do not add a runtime AI API, model key, backend, or network request to generate explanations in the browser. The AI authoring step happens when JavaSage adds or updates a project; the published page only reads the generated Markdown. This keeps the website static, avoids exposing API keys, and prevents a large JavaScript explanation database.
-
-Implementation guidance:
-
-- Add a dedicated renderer such as js/roadmap.js and a dedicated stylesheet such as styles/roadmap.css when that keeps the code maintainable.
-- Add the roadmap section/container to index.html and load its CSS and JavaScript without breaking the current project catalog, knowledge map, filters, theme controls, or other existing interactions.
-- Ensure the roadmap renderer consumes the canonical projects array. If necessary, expose the array through one documented browser-level interface; do not copy the project objects into another file.
-- Sort roadmap entries by roadmapOrder in ascending order. Do not rely on DOM order, filenames, alphabetic sorting, commit dates, or difficulty labels alone to define the learning sequence.
-- Render roadmap cards/nodes dynamically from the catalog. Adding an entry with valid roadmap metadata must make it appear automatically without manually editing the roadmap markup.
-- Each roadmap item should show, where relevant: sequence number, project name, difficulty, status, a concise learning goal, key concepts, and links to the Java source. Show a lesson-guide link only when documentationPath points to an existing guide.
-- Visually distinguish planned, in-progress, and completed states. Do not use the sequence number as a progress claim. Do not show a misleading overall percentage unless it is calculated from the same documented status rules as the progress generator.
-- Make the roadmap useful as a learning path: show the order clearly, make the progression easy to scan, and explain what the learner is expected to understand before moving forward.
-- Design responsively for narrow and wide screens. Use a layout that adapts naturally; do not merely shrink a desktop timeline until its content becomes unreadable.
-- Use semantic HTML, accessible names and links, visible keyboard focus, adequate contrast, and a meaningful reading order. Do not communicate status through color alone.
-- Respect prefers-reduced-motion. Motion must never be required to understand the sequence or status.
-- Do not add a new framework or dependency for a simple data-driven roadmap without a clear technical need.
-- Update README.md to explain the roadmap's data source, ordering field, how to add an exercise, and where lesson guides live.
+Do not add a runtime AI API, model key, backend, or network request to generate explanations in the browser. JavaSage writes the AI-generated lesson when a project is added or its didactic content is updated. The published page only reads Markdown, needs no AI API key, and never stores explanations in JavaScript.
 
 ## Novo designer: coordinated redesign using the user's design agents
 
@@ -309,40 +279,79 @@ The user requests a redesign, not a rewrite of the learning product. Restrict im
 
 ## Preserve every existing consumer
 
-- js/projects.js renders project cards, descriptions, focus labels, code previews, learning outcomes, concepts, and source links.
-- js/knowledge-map.js uses project names, descriptions, concepts, difficulty, status, type, and repository links to build nodes, relationships, details, and filters.
-- The new roadmap renderer consumes the same catalog and uses roadmapOrder and documentationPath. It must not create a divergent project dataset.
-- index.html provides existing catalog/map containers, controls, and script loading. Add the roadmap without deleting or breaking existing sections.
-- projects/md/ contains the lesson guides; its README index must remain synchronized.
-- scripts/update-progress.mjs validates project names and statuses and generates assets/progress.svg. Run it after changing catalog data and keep its generated output if it changes.
-- Add a focused validator, such as scripts/validate-learning-path.mjs, to check unique positive roadmapOrder values, valid statuses, source paths, documentation paths, and the existence of each required guide.
-- Wire validation into GitHub Actions so relevant changes to Java sources, lesson guides, catalog data, roadmap code, or validation scripts trigger the appropriate checks.
-- Update .github/workflows/update-progress.yml only when necessary to include the new validation and correct path triggers. Keep .github/workflows/pages.yml focused on publishing the static website.
-- If the project supports compiling all independent Java exercises together, add a CI compile check using an appropriate JDK. Confirm package and class-name conventions first; do not add a check that fails for structural reasons unrelated to the exercises.
-- Keep progress semantics consistent across the generator, README, SVG description, roadmap statuses, and UI labels.
-- Preserve all existing catalog entries and unrelated workspace changes. Do not stage or commit changes unless the user explicitly asks.
+- data/projects.json is the canonical catalog. Do not maintain a second list or duplicate project objects in JavaScript.
+- js/project-data.js provides the small projects/getProject API consumed by the website.
+- js/landing.js renders the project cards from the canonical array.
+- js/project-study.js loads each selected Java source and Markdown guide; js/lesson-parser.js parses its guided walkthrough.
+- projects/md/ contains the full study guides and their interactive walkthroughs.
+- scripts/project-id.sh generates unique IDs from Java class names or filenames and checks data/projects.json for collisions.
+- tests/ checks catalog integrity, Markdown walkthrough anchors, and ID generation.
+- .github/workflows/pages.yml runs checks, compiles Java sources, and deploys the static website.
+- Preserve the current landing page, study-page layout, responsive styling, copy-code action, and previous/next navigation.
+- Do not add a roadmap, knowledge map, progress generator, AI runtime API, or second project catalog unless the user explicitly requests it.
+- Preserve existing project entries and unrelated workspace changes. Do not stage or commit unless the user explicitly asks.
 
 ## Validation
 
-Run focused validation based on what changed:
+Run focused checks based on what changed:
 
 - node --check js/project-data.js
 - node --check js/lesson-parser.js
 - node --check js/project-study.js
-- node --check scripts/project-id.mjs
+- bash -n scripts/project-id.sh
 - npm run check
 - npm test
 - git diff --check
-- Compile Java files when their source was changed, and preferably validate all independent exercises during a full refresh if the repository structure permits it.
-- For every project, verify that javaPath and markdownPath exist and that the guide contains a valid ## Guided code walkthrough section.
-- Parse every walkthrough and confirm that each exact source anchor appears in the Java file in the same order as the Markdown sections.
-- Validate project IDs for uniqueness and confirm that the ID helper handles filename fallback and collisions.
-- Do not require a roadmap or progress system; neither is part of the current site architecture.
-- Inspect the changed HTML/CSS/JavaScript for broken paths, duplicated IDs, unsafe HTML insertion, missing labels, and regressions to existing catalog/map controls.
+- For each project, verify that javaPath and markdownPath exist and that the Markdown guide contains a valid Guided code walkthrough section.
+- Parse every walkthrough and confirm that each exact source anchor appears in its Java file in the same order as the Markdown sections.
+- Validate project IDs for uniqueness and confirm the helper handles a public class name, filename fallback, existing IDs, and missing files.
+- Compile Java files when their source was changed. The GitHub Actions workflow compiles all current Java exercises on pull requests and pushes to main.
 - Run browser-based responsive and interaction checks only when a suitable browser environment is available. Clearly distinguish static inspection, command-line validation, Java compilation, and actual browser testing.
 - Do not declare a test successful unless it was actually run and its result observed.
 
 ## Workflow and response
+
+### Adicionar projeto
+
+1. Inspect git status, the new Java file, related classes, data/projects.json, and recent Git history.
+2. Read the complete source file directly. Do not ask the user to copy or paste it.
+3. Run bash scripts/project-id.sh path/to/Project.java and use its exact output as the project ID.
+4. Create or update one guide at projects/md/<JavaFileName>.md, including the complete teaching material and the structured Guided code walkthrough required by this agent.
+5. Add one metadata object to data/projects.json with the generated ID, next unused step, actual description, learning goal, concepts, and exact source/guide paths.
+6. Do not paste Java code or explanation content into any JavaScript file. Do not add new runtime AI features or API keys.
+7. Validate the ID, source anchors, metadata, links, Java compilation, npm run check, npm test, and git diff --check.
+8. Update README project counts/list when needed. Preserve site styling and existing behavior. Do not commit unless the user explicitly asks.
+
+### Atualizar projetos
+
+1. Inspect the selected existing entry in data/projects.json and read its complete Java source.
+2. Correct only the metadata that is inaccurate: name, step, difficulty, description, lesson, concepts, javaPath, or markdownPath.
+3. Do not create a new project, generate an additional lesson, redesign the website, or add a parallel catalog in this mode.
+4. Run npm run check, npm test, and Java compilation if source files changed. Do not commit unless the user explicitly asks.
+
+### Atualizar didática
+
+1. Identify the selected Java source. If multiple files are plausible, ask which one.
+2. Inspect the complete source and directly related classes.
+3. Update only that project's Markdown guide, preserving useful material.
+4. Ensure the guide includes the structured Guided code walkthrough format and exact source anchors required by js/lesson-parser.js.
+5. Keep explanations faithful to actual code behavior, including defects and limitations.
+6. Run npm test and verify every anchor against the selected Java source. Do not change project metadata, Java behavior, or page styling unless the user asks.
+
+### Novo designer
+
+1. Inspect the current workspace and git status without editing.
+2. Invoke Design Orchestrator and transfer the BuildJava.ln product context, existing architecture, protected features, and user request.
+3. Let the Orchestrator complete discovery and obtain explicit approval for the redesign scope and visual identity.
+4. Let it select one specialist implementer and coordinate QA/Repair and the independent security audit in sequence.
+5. Validate the results using the tools actually available. Preserve all unrelated files and user work.
+6. Report the selected designer, supporting specialists that actually participated, files changed, approved decisions, validation evidence, limitations, and unresolved defects.
+
+### Final response
+
+Use Brazilian Portuguese. Clearly state which mode ran. For Adicionar projeto, report the detected Java file, generated ID, catalog/Markdown files created, and validation. For Atualizar projetos, report the existing metadata changed and validation. For Atualizar didática, report the source, guide changes, concepts covered, and checks. For Novo designer, report the approved direction, selected designer, QA and audit participation, files changed, and test results. Separate completed work from recommendations, and never claim a file was changed, an agent was called, or a test passed unless that actually happened.
+
+
 
 ### Atualizar projetos
 
