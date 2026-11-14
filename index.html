@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090A0E">
-  <meta name="description" content="Explore ten Java projects in a free-roaming 3D learning trail.">
-  <meta property="og:title" content="BuildJava.ln — My Java projects">
-  <meta property="og:description" content="A free-roaming 3D map of projects built while learning Java.">
+  <meta name="description" content="A hands-on Java learning log, explored through ten colorful 3D project islands.">
+  <meta property="og:title" content="BuildJava.ln — Java, one island at a time">
+  <meta property="og:description" content="Explore ten Java projects through a free-roaming 3D trail.">
   <meta property="og:type" content="website">
-  <title>BuildJava.ln — My Java projects</title>
+  <title>BuildJava.ln — Java, one island at a time</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,21 +34,21 @@
   <main>
     <section class="intro" aria-labelledby="page-title">
       <p class="eyebrow">BUILDJAVA.LN <span>/</span> JAVA PROJECT LOG</p>
-      <h1 id="page-title">My Java projects.</h1>
-      <p class="intro-copy">Small programs I built while learning Java — from the first console inputs to classes, objects and collections. Pick an island to open its guide and source code.</p>
+      <h1 id="page-title">Java, one island at a time.</h1>
+      <p class="intro-copy">A hands-on record of my Java learning. Explore each island to see the idea behind a project, its study guide, and the original source code.</p>
     </section>
 
     <section class="trail-section" aria-labelledby="trail-heading">
       <div class="trail-heading">
         <div>
           <p class="section-label">THE PROJECTS</p>
-          <h2 id="trail-heading">Explore the islands</h2>
+          <h2 id="trail-heading">Explore the trail</h2>
         </div>
         <span class="trail-count">10 projects <i>·</i> beginner to intermediate</span>
       </div>
 
       <div class="trail-stage" id="trail-stage">
-        <canvas id="trail-canvas" tabindex="0" aria-label="Interactive 3D map of ten Java project islands. Drag to rotate, right-drag to pan, and use the mouse wheel to zoom."></canvas>
+        <canvas id="trail-canvas" tabindex="0" aria-label="Interactive 3D Java project trail. Use arrow keys to move between islands and Enter to open a project. Drag to rotate, right-drag to pan, and the wheel to zoom."></canvas>
 
         <div class="stage-topline" aria-hidden="true">
           <span>THE PROJECT MAP</span>
@@ -70,16 +70,44 @@
 
         <div class="scene-fallback" id="scene-fallback" hidden>
           <h2>3D view unavailable</h2>
-          <p>This browser could not start WebGL. Try a browser with WebGL support enabled.</p>
+          <p>The 3D scene could not start, but every project remains available below.</p>
+          <nav class="fallback-links" aria-label="Open a project without the 3D scene">
+            <a href="project.html?project=TypeProfile">TypeProfile</a>
+            <a href="project.html?project=WeekDay">WeekDay</a>
+            <a href="project.html?project=Calculator">Calculator</a>
+            <a href="project.html?project=JoKenPo">JoKenPo</a>
+            <a href="project.html?project=LoginIntermediary">LoginIntermediary</a>
+            <a href="project.html?project=bulletin">bulletin</a>
+            <a href="project.html?project=Vehicle">Vehicle</a>
+            <a href="project.html?project=DeveloperProfile">DeveloperProfile</a>
+            <a href="project.html?project=library">library</a>
+            <a href="project.html?project=CandidateManager">CandidateManager</a>
+          </nav>
         </div>
 
         <div class="stage-controls">
-          <p class="interaction-help"><span>Drag</span> to rotate <i>·</i> <span>Right-drag</span> to move <i>·</i> <span>Wheel</span> to zoom</p>
+          <p class="interaction-help"><span>Drag</span> rotate <i>·</i> <span>Right-drag</span> pan <i>·</i> <span>Wheel</span> zoom <i>·</i> <span>← / →</span> choose <i>·</i> <span>Enter</span> open</p>
           <button class="reset-view" id="reset-view" type="button">Reset view <span aria-hidden="true">↺</span></button>
         </div>
       </div>
     </section>
   </main>
+
+  <script>
+    (() => {
+      const showFallback = () => {
+        const fallback = document.querySelector("#scene-fallback");
+        const canvas = document.querySelector("#trail-canvas");
+        const reset = document.querySelector("#reset-view");
+        if (!fallback) return;
+        fallback.hidden = false;
+        if (canvas) canvas.hidden = true;
+        if (reset) reset.disabled = true;
+      };
+      window.addEventListener("error", showFallback, true);
+      window.addEventListener("unhandledrejection", showFallback);
+    })();
+  </script>
 
   <footer class="site-footer">
     <span>BuildJava.ln</span>
