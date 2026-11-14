@@ -68,15 +68,15 @@
       button.classList.toggle('active', isActive);
       button.setAttribute('aria-pressed', String(isActive));
     });
-    customColorControl.classList.toggle('active', palette === 'custom');
+    customColorControl?.classList.toggle('active', palette === 'custom');
   }
 
-  function setPalette(palette, color = customColor.value) {
+  function setPalette(palette, color = customColor?.value || '#A3E635') {
     root.style.removeProperty('--accent');
     root.style.removeProperty('--accent-strong');
     root.style.removeProperty('--accent-rgb');
 
-    if (palette === 'custom' && isHexColor(color)) {
+    if (palette === 'custom' && customColor && isHexColor(color)) {
       const channels = color.slice(1).match(/.{2}/g).map((channel) => parseInt(channel, 16));
       root.style.setProperty('--accent', color);
       root.style.setProperty('--accent-strong', toHex(channels.map((channel) => channel * 0.78)));
@@ -99,11 +99,15 @@
     if (root.dataset.palette) {
       setAccessibleAccentColors();
     }
-    themeToggle.setAttribute('aria-pressed', String(isDark));
-    themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-    themeToggle.querySelector('i').className = `bi ${isDark ? 'bi-sun' : 'bi-moon-stars'} me-2`;
-    themeToggle.querySelector('span').textContent = isDark ? 'Light mode' : 'Dark mode';
-    themeColorMeta.content = isDark ? '#0B0B12' : '#f7f7fb';
+    if (themeToggle) {
+      themeToggle.setAttribute('aria-pressed', String(isDark));
+      themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+      const icon = themeToggle.querySelector('i');
+      const label = themeToggle.querySelector('span');
+      if (icon) icon.className = `bi ${isDark ? 'bi-sun' : 'bi-moon-stars'} me-2`;
+      if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
+    }
+    if (themeColorMeta) themeColorMeta.content = isDark ? '#080B0A' : '#f4f7f2';
     localStorage.setItem(themeKey, isDark ? 'dark' : 'light');
   }
 
@@ -111,7 +115,7 @@
   const savedPalette = localStorage.getItem(paletteKey);
   const savedCustomColor = localStorage.getItem(customColorKey);
 
-  if (savedCustomColor && isHexColor(savedCustomColor)) {
+  if (customColor && savedCustomColor && isHexColor(savedCustomColor)) {
     customColor.value = savedCustomColor;
   }
   setTheme(savedTheme === 'light' ? 'light' : 'dark');
@@ -119,7 +123,7 @@
     ? (isHexColor(savedCustomColor) ? 'custom' : 'purple')
     : (paletteNames.has(savedPalette) ? savedPalette : 'purple'));
 
-  themeToggle.addEventListener('click', () => {
+  themeToggle?.addEventListener('click', () => {
     setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
   });
 
@@ -127,5 +131,5 @@
     button.addEventListener('click', () => setPalette(button.dataset.paletteChoice));
   });
 
-  customColor.addEventListener('input', () => setPalette('custom', customColor.value));
+  customColor?.addEventListener('input', () => setPalette('custom', customColor.value));
 })();

@@ -1,5 +1,5 @@
 (() => {
-  const projectData = projects;
+  const projectData = projects.filter((project) => project.sourceAvailability !== "unavailable");
   const viewButtons = [...document.querySelectorAll("[data-map-view]")];
   const actionButtons = [...document.querySelectorAll("[data-map-action]")];
   const projectList = document.getElementById("projects-list");
