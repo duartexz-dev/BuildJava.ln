@@ -52,10 +52,13 @@ test("the landing page explains the repository and loads its real project data",
   assert.doesNotMatch(html, /trail-world|three\.module\.js|<canvas/i);
 });
 
-test("the study page presents the guide and Java source with responsive styling", () => {
+test("the study page presents selectable code, matching explanations, and the full guide", () => {
   const html = readFileSync(resolve(root, "project.html"), "utf8");
   assert.match(html, /styles\/site\.css/);
   assert.match(html, /project-study\.js/);
+  assert.match(html, /id="guided-code"/);
+  assert.match(html, /id="code-explanation"/);
+  assert.match(html, /id="explanation-index"/);
   assert.match(html, /id="markdown-content"/);
   assert.match(html, /id="java-source"/);
   assert.match(html, /id="source-file-link"/);
