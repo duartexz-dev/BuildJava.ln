@@ -1,86 +1,65 @@
 # Vehicle
 
-## 1. Overview
+## Overview
 
-**Vehicle** is a console exercise that collects information about a vehicle and groups the values in one object. The program asks for the year, name, horsepower, brand, and color, then prints a summary.
+**Vehicle** is a console exercise that collects five values and stores them in a VehicleInfo object. It demonstrates how a class groups related data and how an object can provide its own readable text representation.
 
-The main idea is to move from several independent variables to a class that represents one thing with related attributes.
+## Learning goals
 
-## 2. Learning goals
+- Model a real-world item with a class.
+- Declare private attributes and initialize them with a constructor.
+- Use this to refer to the current object.
+- Create an instance with new.
+- Override toString() to control how an object is represented as text.
+- Read numeric and text values with Scanner.
 
-- Understand how a class can model a real-world concept.
-- Declare attributes with different data types.
-- Create an object with the \`new\` keyword.
-- Use a constructor to initialize the object's state.
-- Use \`this\` to distinguish an attribute from a constructor parameter.
-- Read numeric and text values with \`Scanner\`.
+## Structure
 
-## 3. Prerequisites
+The source is projects/Intermediate/Vehicle.java and belongs to the Intermediate package.
 
-You should be comfortable with variables, primitive types, \`String\`, console input, and creating a basic class.
+It contains two classes:
 
-## 4. Project and file structure
+- **Vehicle** owns the main method and runs the console interaction.
+- **VehicleInfo** represents one vehicle and stores its name, brand, color, horsepower, and year.
 
-The exercise is stored in \`projects/Intermediate/Vehicle.java\`. The source contains a \`Vehicle\` program class and a nested \`vehicle\` class. The nested class holds the vehicle's data and defines a constructor.
+The five attributes in VehicleInfo are private final. This means they can be assigned by the constructor but cannot be reassigned afterward.
 
-## 5. Program execution
+## Execution flow
 
-1. The program creates a \`Scanner\` for console input.
-2. It reads the vehicle year.
-3. It asks for the name, horsepower, brand, and color.
-4. It creates one object containing those five values.
-5. It prints a formatted summary and closes the scanner.
+1. Scanner reads the year.
+2. nextLine() consumes the remaining line break before the program reads the vehicle name.
+3. The program reads horsepower, consumes that line break, then reads the brand and color.
+4. new VehicleInfo(...) constructs an object with all five values.
+5. System.out.println(vehicle) asks Java to convert the object to text. The overridden toString() method returns a formatted description.
 
-## 6. Complete code walkthrough
+## Key concepts in context
 
-### The data model
-
-The nested class declares five attributes:
-
-- \`name\`, \`mark\`, and \`color\` are \`String\` values.
-- \`horses\` and \`year\` are integers.
-
-The constructor receives the five values and assigns each parameter to its matching attribute. Expressions such as \`this.name = name\` make the distinction explicit: \`this.name\` refers to the object's field, while \`name\` refers to the constructor parameter.
-
-### Reading the input
-
-The program uses \`nextInt()\` for the year and horsepower, and \`nextLine()\` for text. After each integer read, it calls \`nextLine()\` once to consume the remaining line break before reading more text.
-
-### Creating the object
-
-The expression \`new vehicle(...)\` creates an instance and passes the collected values to the constructor. The variables are grouped in one object rather than remaining only as unrelated local values.
-
-## 7. Key Java concepts in context
-
-| Concept | Where it appears | Why it matters |
+| Concept | Example | Purpose |
 | --- | --- | --- |
-| Class | \`vehicle\` | Defines the structure of the data model. |
-| Attributes | The five fields | Store the state belonging to one vehicle. |
-| Constructor | \`vehicle(...)\` | Initializes the new object. |
-| \`this\` | \`this.year = year\` | Refers to the current object's field. |
-| Object creation | \`new vehicle(...)\` | Creates an instance from the class. |
-| Scanner | \`nextInt()\` and \`nextLine()\` | Reads the user's values. |
+| Class | VehicleInfo | Defines the structure of vehicle data. |
+| Private attributes | private final String name | Keeps the data inside the object and prevents reassignment. |
+| Constructor | VehicleInfo(...) | Initializes all attributes. |
+| this | this.name = name | Distinguishes the field from the constructor parameter. |
+| Object creation | new VehicleInfo(...) | Creates an instance. |
+| Method override | toString() | Defines the object's readable text representation. |
 
-## 8. Example execution
+## Example output
 
-The program asks for five values in sequence. For example, a user could enter a year, a vehicle name, a horsepower value, a brand, and a color. The final formatted output displays those values on separate lines.
+The program prints the vehicle name, year, horsepower, brand, and color as a formatted summary.
 
-## 9. Limitations and common mistakes
+## Limitations
 
-- The program does not validate the range or format of the entered values.
-- \`nextInt()\` leaves the line break in the input buffer; the following \`nextLine()\` calls are important for reading text as intended.
-- The nested class is named \`vehicle\` with a lowercase initial. Java class names conventionally use PascalCase, such as \`Vehicle\`.
-- The final \`System.out.println(vehicle)\` prints the default object representation because the class does not override \`toString()\`. It does not print the five attributes as a formatted object summary.
+- The program does not validate year or horsepower ranges.
+- Invalid numeric input causes Scanner to throw an input-mismatch exception.
+- The data object is created and printed, but it is not stored between program runs.
 
-## 10. Practice and extensions
+## Practice extensions
 
-1. Add a method that returns a formatted description of the vehicle.
-2. Override \`toString()\` so printing the object shows its attributes.
-3. Create a second vehicle object and compare their years.
-4. Add basic validation for year and horsepower.
+1. Reject negative horsepower and unrealistic year values.
+2. Create a second VehicleInfo object and compare the years.
+3. Add a method that identifies whether a vehicle is newer than another.
+4. Move VehicleInfo into its own Java file.
 
-## 11. Summary and source
+## Source
 
-This exercise practices class structure, attributes, constructor parameters, \`this\`, object creation, and mixed console input. The Java source remains the source of truth for the implementation.
-
-Source: \`projects/Intermediate/Vehicle.java\`.
+[Vehicle.java](../Intermediate/Vehicle.java)
