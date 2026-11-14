@@ -337,7 +337,7 @@ export const codeNotes = {
       {
         anchor: "int userSelect = scanner.nextInt();",
         title: "6. Ler a escolha da pessoa",
-        explanation: "userSelect recebe o número digitado: 0 para Rock, 1 para Paper e 2 para Scissors. O programa assume que a entrada está nesse intervalo; não verifica isso antes de acessar o array.",
+        explanation: "userSelect recebe o número digitado: 0 para Rock, 1 para Paper e 2 para Scissors. O programa não valida esse intervalo: um número fora de 0 a 2 não acessa o array, mas acaba caindo no else e sendo contado incorretamente como vitória do computador.",
         items: [
           { term: "userSelect", meaning: "Variável que representa a opção escolhida pela pessoa." },
           { term: "nextInt()", meaning: "Lê o próximo token como inteiro." },
