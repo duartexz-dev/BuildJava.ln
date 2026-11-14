@@ -5,6 +5,7 @@ const params = new URLSearchParams(window.location.search);
 const project = getProject(params.get("project"));
 const title = document.querySelector("#study-title");
 const description = document.querySelector("#study-description");
+const studyFlow = document.querySelector("#study-flow");
 const kicker = document.querySelector("#study-kicker");
 const concepts = document.querySelector("#study-concepts");
 const markdownContainer = document.querySelector("#markdown-content");
@@ -266,7 +267,7 @@ function selectExplanation(index, scrollToCode = true) {
   }).join("");
 
   codeExplanation.innerHTML =
-    '<p class="explanation-flow">' + escapeHtml(section.title) + "</p>" +
+    '<p class="explanation-flow">TRECHO SELECIONADO</p>' +
     "<h3>" + escapeHtml(section.title) + "</h3>" +
     "<p>" + escapeHtml(section.explanation) + "</p>" +
     (items ? '<div class="term-list-title">ELEMENTOS DESTE TRECHO</div><ul class="term-list">' + items + "</ul>" : "");
@@ -308,12 +309,13 @@ previousSection.addEventListener("click", () => selectExplanation(activeSectionI
 nextSection.addEventListener("click", () => selectExplanation(activeSectionIndex + 1));
 
 if (!project) {
-  document.title = "Project not found — BuildJava.ln";
-  title.textContent = "Project not found";
-  description.textContent = "This exercise could not be found in the project data.";
-  kicker.textContent = "PROJECT NOT FOUND";
-  breadcrumb.textContent = "Not found";
-  level.textContent = "NO MATCH";
+  document.title = "Projeto não encontrado — BuildJava.ln";
+  title.textContent = "Projeto não encontrado";
+  description.textContent = "Este exercício não foi encontrado no catálogo.";
+  studyFlow.textContent = "";
+  kicker.textContent = "PROJETO NÃO ENCONTRADO";
+  breadcrumb.textContent = "Não encontrado";
+  level.textContent = "SEM RESULTADO";
   previousProject.href = "./index.html#projects";
   nextProject.href = "./index.html#projects";
   showError(markdownContainer, "Return to the home page and open an available exercise.");
@@ -321,7 +323,9 @@ if (!project) {
 } else {
   document.title = project.name + " — BuildJava.ln";
   title.textContent = project.name;
-  description.textContent = getCodeNotes(project.id)?.purpose || project.description;
+  const lessonNotes = getCodeNotes(project.id);
+  description.textContent = lessonNotes?.purpose || project.description;
+  studyFlow.textContent = lessonNotes?.flow || "";
   kicker.textContent = "PROJETO " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
   breadcrumb.textContent = project.name;
   concepts.textContent = project.concepts.join(" · ");
@@ -339,7 +343,7 @@ if (!project) {
     previousProject.querySelector("b").textContent = previous.name;
   } else {
     previousProject.href = "./index.html#projects";
-    previousProject.querySelector("b").textContent = "All projects";
+    previousProject.querySelector("b").textContent = "Todos os projetos";
   }
 
   if (next) {
@@ -347,7 +351,7 @@ if (!project) {
     nextProject.querySelector("b").textContent = next.name;
   } else {
     nextProject.href = "./index.html#projects";
-    nextProject.querySelector("b").textContent = "All projects";
+    nextProject.querySelector("b").textContent = "Todos os projetos";
   }
 
   const markdownPromise = loadFile(project.markdownPath)
