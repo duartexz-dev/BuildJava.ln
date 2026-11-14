@@ -129,7 +129,7 @@ These checks establish that the sources compile and selected behaviors work. The
     │   └── site.css                 # Shared overview and study-page styling
     ├── tests/
     │   ├── project-data.test.js    # Data, file, page, and source checks
-    │   ├── code-notes.test.js     # Markdown explanation-to-source checks
+    │   ├── lesson-parser.test.js     # Markdown walkthrough-to-source checks
     │   └── project-id.test.js     # Automatic project ID checks
     ├── index.html
     ├── project.html
