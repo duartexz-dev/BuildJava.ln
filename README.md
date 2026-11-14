@@ -40,11 +40,11 @@ Every entry has one guide in [projects/md](./projects/md/). The guide contains b
 
 The [website](https://duartexz-dev.github.io/BuildJava.ln/) is a small index for the repository. Open any exercise to read the complete Java code in selectable sections and see the matching explanation beside it. The full Markdown guide remains available below the walkthrough.
 
-The study page links directly to the Java source and Markdown guide and includes previous/next navigation. Project metadata lives in [js/project-data.js](./js/project-data.js); each explanation lives beside its project in Markdown and is checked against exact Java source anchors.
+The study page links directly to the Java source and Markdown guide and includes previous/next navigation. Project metadata lives in [data/projects.json](./data/projects.json), accessed through the small [js/project-data.js](./js/project-data.js) wrapper. Each explanation lives beside its project in Markdown and is checked against exact Java source anchors.
 
 ## Add a new project
 
-Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete Java source directly, generates a unique ID with `node scripts/project-id.mjs path/to/Project.java`, adds one entry to the canonical catalog, and writes the guided lesson into that project's Markdown file. You do not need to copy and paste the code manually. The published website reads the generated Markdown and does not call an AI service at runtime.
+Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete Java source directly, generates a unique ID with `bash scripts/project-id.sh path/to/Project.java`, adds one entry to data/projects.json, and writes the guided lesson into that project's Markdown file. You do not need to copy and paste the code manually. The published website reads the generated Markdown and does not call an AI service at runtime.
 
 ## What the exercises demonstrate
 
@@ -114,13 +114,15 @@ These checks establish that the sources compile and selected behaviors work. The
     │   ├── agents/                 # Personal learning and workflow agents
     │   └── workflows/
     │       └── pages.yml           # Validation and GitHub Pages deployment
+    ├── data/
+    │   └── projects.json           # Canonical project metadata
     ├── js/
-    │   ├── project-data.js         # Single source for exercise metadata
+    │   ├── project-data.js         # Small JSON catalog wrapper
     │   ├── lesson-parser.js         # Reads walkthroughs from Markdown
     │   ├── landing.js              # Project overview rendering
     │   └── project-study.js        # Interactive code and guide loading
     ├── scripts/
-    │   └── project-id.mjs          # Generates unique project IDs
+    │   └── project-id.sh           # Generates unique project IDs
     ├── projects/
     │   ├── Beginner/               # Four introductory Java exercises
     │   ├── Intermediate/           # Six combined and object-oriented exercises
@@ -128,9 +130,10 @@ These checks establish that the sources compile and selected behaviors work. The
     ├── styles/
     │   └── site.css                 # Shared overview and study-page styling
     ├── tests/
-    │   ├── project-data.test.js    # Data, file, page, and source checks
-    │   ├── lesson-parser.test.js     # Markdown walkthrough-to-source checks
-    │   └── project-id.test.js     # Automatic project ID checks
+    │   ├── project-data.test.js    # Catalog, file, page, and source checks
+    │   └── lesson-parser.test.js   # Markdown walkthrough-to-source checks
+    ├── tests/fixtures/
+    │   └── ProjectIdFixture.java   # Unique-ID test fixture
     ├── index.html
     ├── project.html
     └── package.json
