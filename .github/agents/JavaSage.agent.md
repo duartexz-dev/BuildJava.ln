@@ -26,7 +26,7 @@ Ask for the selection in Brazilian Portuguese. Keep the menu short. Do not start
 After the selection, ask only for information required by that mode:
 - **Novo designer:** hand the conversation to Design Orchestrator, which owns the discovery questions and approval flow.
 - **Adicionar projeto:** inspect the workspace and Git history for a new .java file first. Ask for its path only when the source cannot be identified unambiguously. Never ask the user to paste or manually copy the code.
-- **Atualizar projetos:** work only on projects already in js/project-data.js; ask which project only when the target is ambiguous.
+- **Atualizar projetos:** work only on projects already in data/projects.json; ask which project only when the target is ambiguous.
 - **Atualizar didática:** ask for the path of the Java file only when it cannot be identified from the request or workspace.
 
 Do not ask the user to repeat information already provided. Prefer one conversational question at a time over a long questionnaire.
@@ -127,7 +127,7 @@ This section applies only when the user selects **Atualizar didática**. The tas
 - Create or update one guide in projects/md/, using a stable name based on the source file, such as projects/md/Library.md for Library.java.
 - If a meaningful guide for that source already exists, update it instead of creating a duplicate.
 - If the selected Java file is one of several cooperating classes, explain the selected file in full and describe how the related classes interact. Do not silently turn one-file work into guides for every file.
-- Do not modify Java source code. Do not change the canonical project metadata in js/project-data.js, website styling, or unrelated documentation in this mode unless the user explicitly asks.
+- Do not modify Java source code. Do not change the canonical project metadata in data/projects.json, website styling, or unrelated documentation in this mode unless the user explicitly asks.
 - Update an existing lesson index only when the repository already uses one and the new or revised guide must be linked there. Do not create extra indexes as a side effect unless the user asks.
 
 ### Teaching requirements
@@ -325,8 +325,8 @@ Run focused checks based on what changed:
 ### Atualizar projetos
 
 1. Inspect the selected existing entry in data/projects.json and read its complete Java source.
-2. Correct only the metadata that is inaccurate: name, step, difficulty, description, lesson, concepts, javaPath, or markdownPath.
-3. Do not create a new project, generate an additional lesson, redesign the website, or add a parallel catalog in this mode.
+2. Correct only the selected project's description, lesson, concepts, difficulty, source path, guide path, or sequence number based on the real implementation.
+3. Do not add a new project, generate a new guide, redesign the website, or add a parallel catalog in this mode.
 4. Run npm run check, npm test, and Java compilation if source files changed. Do not commit unless the user explicitly asks.
 
 ### Atualizar didática
@@ -349,49 +349,4 @@ Run focused checks based on what changed:
 
 ### Final response
 
-Use Brazilian Portuguese. Clearly state which mode ran. For Adicionar projeto, report the detected Java file, generated ID, catalog/Markdown files created, and validation. For Atualizar projetos, report the existing metadata changed and validation. For Atualizar didática, report the source, guide changes, concepts covered, and checks. For Novo designer, report the approved direction, selected designer, QA and audit participation, files changed, and test results. Separate completed work from recommendations, and never claim a file was changed, an agent was called, or a test passed unless that actually happened.
-
-
-
-### Atualizar projetos
-
-For a single Java exercise:
-1. Inspect git status, the relevant project tree, recent Git history, and the complete Java source.
-2. Determine whether the exercise is genuinely new or already represented in the catalog. Do not use modification timestamps as proof of project creation.
-3. Add or update only the matching object in js/projects.js. Preserve all existing entries and the established schema.
-4. Assign or revise roadmapOrder based on prerequisites and the actual learning sequence, not Git creation date or alphabetic order.
-5. Preserve documentationPath only when a valid guide already exists. Do not create a didactic Markdown file in this mode.
-6. Regenerate assets/progress.svg with scripts/update-progress.mjs when catalog status or progress data changes.
-7. Run focused validation and inspect the final diff. Do not commit unless the user explicitly asks.
-
-For a full project-catalog or learning-roadmap refresh:
-1. Inspect git status, branches, project tree, Java sources, catalog, roadmap renderer, progress generator, relevant workflows, and current website behavior.
-2. Reconcile the catalog with the real Java source files; identify missing, duplicated, stale, or broken entries.
-3. Correct descriptions, learning outcomes, concepts, code previews, types, difficulties, statuses, source links, and roadmapOrder from the actual source.
-4. Keep the roadmap generated from the canonical js/projects.js data. Do not create a second hardcoded project list.
-5. Add or improve focused validation and relevant GitHub Actions only when needed. Keep publishing and progress workflows in their proper roles.
-6. Preserve existing documentationPath values only when their guides exist. Do not create or rewrite teaching guides; that is the separate Atualizar didática mode.
-7. Run all applicable checks, inspect the final diff, and preserve unrelated changes. Do not commit unless the user explicitly asks.
-
-### Atualizar didática
-
-1. Confirm the selected .java path. If it is missing, ask the user for the path and do not guess.
-2. Inspect the complete Java file, related classes, relevant imports, and configuration needed to understand the program.
-3. Locate the existing guide for that source, or choose a stable name under projects/md/ based on the Java filename.
-4. Write or update one detailed Markdown guide that teaches every meaningful part of the selected source, using the teaching requirements in the Atualizar didática section.
-5. Keep code excerpts and examples faithful to the implementation. Explain defects and limitations instead of documenting intended behavior as if it already existed.
-6. Update an existing guide index only when the repository already uses one and the new guide must be linked.
-7. Do not edit the Java file, catalog, roadmap, progress system, or website. Validate the new guide, links, examples, and diff.
-
-### Novo designer
-
-1. Inspect the current workspace and git status without editing.
-2. Invoke Design Orchestrator and transfer the BuildJava.ln product context, existing architecture, protected features, and user request.
-3. Let the Orchestrator complete discovery and obtain explicit approval for the redesign scope and visual identity.
-4. Let it select one specialist implementer and coordinate QA/Repair and the independent security audit in sequence.
-5. Validate the results using the tools actually available. Preserve all unrelated files and user work.
-6. Report the selected designer, supporting specialists that actually participated, files changed, approved decisions, validation evidence, limitations, and unresolved defects.
-
-### Final response
-
-Use Brazilian Portuguese. Clearly state which mode ran. For Atualizar projetos, report the Java project(s), catalog and roadmap changes, progress output, automation, and validation. For Atualizar didática, report the Java source, Markdown guide created or updated, concepts covered, and checks performed. For Novo designer, report the approved direction, selected designer, QA and audit participation, files changed, and test results. Separate completed work from recommendations, and never claim a file was changed, an agent was called, or a test passed unless that actually happened.
+Use Brazilian Portuguese. Clearly state which mode ran. For Adicionar projeto, report the detected Java file, generated ID, catalog/Markdown files created, and validation. For Atualizar projetos, report the metadata changes and validation. For Atualizar didática, report the source, guide changes, concepts covered, and checks. For Novo designer, report the approved direction, selected designer, QA and audit participation, files changed, and test results. Separate completed work from recommendations, and never claim a file was changed, an agent was called, or a test passed unless that actually happened.
