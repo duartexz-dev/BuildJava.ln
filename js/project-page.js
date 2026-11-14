@@ -49,7 +49,7 @@
     const codeTokens = [];
 
     text = text.replace(/`([^`]+)`/g, (_, code) => {
-      const token = `@@INLINE_CODE_${codeTokens.length}@@`;
+      const token = `@@INLINECODE${codeTokens.length}@@`;
       codeTokens.push(`<code>${code}</code>`);
       return token;
     });
@@ -71,7 +71,7 @@
       .replace(/_([^_]+)_/g, "<em>$1</em>");
 
     codeTokens.forEach((html, index) => {
-      text = text.replace(`@@INLINE_CODE_${index}@@`, html);
+      text = text.replace(`@@INLINECODE${index}@@`, html);
     });
 
     return text;
