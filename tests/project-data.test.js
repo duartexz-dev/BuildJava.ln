@@ -39,17 +39,39 @@ test("getProject resolves known ids and safely rejects unknown ids", () => {
   assert.equal(getProject("not-a-real-project"), null);
 });
 
-test("the landing page is a plain introduction without CSS or a 3D scene", () => {
+test("the landing page explains the repository and loads its real project data", () => {
   const html = readFileSync(resolve(root, "index.html"), "utf8");
-  assert.match(html, /What is BuildJava\.ln/);
-  assert.match(html, /learning repository/);
-  assert.match(html, /project\.html\?project=TypeProfile/);
-  assert.doesNotMatch(html, /stylesheet|<style|<script|trail-world|three\.module\.js|<canvas/i);
+  const landingScript = readFileSync(resolve(root, "js/landing.js"), "utf8");
+  assert.match(html, /Learning Java/);
+  assert.match(html, /practical programming exercises/);
+  assert.match(html, /styles\/landing\.css/);
+  assert.match(html, /js\/landing\.js/);
+  assert.match(html, /id="project-groups"/);
+  assert.match(landingScript, /from "\.\/project-data\.js"/);
+  assert.match(landingScript, /project\.id/);
+  assert.doesNotMatch(html, /trail-world|three\.module\.js|<canvas/i);
 });
 
-test("the study page uses no stylesheet and keeps a Java source code block", () => {
+test("the study page presents the guide and Java source with responsive styling", () => {
   const html = readFileSync(resolve(root, "project.html"), "utf8");
-  assert.doesNotMatch(html, /stylesheet|<style/i);
-  assert.match(html, /id="java-source"/);
+  assert.match(html, /styles\/study\.css/);
   assert.match(html, /project-study\.js/);
+  assert.match(html, /id="markdown-content"/);
+  assert.match(html, /id="java-source"/);
+  assert.match(html, /id="source-file-link"/);
+});
+
+test("CandidateManager validates removals against the current collection size", () => {
+  const source = readFileSync(resolve(root, "projects/Intermediate/CandidateManager.java"), "utf8");
+  assert.match(source, /candidateNumber < 1 \|\| candidateNumber > candidates\.size\(\)/);
+  assert.match(source, /private static void removeCandidate/);
+  assert.match(source, /private static int readInt/);
+});
+
+test("Vehicle models its data and provides a readable object representation", () => {
+  const source = readFileSync(resolve(root, "projects/Intermediate/Vehicle.java"), "utf8");
+  assert.match(source, /class VehicleInfo/);
+  assert.match(source, /private final String name/);
+  assert.match(source, /@Override\s+public String toString\(\)/);
+  assert.match(source, /System\.out\.println\(vehicle\)/);
 });
