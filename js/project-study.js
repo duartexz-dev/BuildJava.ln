@@ -238,10 +238,10 @@ function renderGuidedCode(source, notes) {
         '</span><span class="line-content">' + (line ? escapeHtml(line) : " ") + "</span></span>";
     }).join("");
 
-    return '<button class="code-segment" type="button" data-section-index="' + index +
+    return '<div class="code-segment" role="button" tabindex="0" data-section-index="' + index +
       '" aria-pressed="false"><span class="code-segment-heading"><b>' + escapeHtml(section.title) +
       '</b><small>LINHAS ' + (section.firstLine + 1) + "–" + (section.lastLine + 1) +
-      '</small></span><pre><code>' + lineMarkup + "</code></pre></button>";
+      '</small></span><pre><code>' + lineMarkup + "</code></pre></div>";
   }).join("");
 
   explanationIndex.innerHTML = currentSections.map((section, index) => {
@@ -295,6 +295,14 @@ function selectExplanation(index, scrollToCode = true) {
 guidedCode.addEventListener("click", (event) => {
   const button = event.target.closest("[data-section-index]");
   if (button) selectExplanation(Number(button.dataset.sectionIndex), false);
+});
+
+guidedCode.addEventListener("keydown", (event) => {
+  const segment = event.target.closest(".code-segment");
+  if (segment && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    selectExplanation(Number(segment.dataset.sectionIndex), false);
+  }
 });
 
 explanationIndex.addEventListener("click", (event) => {
