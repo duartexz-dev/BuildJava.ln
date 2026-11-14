@@ -319,6 +319,7 @@ button { font: inherit; }
   color: var(--muted);
   font: 9px var(--mono);
 }
+.group-description { margin: -5px 0 15px; color: var(--muted); font-size: 10px; }
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
