@@ -1,18 +1,24 @@
 # BuildJava.ln
 
-**A Java learning journey, built one project at a time.**
+**A Java learning log built around ten small projects.**
 
-BuildJava.ln is a public learning log for practicing Java through small, documented programs. Its website presents the current projects as a single ascending 3D trail: each stop is a thematic island, and the staircase moves from simpler exercises toward projects that combine more concepts.
+The website is a single 3D map of the current learning path. Each stop is a thematic island, ordered from first console input to object-based programs and collections. The interface stays monochrome; the islands and connecting steps carry the color.
 
-## The experience
+## Exploring the trail
 
-- The landing page is the trail. There is no separate project catalogue or concept map.
-- Each project has its own 3D scene built around its subject.
-- Hovering an island reveals a short description and the concepts practiced.
-- Selecting an island opens a study page with its Markdown guide beside the original Java source.
-- The staircase alternates direction as it rises, so the order is both visual and pedagogical.
+The map is freely navigable; it is not tied to page scrolling.
 
-The scene is rendered with Three.js. The site pins the CDN import to version 0.187.0 and uses the browser's ES module import map. An internet connection is required for the Three.js module and web fonts.
+- Left mouse drag rotates the camera.
+- Right mouse drag moves the view.
+- Mouse wheel zooms in and out.
+- On touch screens, drag to rotate and use two fingers to move or zoom.
+- Select an island or its label to open the project study.
+- Hovering a stop reveals a short description and the main concepts.
+- Reset view returns to the initial camera position.
+
+Each island has small, restrained motion tied to its subject. The motion is disabled or simplified when the system's reduced-motion preference is active.
+
+The 3D view uses Three.js 0.187.0 and its OrbitControls addon through an import map. A WebGL-capable browser and an internet connection for the CDN module and web fonts are required.
 
 ## Current trail
 
@@ -33,48 +39,44 @@ The order is an editorial progression based on the current source and guides, no
 
 \`\`\`text
 BuildJava.ln/
-├── .github/
-│   ├── agents/                  # Project-specific Copilot agents
-│   └── workflows/               # GitHub Pages and progress automation
-├── assets/
-│   └── progress.svg             # Generated learning progress graphic
+├── .github/                      # Project agents and workflows
+├── assets/                       # Generated progress graphic
 ├── js/
-│   ├── projects.js               # Progress workflow's existing catalog data
-│   ├── trail-data.js             # Data used by the 3D trail and study page
-│   ├── trail-world.js            # Three.js scene and island interactions
-│   └── project-study.js          # Markdown and Java study-page loader
+│   ├── projects.js               # Existing progress automation data
+│   ├── trail-data.js             # Trail and study-page project data
+│   ├── trail-world.js            # Three.js scene and camera controls
+│   └── project-study.js          # Markdown and Java study loader
 ├── projects/
-│   ├── Beginner/                 # Beginner Java source files
-│   ├── Intermediate/             # Intermediate Java source files
-│   └── md/                       # Markdown guides
-├── scripts/
-│   └── update-progress.mjs       # Generates assets/progress.svg
+│   ├── Beginner/                 # Beginner Java source
+│   ├── Intermediate/             # Intermediate Java source
+│   └── md/                       # Project guides
+├── scripts/                      # Progress graphic generator
 ├── styles/
-│   ├── trail-world.css           # Landing page presentation
-│   └── project-study.css         # Study page presentation
-├── index.html                    # Single-page 3D trail
-└── project.html                  # Individual project study page
+│   ├── trail-world.css           # Landing page
+│   └── project-study.css         # Study page
+├── index.html                    # Interactive 3D trail
+└── project.html                  # Project study page
 \`\`\`
 
 ## Run locally
 
-A local HTTP server is required for ES modules and file fetching. From the repository folder, run:
+From the repository folder, run a local HTTP server:
 
 \`\`\`bash
 python -m http.server 8000
 \`\`\`
 
-Then open http://localhost:8000 in a browser with WebGL support.
+Open http://localhost:8000 in a WebGL-capable browser. ES modules and project files are fetched over HTTP, so opening the HTML file directly is not supported.
 
-## Java projects
+## Java projects and guides
 
-The Java source files live in the projects folder. Each trail stop points to its matching source file and Markdown guide. Keep both aligned when a project changes. The Vehicle guide was added alongside this trail because its source existed without a matching Markdown document.
+Each stop points to its Java source and Markdown guide. Keep both aligned when a project changes. The Vehicle guide was added because its source existed without a matching Markdown document.
 
 ## Progress graphic
 
-The existing progress workflow and generator remain available. The generator reads js/projects.js and writes assets/progress.svg; this legacy progress data is not rendered as a project catalogue on the website.
+The existing progress workflow remains available and continues to read \`js/projects.js\`. That legacy automation data is not rendered as a separate catalogue on the landing page.
 
-Run the generator locally with:
+Run the generator with:
 
 \`\`\`bash
 node scripts/update-progress.mjs
@@ -82,8 +84,8 @@ node scripts/update-progress.mjs
 
 ## License
 
-This project is distributed under the MIT License. See LICENSE.
+MIT. See \`LICENSE\`.
 
 ---
 
-_Learning in public, one island at a time._
+_Learning in public, through real projects._
