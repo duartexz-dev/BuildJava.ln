@@ -44,7 +44,7 @@ test("the landing page explains the repository and loads its real project data",
   const landingScript = readFileSync(resolve(root, "js/landing.js"), "utf8");
   assert.match(html, /Learning Java/);
   assert.match(html, /practical programming exercises/);
-  assert.match(html, /styles\\/site\\.css/);
+  assert.match(html, /styles\/site\.css/);
   assert.match(html, /js\/landing\.js/);
   assert.match(html, /id="project-groups"/);
   assert.match(landingScript, /from "\.\/project-data\.js"/);
@@ -54,7 +54,7 @@ test("the landing page explains the repository and loads its real project data",
 
 test("the study page presents the guide and Java source with responsive styling", () => {
   const html = readFileSync(resolve(root, "project.html"), "utf8");
-  assert.match(html, /styles\\/site\\.css/);
+  assert.match(html, /styles\/site\.css/);
   assert.match(html, /project-study\.js/);
   assert.match(html, /id="markdown-content"/);
   assert.match(html, /id="java-source"/);
