@@ -2,7 +2,7 @@
 
 **A Java learning log built around ten small projects.**
 
-The website is a single 3D map of the current learning path. Each stop is a small thematic island, ordered from first console input to object-based programs and collections.
+The website is a single 3D map of the current learning path. Each stop is a thematic island, ordered from first console input to object-based programs and collections. The interface stays monochrome; the islands and connecting steps carry the color.
 
 ## Exploring the trail
 
@@ -13,8 +13,10 @@ The map is freely navigable; it is not tied to page scrolling.
 - Mouse wheel zooms in and out.
 - On touch screens, drag to rotate and use two fingers to move or zoom.
 - Select an island or its label to open the project study.
-- Hovering a stop shows a short description and the main concepts.
+- Hovering a stop reveals a short description and the main concepts.
 - Reset view returns to the initial camera position.
+
+Each island has small, restrained motion tied to its subject. The motion is disabled or simplified when the system's reduced-motion preference is active.
 
 The 3D view uses Three.js 0.187.0 and its OrbitControls addon through an import map. A WebGL-capable browser and an internet connection for the CDN module and web fonts are required.
 
