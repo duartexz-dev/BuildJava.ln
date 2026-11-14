@@ -88,3 +88,149 @@ The user-win branch does not print a newline after the score, so the replay prom
 The game combines arrays, random numbers, boolean logic, counters, and a `do-while` loop. Validate the player's index before treating every unmatched case as a computer win.
 
 Source: [`JoKenPo.java`](../Beginner/JoKenPo.java).
+
+## Guided code walkthrough
+
+**Execution flow:** Preparar opções e placar → iniciar rodada → comparar escolhas → atualizar pontos → perguntar se haverá outra rodada.
+
+Select a code section on the website to read its matching explanation. Each anchor is taken from the Java source and is checked by the repository tests.
+
+### 1. Importar as ferramentas
+
+**Anchor:** `import java.util.Random;`
+
+O programa precisa de duas classes: Random para escolher uma opção do computador e Scanner para ler a opção da pessoa.
+
+**Terms**
+- `Random`: Classe que fornece valores pseudoaleatórios.
+- `Scanner`: Classe que recebe a escolha digitada no terminal.
+
+### 2. Definir a classe principal
+
+**Anchor:** `public class JoKenPo {`
+
+JoKenPo agrupa o programa. A execução começa em main, que prepara os objetos e controla as rodadas.
+
+**Terms**
+- `main`: Método de entrada usado pelo lançador Java.
+- `void`: Indica que main não retorna um valor.
+
+### 3. Preparar entrada e aleatoriedade
+
+**Anchor:** `Scanner scanner = new Scanner(System.in);`
+
+scanner lê o que o usuário digita; random gera a escolha do computador. A variável option guarda se a pessoa quer jogar novamente.
+
+**Terms**
+- `scanner`: Objeto responsável pela leitura do teclado.
+- `random`: Objeto que gera números pseudoaleatórios.
+- `boolean option`: Variável de controle: true repete o jogo e false encerra.
+
+### 4. Inicializar o placar
+
+**Anchor:** `int winsComputer = 0;`
+
+As duas variáveis começam em zero porque nenhuma rodada foi decidida. Elas permanecem fora do do-while para que o placar não seja reiniciado a cada rodada.
+
+**Terms**
+- `winsComputer`: Quantidade de vitórias do computador.
+- `winsUser`: Quantidade de vitórias da pessoa.
+- `++`: Incrementa uma variável em uma unidade.
+
+### 5. Garantir ao menos uma rodada
+
+**Anchor:** `do {`
+
+do-while executa o bloco primeiro e só depois verifica a condição. Por isso, a pessoa sempre joga uma rodada antes de decidir se quer continuar.
+
+**Terms**
+- `do`: Inicia o bloco que será executado pelo menos uma vez.
+- `while`: Testa a condição de repetição no fim do bloco.
+
+### 6. Ler a escolha da pessoa
+
+**Anchor:** `int userSelect = scanner.nextInt();`
+
+userSelect recebe o número digitado: 0 para Rock, 1 para Paper e 2 para Scissors. O programa não valida esse intervalo: um número fora de 0 a 2 não acessa o array, mas acaba caindo no else e sendo contado incorretamente como vitória do computador.
+
+**Terms**
+- `userSelect`: Variável que representa a opção escolhida pela pessoa.
+- `nextInt()`: Lê o próximo token como inteiro.
+- `0, 1 e 2`: Índices usados para representar as três opções.
+
+### 7. Relacionar índices e opções
+
+**Anchor:** `String[] options = new String[3];`
+
+options é um array de Strings com três posições. A posição 0 guarda Rock, a 1 guarda Paper e a 2 guarda Scissors. O índice é a ligação entre o número digitado e o nome exibido.
+
+**Terms**
+- `String[]`: Declara um array que armazena valores do tipo String.
+- `new String[3]`: Cria espaço para três referências a textos.
+- `options[0]`: Acessa a primeira posição; arrays começam no índice zero.
+
+### 8. Sortear a opção do computador
+
+**Anchor:** `int computerChoice = random.nextInt(options.length);`
+
+options.length vale 3. nextInt(3) pode devolver 0, 1 ou 2; esses valores são índices válidos para o array. Assim o programa não precisa escrever três sorteios separados.
+
+**Terms**
+- `options.length`: Quantidade de posições existentes no array.
+- `nextInt(bound)`: Gera um inteiro a partir de zero e menor que bound.
+- `computerChoice`: Índice sorteado para representar a escolha do computador.
+
+### 9. Verificar empate
+
+**Anchor:** `if (userSelect == computerChoice) {`
+
+O operador == compara os dois inteiros. Quando os índices são iguais, os dois jogadores escolheram a mesma opção e o programa não aumenta nenhum placar.
+
+**Terms**
+- `if`: Executa o bloco somente quando a condição é verdadeira.
+- `==`: Compara igualdade entre valores primitivos.
+- `winsUser / winsComputer`: O placar é exibido, mas permanece igual em caso de empate.
+
+### 10. Reconhecer as três vitórias da pessoa
+
+**Anchor:** `} else if ((userSelect == 0 && computerChoice == 2)`
+
+O else if verifica as três combinações vencedoras: pedra vence tesoura, papel vence pedra e tesoura vence papel. && exige que as duas comparações de uma combinação sejam verdadeiras; || permite que qualquer uma das três combinações vença.
+
+**Terms**
+- `else if`: Testa uma condição alternativa quando o if anterior não foi verdadeiro.
+- `&&`: E lógico: os dois lados precisam ser verdadeiros.
+- `||`: OU lógico: basta uma combinação completa ser verdadeira.
+- `winsUser++`: Soma um ponto às vitórias da pessoa.
+
+### 11. Tratar a vitória do computador
+
+**Anchor:** `} else {`
+
+Se não houve empate nem uma das três combinações vencedoras da pessoa, o computador venceu. O programa incrementa winsComputer e mostra o placar atualizado.
+
+**Terms**
+- `else`: Executa quando as condições anteriores falham.
+- `winsComputer++`: Incrementa o placar do computador.
+
+### 12. Perguntar se haverá outra rodada
+
+**Anchor:** `option = scanner.nextBoolean();`
+
+nextBoolean() lê true ou false e guarda a resposta em option. O do-while volta ao início somente quando option é true.
+
+**Terms**
+- `option`: Estado que controla a repetição do jogo.
+- `nextBoolean()`: Lê um valor booleano; não aceita respostas livres como sim ou não.
+- `while (option == true)`: Testa se a pessoa escolheu continuar. Em Java, também seria possível escrever apenas while (option).
+
+### 13. Encerrar o programa
+
+**Anchor:** `scanner.close();`
+
+Depois que a condição do do-while fica falsa, o código chega ao fim e fecha o Scanner. Uma melhoria possível seria validar userSelect antes de usar esse número como índice.
+
+**Terms**
+- `close()`: Fecha o recurso de entrada.
+- `Validação`: Conferir se o número recebido está entre 0 e 2 antes de acessar options.
+

@@ -95,3 +95,119 @@ The program's prompts contain spelling and grammar choices shown as written in t
 The exercise models profile data with a nested class and stores a variable number of projects in an `ArrayList`. Its loop is controlled by a string comparison, so only `"true"` (ignoring case) continues.
 
 Source: [`DeveloperProfile.java`](../Intermediate/DeveloperProfile.java).
+
+## Guided code walkthrough
+
+**Execution flow:** Ler nome e linguagem → criar o perfil → repetir a coleta de projetos → imprimir os dados e a lista.
+
+Select a code section on the website to read its matching explanation. Each anchor is taken from the Java source and is checked by the repository tests.
+
+### 1. Importar as classes utilizadas
+
+**Anchor:** `import java.util.Scanner;`
+
+Scanner cuida das entradas de texto e ArrayList guarda uma quantidade variável de projetos.
+
+**Terms**
+- `Scanner`: Ferramenta de leitura do terminal.
+- `ArrayList`: Implementação de lista que pode aumentar ou diminuir de tamanho.
+
+### 2. Declarar a classe do programa
+
+**Anchor:** `public class DeveloperProfile {`
+
+DeveloperProfile é a classe pública do arquivo. Dentro dela existe uma classe interna que representa os dados de um perfil.
+
+**Terms**
+- `DeveloperProfile`: Nome da classe externa, que contém main.
+- `main`: Ponto de entrada da execução Java.
+
+### 3. Criar o modelo do perfil
+
+**Anchor:** `public static class developerProfile {`
+
+developerProfile é uma classe aninhada estática. Ela reúne nome, linguagem favorita e lista de projetos. Em Java, nomes de classes normalmente começam com letra maiúscula; DeveloperProfile seria uma convenção mais clara para essa classe interna.
+
+**Terms**
+- `static class`: Classe aninhada que pode ser criada sem um objeto DeveloperProfile externo.
+- `String`: Tipo usado para nome e linguagem.
+- `ArrayList<String>`: Lista redimensionável que guarda Strings.
+
+### 4. Inicializar o perfil com um construtor
+
+**Anchor:** `public developerProfile(String name, String favoriteLanguage) {`
+
+O construtor recebe o nome e a linguagem preferida. Em seguida, inicializa a lista vazia; sem essa inicialização, profile.projects seria null e a chamada add poderia causar NullPointerException.
+
+**Terms**
+- `name`: Parâmetro com o nome informado.
+- `favoriteLanguage`: Parâmetro com a linguagem preferida.
+- `this.name`: Campo do objeto atual.
+- `new ArrayList<>()`: Cria uma lista vazia capaz de receber novos itens.
+
+### 5. Ler os dados do usuário
+
+**Anchor:** `public static void main(String[] args) {`
+
+main cria um Scanner e lê o nome e a linguagem com nextLine(). A variável respost recebe a resposta textual sobre a existência de projetos; mais adiante ela controla o while.
+
+**Terms**
+- `scanner`: Leitor de entradas.
+- `name`: Variável local para o nome digitado.
+- `favoriteLanguage`: Variável local para a linguagem informada.
+- `respost`: String usada como resposta de continuidade; o nome tem um erro de escrita, mas funciona.
+
+### 6. Criar o objeto de perfil
+
+**Anchor:** `developerProfile profile = new developerProfile(name, favoriteLanguage);`
+
+new chama o construtor e passa os dois dados que foram lidos. profile passa a referenciar o objeto que contém os atributos e a lista de projetos.
+
+**Terms**
+- `profile`: Variável que referencia o perfil criado.
+- `new`: Cria uma instância da classe.
+- `argumentos`: Valores enviados ao construtor, na mesma ordem dos parâmetros.
+
+### 7. Repetir enquanto a resposta for true
+
+**Anchor:** `while (respost.equalsIgnoreCase("true")) {`
+
+equalsIgnoreCase compara o conteúdo da String sem diferenciar maiúsculas de minúsculas. Assim, true, TRUE e True são aceitos. O laço só começa se a primeira resposta corresponder a true.
+
+**Terms**
+- `while`: Repete o bloco enquanto a condição for verdadeira.
+- `equalsIgnoreCase()`: Compara textos ignorando diferenças entre maiúsculas e minúsculas.
+- `respost`: A resposta é uma String, portanto a comparação é feita com equalsIgnoreCase, não com ==.
+
+### 8. Ler e armazenar cada projeto
+
+**Anchor:** `String nameProject = scanner.nextLine();`
+
+nameProject recebe o nome de um projeto. profile.projects.add(nameProject) acrescenta esse texto ao final da lista existente, sem substituir os itens anteriores.
+
+**Terms**
+- `nameProject`: Variável local para o projeto informado nesta repetição.
+- `profile.projects`: Acesso à lista que pertence ao objeto profile.
+- `add()`: Acrescenta um elemento ao final de uma ArrayList.
+
+### 9. Atualizar a condição do laço
+
+**Anchor:** `respost = scanner.nextLine();`
+
+O programa pergunta se há outro projeto e substitui respost pela nova resposta. A próxima verificação do while usa esse valor atualizado; sem essa leitura, o laço poderia repetir para sempre.
+
+**Terms**
+- `=`: Atribui a nova resposta à variável respost.
+- `while`: Reavalia a condição antes de iniciar a próxima repetição.
+
+### 10. Imprimir o perfil
+
+**Anchor:** `scanner.close();`
+
+Depois da coleta, o Scanner é fechado. profile.projects.size() informa quantos projetos foram adicionados; o for-each percorre a lista e imprime cada String.
+
+**Terms**
+- `size()`: Devolve a quantidade de elementos da lista.
+- `for (String project : profile.projects)`: Percorre cada item da lista e coloca o item atual na variável project.
+- `FavoriteLanguage`: Campo com a linguagem favorita. Pela convenção Java, seria mais claro usar favoriteLanguage em camelCase.
+

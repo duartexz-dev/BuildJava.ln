@@ -81,3 +81,126 @@ The values total 300, and dividing by four gives an average of 75.
 The exercise combines object construction and numeric calculation. The average is compared with an inclusive threshold of 60, but the stated grade range is not validated by the program.
 
 Source: [`bulletin.java`](../Intermediate/bulletin.java).
+
+## Guided code walkthrough
+
+**Execution flow:** Declarar Student → ler nome e notas → criar o objeto → calcular a média → comparar com a nota mínima.
+
+Select a code section on the website to read its matching explanation. Each anchor is taken from the Java source and is checked by the repository tests.
+
+### 1. Localizar a classe no pacote
+
+**Anchor:** `package Intermediate;`
+
+A declaração package organiza bulletin dentro do pacote Intermediate. O nome do pacote também aparece no caminho do arquivo.
+
+**Terms**
+- `package`: Declara a qual pacote esta classe pertence.
+
+### 2. Importar Scanner
+
+**Anchor:** `import java.util.Scanner;`
+
+Scanner será utilizado para ler o nome e as quatro notas digitadas pelo usuário.
+
+**Terms**
+- `Scanner`: Classe de leitura de dados do terminal.
+
+### 3. Declarar a classe principal
+
+**Anchor:** `public class bulletin {`
+
+bulletin é a classe pública do arquivo. Dentro dela existe outra classe, Student, que descreve os dados de um estudante.
+
+**Terms**
+- `public class`: Declara uma classe com acesso público.
+- `Student`: Classe interna que modela um estudante.
+
+### 4. Definir os atributos do estudante
+
+**Anchor:** `String name;`
+
+Os campos guardam informações que pertencem ao mesmo estudante. Em vez de espalhar quatro notas pelo programa, elas ficam reunidas no objeto Student.
+
+**Terms**
+- `name`: Nome do estudante.
+- `portugueseGrade / mathGrade / englishGrade / historyGrade`: Campos que armazenam as notas de cada disciplina.
+- `Double`: Classe wrapper para valores decimais; double é o tipo primitivo equivalente.
+
+### 5. Construir um objeto Student
+
+**Anchor:** `public Student(String name, Double portugueseGrade, Double mathGrade, Double englishGrade,`
+
+O construtor tem o mesmo nome da classe e não declara tipo de retorno. Cada parâmetro recebe um dado; this aponta para o objeto atual, permitindo diferenciar o campo do parâmetro que tem o mesmo nome.
+
+**Terms**
+- `Student(...)`: Construtor chamado quando usamos new Student(...).
+- `parâmetros`: Valores recebidos pelo construtor para inicializar o objeto.
+- `this.name`: Campo name pertencente ao objeto atual.
+- `name`: Parâmetro recebido pelo construtor.
+
+### 6. Iniciar a execução e receber as notas
+
+**Anchor:** `public static void main(String[] args) {`
+
+main cria o Scanner, mostra as perguntas e lê cada resposta. O nome é lido com nextLine(); as notas são lidas com nextDouble(), porque podem ter casas decimais.
+
+**Terms**
+- `scanner`: Leitor usado para todas as entradas.
+- `nextLine()`: Lê o nome completo até Enter.
+- `nextDouble()`: Lê uma nota como valor decimal.
+
+### 7. Criar e guardar o objeto
+
+**Anchor:** `Student student = new Student(name, portugueseGrade, mathGrade, englishGrade, historyGrade);`
+
+new chama o construtor de Student e passa os cinco dados na ordem esperada. A variável student guarda a referência ao objeto criado, e seus campos podem ser acessados com o ponto.
+
+**Terms**
+- `new`: Cria uma instância da classe.
+- `student`: Variável que referencia o objeto Student.
+- `.`: Operador de acesso a membros, como student.mathGrade.
+
+### 8. Definir a média mínima e calcular
+
+**Anchor:** `final Double passingGradeThreshold = 60.00;`
+
+passingGradeThreshold guarda a nota mínima e final impede sua reatribuição. totalGrades soma os quatro campos do objeto; averageGrade divide o total por quatro.
+
+**Terms**
+- `final`: Torna a referência/variável não reatribuível depois da inicialização.
+- `passingGradeThreshold`: Valor usado como limite para aprovação: 60.00.
+- `totalGrades`: Soma das quatro notas do estudante.
+- `averageGrade`: Média aritmética: soma dividida por quatro.
+
+### 9. Decidir se o estudante passou
+
+**Anchor:** `boolean passed = averageGrade >= passingGradeThreshold;`
+
+>= compara a média com o limite. O resultado dessa comparação é boolean: true quando a média é maior ou igual a 60, e false nos outros casos.
+
+**Terms**
+- `boolean passed`: Variável que guarda o resultado da comparação.
+- `>=`: Maior ou igual.
+
+### 10. Escolher e imprimir a mensagem
+
+**Anchor:** `String result = passed`
+
+O operador ternário escolhe a mensagem conforme passed. A concatenação com + junta o texto da mensagem ao valor de averageGrade.
+
+**Terms**
+- `?`: Se a condição antes do ? for verdadeira, escolhe o primeiro resultado.
+- `:`: Se a condição for falsa, escolhe o resultado depois dos dois-pontos.
+- `+`: Com String, concatena textos e valores convertidos para texto.
+
+### 11. Encerrar o Scanner
+
+**Anchor:** `scanner.close();`
+
+Depois de imprimir o resultado, o programa fecha o Scanner. Apesar do texto pedir notas entre 10 e 100, o código atual não valida essa faixa; essa é uma melhoria possível.
+
+**Terms**
+- `close()`: Fecha o leitor de entrada.
+- `Validação`: Seria necessário conferir cada nota antes de calcular a média.
+

@@ -78,3 +78,12 @@ test("Vehicle models its data and provides a readable object representation", ()
   assert.match(source, /@Override\s+public String toString\(\)/);
   assert.match(source, /System\.out\.println\(vehicle\)/);
 });
+
+test("the JSON file is the only canonical project catalog", () => {
+  const catalogPath = resolve(root, "data/projects.json");
+  const wrapperPath = resolve(root, "js/project-data.js");
+  assert.ok(existsSync(catalogPath));
+  assert.deepEqual(JSON.parse(readFileSync(catalogPath, "utf8")), projects);
+  assert.match(readFileSync(wrapperPath, "utf8"), /data\/projects\.json/);
+  assert.equal(existsSync(resolve(root, "js/code-notes.js")), false);
+});

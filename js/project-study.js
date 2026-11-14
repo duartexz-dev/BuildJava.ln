@@ -1,5 +1,5 @@
 import { getProject, projects } from "./project-data.js";
-import { getCodeNotes } from "./code-notes.js";
+import { parseGuidedWalkthrough } from "./lesson-parser.js";
 
 const params = new URLSearchParams(window.location.search);
 const project = getProject(params.get("project"));
@@ -26,6 +26,8 @@ const previousSection = document.querySelector("#previous-section");
 const nextSection = document.querySelector("#next-section");
 let currentSections = [];
 let activeSectionIndex = 0;
+let loadedGuide = null;
+let loadedSource = null;
 
 function escapeHtml(value) {
   return String(value)
@@ -203,10 +205,10 @@ function showError(container, message) {
   container.innerHTML = '<p class="study-error">' + escapeHtml(message) + "</p>";
 }
 
-function renderGuidedCode(source, notes) {
+function renderGuidedCode(source, sections) {
   const lines = source.replace(/\r\n/g, "\n").split("\n");
 
-  if (!notes || !Array.isArray(notes.sections) || notes.sections.length === 0) {
+  if (!Array.isArray(sections) || sections.length === 0) {
     guidedCode.innerHTML = '<p class="study-error">As explicações deste projeto ainda não estão disponíveis.</p>';
     return;
   }
@@ -214,7 +216,7 @@ function renderGuidedCode(source, notes) {
   const starts = [];
   let searchFrom = 0;
 
-  notes.sections.forEach((section) => {
+  sections.forEach((section) => {
     const anchorIndex = lines.findIndex((line, index) => index >= searchFrom && line.includes(section.anchor));
     if (anchorIndex === -1) {
       throw new Error("Trecho de referência não encontrado: " + section.anchor);
@@ -223,7 +225,7 @@ function renderGuidedCode(source, notes) {
     searchFrom = anchorIndex + 1;
   });
 
-  currentSections = notes.sections.map((section, index) => {
+  currentSections = sections.map((section, index) => {
     const firstLine = index === 0 ? 0 : starts[index];
     const lastLine = index < starts.length - 1 ? starts[index + 1] - 1 : lines.length - 1;
     return { ...section, firstLine, lastLine };
@@ -253,6 +255,17 @@ function renderGuidedCode(source, notes) {
 
   activeSectionIndex = 0;
   selectExplanation(0, false);
+}
+
+function renderStudyWhenReady() {
+  if (loadedGuide === null || loadedSource === null) return;
+
+  try {
+    const sections = parseGuidedWalkthrough(loadedGuide);
+    renderGuidedCode(loadedSource, sections);
+  } catch (error) {
+    showError(guidedCode, "A explicação deste projeto precisa ser revisada: " + error.message);
+  }
 }
 
 function selectExplanation(index, scrollToCode = true) {
@@ -332,9 +345,8 @@ if (!project) {
 } else {
   document.title = project.name + " — BuildJava.ln";
   title.textContent = project.name;
-  const lessonNotes = getCodeNotes(project.id);
-  description.textContent = lessonNotes?.purpose || project.description;
-  studyFlow.textContent = lessonNotes?.flow || "";
+  description.textContent = project.description;
+  studyFlow.textContent = project.lesson || "";
   kicker.textContent = "PROJETO " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
   breadcrumb.textContent = project.name;
   concepts.textContent = project.concepts.join(" · ");
@@ -366,13 +378,16 @@ if (!project) {
   const markdownPromise = loadFile(project.markdownPath)
     .then((markdown) => {
       markdownContainer.innerHTML = renderMarkdown(markdown);
+      loadedGuide = markdown;
+      renderStudyWhenReady();
     })
     .catch((error) => showError(markdownContainer, "O guia não pôde ser carregado. " + error.message));
 
   const sourcePromise = loadFile(project.javaPath)
     .then((source) => {
       javaSource.textContent = source;
-      renderGuidedCode(source, getCodeNotes(project.id));
+      loadedSource = source;
+      renderStudyWhenReady();
       copyButton.disabled = false;
     })
     .catch((error) => {
