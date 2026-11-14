@@ -1,4 +1,4 @@
-name: Deploy static site to GitHub Pages
+name: Validate and deploy BuildJava.ln
 
 on:
   push:
@@ -27,11 +27,36 @@ jobs:
         with:
           node-version: 22
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
       - name: Check JavaScript syntax
         run: npm run check
 
-      - name: Test project catalog and source files
+      - name: Test project catalogue, guides, and source links
         run: npm test
+
+      - name: Compile all Java exercises
+        run: |
+          mkdir -p "$RUNNER_TEMP/buildjava-classes"
+          javac -d "$RUNNER_TEMP/buildjava-classes" $(find projects -type f -name "*.java" -print)
+
+      - name: Smoke-test representative Java programs
+        shell: bash
+        run: |
+          set -euo pipefail
+          classes="$RUNNER_TEMP/buildjava-classes"
+
+          candidate_output="$(printf '4\n20\n4\n20\n0\n' | java -cp "$classes" Intermediate.CandidateManager)"
+          grep -Fq "Removed: Vinicius Teixeira" <<< "$candidate_output"
+          grep -Fq "Invalid position. Choose a number between 1 and 19." <<< "$candidate_output"
+
+          vehicle_output="$(printf '2020\nCivic\n155\nHonda\nSilver\n' | java -cp "$classes" Intermediate.Vehicle)"
+          grep -Fq "Vehicle: Civic" <<< "$vehicle_output"
+          grep -Fq "Brand: Honda" <<< "$vehicle_output"
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
