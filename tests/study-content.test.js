@@ -80,6 +80,14 @@ test("the Java source remains larger than the website JavaScript layer", () => {
   );
 });
 
+test("JavaSage applies the same guide standard to future projects", () => {
+  const agent = readFileSync(resolve(root, ".github/agents/JavaSage.agent.md"), "utf8");
+  for (const heading of guideSections) {
+    assert.ok(agent.includes("**" + heading + "**"), "JavaSage is missing the required guide heading: " + heading);
+  }
+  assert.match(agent, /Do not create a second "Guided code walkthrough"/);
+});
+
 test("each guide identifies the matching Java source filename", () => {
   for (const project of projects) {
     const guide = readFileSync(resolve(root, project.markdownPath), "utf8");
