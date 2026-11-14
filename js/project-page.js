@@ -54,7 +54,7 @@
       return token;
     });
 
-    text = text.replace(/[([^]]+)](([^)]+))/g, (match, label, escapedUrl) => {
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, escapedUrl) => {
       const rawUrl = escapedUrl
         .replace(/&amp;/g, "&")
         .replace(/&quot;/g, '"');
@@ -65,9 +65,9 @@
     });
 
     text = text
-      .replace(/**([^*]+)**/g, "<strong>$1</strong>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/__([^_]+)__/g, "<strong>$1</strong>")
-      .replace(/*([^*]+)*/g, "<em>$1</em>")
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>")
       .replace(/_([^_]+)_/g, "<em>$1</em>");
 
     codeTokens.forEach((html, index) => {
@@ -186,7 +186,7 @@
         continue;
       }
 
-      const quote = line.match(/^\s*&gt;\s?(.+)$/);
+      const quote = line.match(/^\s*>\s?(.+)$/);
       if (quote) {
         flushParagraph();
         closeList();
