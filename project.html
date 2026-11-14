@@ -3,38 +3,81 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Study notes and original Java source code for a BuildJava.ln exercise.">
-  <title>Java exercise — BuildJava.ln</title>
+  <meta name="theme-color" content="#f3f1eb">
+  <meta name="description" content="Read the learning guide and inspect the Java source code for a BuildJava.ln exercise.">
+  <title>Project study — BuildJava.ln</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles/study.css">
   <script type="module" src="./js/project-study.js"></script>
 </head>
 <body>
-  <header>
-    <p><a href="./index.html">BuildJava.ln — Home</a></p>
+  <a class="skip-link" href="#study-main">Skip to content</a>
+  <header class="study-header">
+    <a class="brand" href="./index.html" aria-label="BuildJava.ln home">
+      <span class="brand-name">BuildJava<span class="brand-suffix">.ln</span></span>
+      <span class="brand-caption">JAVA / LEARNING REPOSITORY</span>
+    </a>
+    <a class="back-link" href="./index.html">← All projects</a>
   </header>
 
-  <main>
-    <p><a href="./index.html">Back to overview</a></p>
-    <p id="study-kicker">JAVA EXERCISE</p>
-    <h1 id="study-title">Loading exercise…</h1>
-    <p id="study-description"></p>
-    <p id="study-concepts"></p>
+  <main id="study-main">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="./index.html">Home</a><span aria-hidden="true">/</span><a href="./index.html#projects">Projects</a><span aria-hidden="true">/</span><span id="study-breadcrumb">Exercise</span>
+    </nav>
 
-    <section>
-      <h2>Study guide</h2>
-      <p><a id="markdown-source-link" href="#" target="_blank" rel="noopener noreferrer">View Markdown file on GitHub</a></p>
-      <div id="markdown-content">Loading the study guide…</div>
+    <section class="study-hero">
+      <p class="study-kicker" id="study-kicker">PROJECT / JAVA</p>
+      <h1 id="study-title">Loading exercise…</h1>
+      <p id="study-description" class="study-description"></p>
+      <div class="study-meta">
+        <span id="study-concepts"></span>
+        <span id="study-level"></span>
+      </div>
     </section>
 
-    <section>
-      <h2>Java source code</h2>
-      <p id="code-path"></p>
-      <p><button id="copy-code" type="button" disabled>Copy Java code</button></p>
-      <pre><code id="java-source">Loading Java source…</code></pre>
+    <section class="study-workspace" aria-label="Study guide and Java implementation">
+      <article class="guide-panel">
+        <header class="panel-header">
+          <div>
+            <p class="panel-kicker">01 / UNDERSTAND</p>
+            <h2>Study guide</h2>
+          </div>
+          <a id="markdown-source-link" href="#" target="_blank" rel="noopener noreferrer">Markdown ↗</a>
+        </header>
+        <div class="markdown-content" id="markdown-content" aria-live="polite">
+          <p class="loading-message">Loading the study guide…</p>
+        </div>
+      </article>
+
+      <article class="source-panel">
+        <header class="panel-header source-panel-header">
+          <div>
+            <p class="panel-kicker">02 / INSPECT</p>
+            <h2>Java source</h2>
+            <p id="code-path" class="source-path"></p>
+          </div>
+          <div class="source-actions">
+            <a id="source-file-link" href="#" target="_blank" rel="noopener noreferrer">Open file ↗</a>
+            <button class="copy-button" id="copy-code" type="button" disabled>Copy</button>
+          </div>
+        </header>
+        <pre class="java-source"><code id="java-source">Loading Java source…</code></pre>
+        <p class="source-note">This is the source file stored in the repository.</p>
+      </article>
     </section>
+
+    <nav class="project-navigation" aria-label="Project navigation">
+      <a id="previous-project" href="./index.html#projects"><span>PREVIOUS</span><strong>Project list</strong></a>
+      <a id="next-project" href="./index.html#projects"><span>NEXT</span><strong>Project list</strong></a>
+    </nav>
   </main>
 
-  <footer>
-    <p>BuildJava.ln — Learning Java by building.</p>
+  <footer class="site-footer">
+    <a class="footer-brand" href="./index.html">BuildJava<span>.ln</span></a>
+    <span>LEARNING JAVA BY BUILDING</span>
+    <a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
   </footer>
 </body>
 </html>
