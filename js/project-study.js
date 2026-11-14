@@ -1,4 +1,4 @@
-import { getProject } from "./project-data.js";
+import { getProject, projects } from "./project-data.js";
 
 const params = new URLSearchParams(window.location.search);
 const project = getProject(params.get("project"));
@@ -11,6 +11,11 @@ const javaSource = document.querySelector("#java-source");
 const copyButton = document.querySelector("#copy-code");
 const markdownLink = document.querySelector("#markdown-source-link");
 const codePath = document.querySelector("#code-path");
+const sourceFileLink = document.querySelector("#source-file-link");
+const breadcrumb = document.querySelector("#study-breadcrumb");
+const level = document.querySelector("#study-level");
+const previousProject = document.querySelector("#previous-project");
+const nextProject = document.querySelector("#next-project");
 
 function escapeHtml(value) {
   return String(value)
@@ -192,7 +197,11 @@ if (!project) {
   document.title = "Project not found — BuildJava.ln";
   title.textContent = "Project not found";
   description.textContent = "This exercise could not be found in the project data.";
-  kicker.textContent = "NO MATCHING STOP";
+  kicker.textContent = "PROJECT NOT FOUND";
+  breadcrumb.textContent = "Not found";
+  level.textContent = "NO MATCH";
+  previousProject.href = "./index.html#projects";
+  nextProject.href = "./index.html#projects";
   showError(markdownContainer, "Return to the home page and open an available exercise.");
   javaSource.textContent = "No source file is associated with this address.";
 } else {
@@ -200,9 +209,32 @@ if (!project) {
   title.textContent = project.name;
   description.textContent = project.description;
   kicker.textContent = "PROJECT " + String(project.step).padStart(2, "0") + " / " + project.difficulty.toUpperCase();
-  concepts.textContent = project.concepts.join(", ");
+  breadcrumb.textContent = project.name;
+  concepts.textContent = project.concepts.join(" · ");
+  level.textContent = project.difficulty.toUpperCase() + " / EXERCISE";
   markdownLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.markdownPath;
+  sourceFileLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.javaPath;
   codePath.textContent = project.javaPath;
+
+  const projectIndex = projects.findIndex((item) => item.id === project.id);
+  const previous = projects[projectIndex - 1];
+  const next = projects[projectIndex + 1];
+
+  if (previous) {
+    previousProject.href = "./project.html?project=" + encodeURIComponent(previous.id);
+    previousProject.querySelector("strong").textContent = previous.name;
+  } else {
+    previousProject.href = "./index.html#projects";
+    previousProject.querySelector("strong").textContent = "All projects";
+  }
+
+  if (next) {
+    nextProject.href = "./project.html?project=" + encodeURIComponent(next.id);
+    nextProject.querySelector("strong").textContent = next.name;
+  } else {
+    nextProject.href = "./index.html#projects";
+    nextProject.querySelector("strong").textContent = "All projects";
+  }
 
   const markdownPromise = loadFile(project.markdownPath)
     .then((markdown) => {

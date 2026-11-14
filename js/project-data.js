@@ -72,7 +72,7 @@ export const projects = [
     difficulty: "Intermediate",
     description: "Collect a vehicle's year, name, horsepower, brand, and color, then group those values in an object.",
     lesson: "Use a constructor and this to initialize an object with several related attributes.",
-    concepts: ["Classes", "Constructor", "this"],
+    concepts: ["Classes", "Constructor", "Encapsulation", "toString()"],
     javaPath: "projects/Intermediate/Vehicle.java",
     markdownPath: "projects/md/Vehicle.md"
   },
@@ -105,7 +105,7 @@ export const projects = [
     difficulty: "Intermediate",
     description: "Manage candidates with a menu that can add, list, search, remove, and count entries.",
     lesson: "Combine ArrayList operations, methods, search logic, and a menu-driven loop.",
-    concepts: ["ArrayList", "Methods", "Menu loop"],
+    concepts: ["ArrayList", "Methods", "Input validation"],
     javaPath: "projects/Intermediate/CandidateManager.java",
     markdownPath: "projects/md/CandidateManager.md"
   }

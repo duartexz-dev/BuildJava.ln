@@ -1,57 +1,86 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="BuildJava.ln is a personal record of learning Java through practical programming exercises.">
-  <title>BuildJava.ln — Learning Java</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f3f1eb">
+<meta name="description" content="BuildJava.ln documents learning Java through practical exercises, study notes, and source code.">
+<meta property="og:title" content="BuildJava.ln — Learning Java by building">
+<meta property="og:description" content="Ten practical Java exercises, each with a study guide and source code.">
+<title>BuildJava.ln — Learning Java by building</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/site.css">
+<script type="module" src="./js/landing.js"></script>
 </head>
 <body>
-  <header>
-    <h1>BuildJava.ln</h1>
-    <p>A personal log of learning Java through practice.</p>
-  </header>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="./index.html"><b>BuildJava<span>.ln</span></b><small>JAVA / LEARNING REPOSITORY</small></a>
+<nav aria-label="Main navigation"><a href="#projects">Projects</a><a href="#method">Method</a><a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+</header>
 
-  <main>
-    <section>
-      <h2>What is BuildJava.ln?</h2>
-      <p>
-        BuildJava.ln is a learning repository where I practice Java by building
-        small programs. Each exercise focuses on programming concepts and keeps
-        the Java source code together with a study guide.
-      </p>
-      <p>
-        The goal is to understand how the language works by writing, reviewing,
-        and improving code — not just collecting finished tutorials.
-      </p>
-    </section>
+<main id="main-content">
+<section class="hero">
+<div>
+<p class="eyebrow"><i></i> ACTIVE LEARNING REPOSITORY <span>/</span> JAVA</p>
+<h1>Learning Java<br><em>by building.</em></h1>
+<p class="hero-copy">BuildJava.ln is a record of learning Java through practical programming exercises. Each project connects a small problem to the concepts, notes, and source code behind its solution.</p>
+<div class="actions"><a class="button" href="#projects">Explore the projects ↓</a><a class="plain-link" href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a></div>
+<p class="scope-hint">A learning repository — not a finished course or production software.</p>
+</div>
+<aside class="code-card" aria-label="Java code example from the library exercise">
+<div class="code-top"><span>● &nbsp;library.java</span><b>JAVA</b></div>
+<div class="code-body"><p>A real example from the collection exercise</p><pre><code><span>ArrayList&lt;String&gt;</span> books = new ArrayList&lt;&gt;();
 
-    <section>
-      <h2>How the project works</h2>
-      <ol>
-        <li>Choose a practical programming exercise.</li>
-        <li>Write a Java program to solve it.</li>
-        <li>Study the concepts and document what the code does.</li>
-      </ol>
-      <p>
-        The current collection has ten exercises, from beginner fundamentals
-        to intermediate object-oriented programming and collections.
-      </p>
-    </section>
+String nameBook = scanner.nextLine();
 
-    <section>
-      <h2>Start learning</h2>
-      <p>
-        <a href="./project.html?project=TypeProfile">Open the first Java exercise: TypeProfile</a>
-      </p>
-      <p>
-        <a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">View the repository on GitHub</a>
-      </p>
-    </section>
-  </main>
+books.add(nameBook);
 
-  <footer>
-    <p>BuildJava.ln — Learning in public.</p>
-  </footer>
+System.out.printf(
+    <i>"Current library: %s\n"</i>,
+    books
+);</code></pre></div>
+<div class="code-bottom"><span>COLLECTIONS / ARRAYLIST</span><a href="./project.html?project=library">Read the exercise ↗</a></div>
+</aside>
+</section>
+
+<section class="metrics" aria-label="Repository overview">
+<div><b>10</b><span>Java exercises</span></div><div><b>10</b><span>Study guides</span></div><div><b>02</b><span>Learning stages</span></div><div class="metric-note">CORE SYNTAX <span>→ OBJECTS &amp; COLLECTIONS</span></div>
+</section>
+
+<section class="overview">
+<p class="eyebrow-index">01 / THE PROJECT</p>
+<div><h2>Small programs.<br><em>Concrete concepts.</em></h2><div class="overview-copy">
+<p>The goal is to turn each topic into something that can be run, inspected, and improved. The exercises begin with console input and control flow, then move into classes, objects, constructors, and collections.</p>
+<p>Every exercise has two connected parts: a Markdown guide that explains the learning goal, and the Java file that contains the implementation.</p>
+</div></div>
+</section>
+
+<section class="projects" id="projects">
+<div class="section-head"><div><p class="eyebrow-index">02 / THE WORK</p><h2>Explore the exercises.</h2></div><p>Open a project to read its guide and inspect the original Java source.</p></div>
+<div id="project-groups" class="project-groups" aria-live="polite"><p class="loading-message">Loading the project list…</p></div>
+<noscript><p>JavaScript is required for the project index. Browse the <a href="https://github.com/duartexz-dev/BuildJava.ln/tree/main/projects">projects directory on GitHub</a>.</p></noscript>
+</section>
+
+<section class="method" id="method">
+<div class="section-head"><div><p class="eyebrow-index">03 / THE METHOD</p><h2>Learn by doing.<br><em>Document what matters.</em></h2></div><p>A consistent structure makes it easier to review what each exercise teaches and how the code applies it.</p></div>
+<div class="method-grid">
+<article><small>01</small><h3>Build</h3><p>Start with a focused task and write a Java program that solves it.</p></article>
+<article><small>02</small><h3>Understand</h3><p>Connect the code to the concepts explained in the study guide.</p></article>
+<article><small>03</small><h3>Improve</h3><p>Review edge cases, make changes, and keep the implementation open to feedback.</p></article>
+</div>
+</section>
+
+<section class="scope">
+<p class="eyebrow-index">04 / SCOPE &amp; TECHNOLOGY</p>
+<div class="scope-grid"><h2>Java is the focus.<br><em>The website supports it.</em></h2><p>The repository is centered on Java practice. HTML, CSS, and JavaScript provide a lightweight index for the exercises; GitHub Actions checks the project data and compiles every Java source.</p></div>
+<p class="tech-line">STACK / JAVA · HTML · CSS · JAVASCRIPT · GITHUB ACTIONS</p>
+<p class="scope-note">These are learning exercises, not production-ready applications. Their current scope and limitations are documented alongside the code.</p>
+</section>
+</main>
+
+<footer class="site-footer"><a href="./index.html">BuildJava<span>.ln</span></a><span>LEARNING JAVA BY BUILDING</span><a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">GITHUB ↗</a></footer>
 </body>
 </html>
