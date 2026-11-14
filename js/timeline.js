@@ -59,8 +59,9 @@
     source.href = resource.firstCommitUrl;
     source.target = "_blank";
     source.rel = "noopener noreferrer";
-    source.textContent = "First recorded source commit";
-    source.setAttribute("aria-label", `Open the first recorded source commit for ${project.name}`);
+    source.textContent = "First GitHub appearance";
+    source.title = `First recorded at ${resource.firstRecordedPath || resource.javaPath}`;
+    source.setAttribute("aria-label", `Open the first GitHub appearance of ${project.name}`);
 
     copy.append(title, description, source);
     article.append(time, copy);
@@ -80,6 +81,6 @@
 
   const note = document.createElement("p");
   note.className = "timeline-source-note";
-  note.textContent = "Dates use the first Git commit found for each current Java source path. To correct a date, set dateOverride for that project in js/project-resources.js.";
+  note.textContent = "Dates use the earliest verified Git commit in which each project appeared, including an earlier source path when the file was later reorganized. To correct a date, set dateOverride for that project in js/project-resources.js.";
   timeline.after(note);
 })();
