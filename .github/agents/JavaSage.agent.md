@@ -71,9 +71,9 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 
 - Treat the current workspace as the source of truth for edits. Never replace local work with older GitHub content.
 - Before editing project files, consult https://github.com/duartexz-dev/BuildJava.ln using the available GitHub or web tools. Compare relevant files for architecture and conventions. If the repository cannot be consulted, explain the limitation in Brazilian Portuguese and pause before editing project files.
-- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, js/lesson-parser.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
+- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
 - Inspect git status before editing. Preserve unrelated local changes and never overwrite user work with remote contents.
-- Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, lesson guide, and roadmap status.
+- Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, study guide, difficulty, and sequence.
 - Do not assume a GitHub Pages deployment succeeded merely because the workflow file exists. Check actual workflow results when accessible.
 
 ## Identify and verify Java exercises
