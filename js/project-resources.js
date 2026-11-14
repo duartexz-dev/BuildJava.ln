@@ -1,9 +1,9 @@
 /*
  * Canonical links and history metadata for the active Java projects.
  *
- * firstCommitAt comes from the GitHub commit history of the current Java file.
- * Set dateOverride to an ISO date only when the real project start predates
- * or differs from the first commit that introduced this path.
+ * firstCommitAt is the earliest verified GitHub commit where the project
+ * appeared. firstRecordedPath preserves the file location at that moment.
+ * Set dateOverride to an ISO date when the actual start predates Git history.
  */
 window.BuildJavaProjectResources = Object.freeze({
   TypeProfile: {
