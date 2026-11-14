@@ -256,7 +256,7 @@ h1, h2, h3, h4, p { overflow-wrap: anywhere; }
   overflow: auto;
   color: #edf1e9;
   background: #111813;
-  font: 9px/1.8 var(--mono);
+  font: 11px/1.8 var(--mono);
   tab-size: 4;
 }
 .java-source code { white-space: pre; }
@@ -267,10 +267,11 @@ h1, h2, h3, h4, p { overflow-wrap: anywhere; }
   padding: 17px;
   overflow: auto;
   color: #4d534d;
-  font-size: 10px;
-  line-height: 1.85;
+  font-size: 12px;
+  line-height: 1.9;
 }
 .markdown-content > :first-child { margin-top: 0; }
+.markdown-content > h1:first-child { display: none; }
 .markdown-content h1, .markdown-content h2, .markdown-content h3, .markdown-content h4 {
   margin: 1.3em 0 .5em;
   color: var(--ink);
@@ -282,10 +283,10 @@ h1, h2, h3, h4, p { overflow-wrap: anywhere; }
 .markdown-content li { margin: 0 0 5px; }
 .markdown-content a { color: var(--green); }
 .markdown-content code { padding: 1px 3px; background: #efeee8; font-family: var(--mono); font-size: .92em; }
-.markdown-content pre { padding: 12px; overflow: auto; color: white; background: var(--dark); font: 9px/1.7 var(--mono); }
+.markdown-content pre { padding: 12px; overflow: auto; color: white; background: var(--dark); font: 10px/1.75 var(--mono); }
 .markdown-content pre code { padding: 0; color: inherit; background: transparent; }
 .markdown-content blockquote { margin: 12px 0; padding: 6px 12px; border-left: 2px solid var(--accent); color: var(--muted); }
-.markdown-content table { width: 100%; border-collapse: collapse; font-size: 9px; }
+.markdown-content table { width: 100%; border-collapse: collapse; font-size: 11px; }
 .markdown-content td, .markdown-content th { padding: 6px; border: 1px solid var(--line); text-align: left; }
 .markdown-content hr { border: 0; border-top: 1px solid var(--line); }
 .study-error { padding: 16px; color: var(--accent); font-size: 10px; }
@@ -329,6 +330,7 @@ h1, h2, h3, h4, p { overflow-wrap: anywhere; }
   .study-hero h1 { font-size: 40px; }
   .panel-header { padding: 10px; }
   .markdown-content { padding: 14px; }
-  .java-source { min-height: 260px; font-size: 8px; padding: 14px 10px; }
+  .java-source { min-height: 260px; font-size: 10px; padding: 14px 10px; }
+  .markdown-content { font-size: 11px; }
   .study-header, main, .site-footer { width: calc(100% - 36px); }
 }
