@@ -34,13 +34,17 @@ The projects move from core language fundamentals into object-oriented programmi
 | 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
 | 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | Methods, collections, validation, menu flow | Intermediate |
 
-Every entry has a companion guide in [projects/md](./projects/md/) and a guided walkthrough defined in [js/code-notes.js](./js/code-notes.js). The walkthrough is anchored to real lines in the Java source so each explanation stays connected to the code it describes.
+Every entry has one guide in [projects/md](./projects/md/). The guide contains both the full study material and the structured interactive walkthrough. The website parses that Markdown directly, so lesson text is not duplicated in JavaScript.
 
 ## How to explore an exercise
 
 The [website](https://duartexz-dev.github.io/BuildJava.ln/) is a small index for the repository. Open any exercise to read the complete Java code in selectable sections and see the matching explanation beside it. The full Markdown guide remains available below the walkthrough.
 
-The study page links directly to both source files on GitHub and includes previous/next navigation. Project metadata is kept in one place, while code explanations are maintained separately and checked against the actual source anchors.
+The study page links directly to the Java source and Markdown guide and includes previous/next navigation. Project metadata lives in [js/project-data.js](./js/project-data.js); each explanation lives beside its project in Markdown and is checked against exact Java source anchors.
+
+## Add a new project
+
+Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete Java source directly, generates a unique ID with `node scripts/project-id.mjs path/to/Project.java`, adds one entry to the canonical catalog, and writes the guided lesson into that project's Markdown file. You do not need to copy and paste the code manually. The published website reads the generated Markdown and does not call an AI service at runtime.
 
 ## What the exercises demonstrate
 
@@ -56,7 +60,7 @@ The study page links directly to both source files on GitHub and includes previo
 | --- | --- |
 | Java | Main learning content and console exercises |
 | HTML and CSS | Accessible project overview and study layout |
-| JavaScript | Project catalogue, Markdown rendering, and source display |
+| JavaScript | Project catalogue, Markdown parsing, navigation, and source display |
 | Node.js | JavaScript syntax checks and repository integrity tests |
 | GitHub Actions | Java compilation, smoke tests, and GitHub Pages deployment |
 
@@ -112,9 +116,11 @@ These checks establish that the sources compile and selected behaviors work. The
     │       └── pages.yml           # Validation and GitHub Pages deployment
     ├── js/
     │   ├── project-data.js         # Single source for exercise metadata
-    │   ├── code-notes.js           # Guided explanations for all ten exercises
+    │   ├── lesson-parser.js         # Reads walkthroughs from Markdown
     │   ├── landing.js              # Project overview rendering
     │   └── project-study.js        # Interactive code and guide loading
+    ├── scripts/
+    │   └── project-id.mjs          # Generates unique project IDs
     ├── projects/
     │   ├── Beginner/               # Four introductory Java exercises
     │   ├── Intermediate/           # Six combined and object-oriented exercises
@@ -123,7 +129,8 @@ These checks establish that the sources compile and selected behaviors work. The
     │   └── site.css                 # Shared overview and study-page styling
     ├── tests/
     │   ├── project-data.test.js    # Data, file, page, and source checks
-    │   └── code-notes.test.js     # Explanation-to-source anchor checks
+    │   ├── code-notes.test.js     # Markdown explanation-to-source checks
+    │   └── project-id.test.js     # Automatic project ID checks
     ├── index.html
     ├── project.html
     └── package.json
