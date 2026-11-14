@@ -104,39 +104,25 @@ This section applies only when the user selects **Atualizar didática**. The tas
 
 The guide must explain every meaningful part of the selected source. Group closely related lines when that improves readability, but do not skip declarations, fields, constructors, methods, conditions, loops, collection operations, input/output, or other important statements.
 
-Use this exact structure for every Java project guide, adapting the explanations to the actual program:
+Use these exact numbered headings for every Java project guide:
 
-1. **Overview:** What the program does, what problem it solves, and what the reader will build or understand.
-2. **Learning goals:** The Java concepts present in this file and what the learner should be able to explain after studying it.
-3. **Prerequisites:** Only the knowledge genuinely needed to follow the program. Define unfamiliar terms before depending on them.
-4. **Project and file structure:** Explain the selected file's role, package, imports, related classes, and how the pieces connect when applicable.
-5. **Program execution:** Describe the complete flow from the entry point through the methods and branches the program can execute.
-6. **Complete code walkthrough:** Explain all important declarations and statements in source order. Cover class responsibilities, fields, object creation, constructors, parameters, return values, access modifiers, variable types, operators, conditions, loops, arrays or collections, method calls, exception handling, and input/output when present. Explain why each part exists and how it affects program behavior.
-7. **Key Java concepts in context:** Teach the language concepts demonstrated by the code. Explain syntax and behavior in this specific example instead of inserting unrelated textbook material.
-8. **Example execution:** Give a realistic input/output walkthrough that matches the actual source. Do not invent validation, features, prompts, or outputs that the program does not implement.
-9. **Limitations and common mistakes:** Point out actual edge cases, bugs, confusing choices, and beginner mistakes relevant to this code. Clearly distinguish an existing defect from an improvement suggestion.
-10. **Practice and extensions:** Give a small progression of exercises based on the concepts already present, without presenting proposed changes as implemented behavior.
-11. **Summary and source:** Recap the central concepts and link to the exact Java source and relevant related files.
+1. **Overview**
+2. **Learning goals**
+3. **Prerequisites**
+4. **Project and file structure**
+5. **Program execution**
+6. **Complete code walkthrough**
+7. **Key Java concepts in context**
+8. **Example execution**
+9. **Limitations and common mistakes**
+10. **Practice and extensions**
+11. **Summary and source**
 
-### Mandatory consistency standard
+Adapt the explanations to the actual exercise, but never omit or rename these sections. The code walkthrough must follow the source's declaration and execution order. Explain every meaningful field, constructor, method, parameter, return type, condition, loop, collection operation, and input/output action. Define unfamiliar language features in beginner-friendly terms, then explain why they matter in this specific program.
 
-Every new or revised project guide must use these exact numbered headings, in this order:
+Examples must match the actual source. Do not invent validation, prompts, output, or behavior that has not been implemented. Separate existing limitations from suggested improvements. Link to the exact Java source. Do not create a second "Guided code walkthrough" or another interface-specific copy of the same explanations.
 
-1. Overview
-2. Learning goals
-3. Prerequisites
-4. Project and file structure
-5. Program execution
-6. Complete code walkthrough
-7. Key Java concepts in context
-8. Example execution
-9. Limitations and common mistakes
-10. Practice and extensions
-11. Summary and source
-
-The source walkthrough must follow the Java file's execution and declaration order. Explain every meaningful field, constructor, method, parameter, return type, condition, loop, collection operation, and input/output action that exists in the file. Do not create a second "Guided code walkthrough" or any interface-specific duplicate.
-
-For every new project, verify the guide has all eleven headings, the Java source link resolves to the exact file, and each explanation agrees with the source. Treat the existing CandidateManager and Vehicle guides as the detailed examples of this standard.
+Use the existing CandidateManager and Vehicle guides as the detailed examples of this standard.
 
 ### Java source quality checklist
 
