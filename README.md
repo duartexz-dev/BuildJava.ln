@@ -61,7 +61,7 @@ Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete 
 | Java | Main learning content and console exercises |
 | HTML and CSS | Accessible project overview and study layout |
 | JavaScript | Project catalogue, Markdown parsing, navigation, and source display |
-| Node.js | JavaScript syntax checks and repository integrity tests |
+| Node.js and Python | JavaScript syntax checks, repository integrity tests, and the project-ID test suite |
 | GitHub Actions | Java compilation, smoke tests, and GitHub Pages deployment |
 
 The website has no backend, database, framework, or third-party runtime package dependency. Google Fonts are used for the presentation and fall back to local system fonts if unavailable.
@@ -93,10 +93,12 @@ Open http://localhost:8000 in a browser. The study page fetches the Markdown and
 
 ## Automated checks
 
-Run the JavaScript checks:
+Run the repository checks:
 
     npm run check
     npm test
+
+The test command runs the Node.js suite and Python's standard-library unittest suite.
 
 The GitHub Actions workflow also:
 
@@ -131,9 +133,10 @@ These checks establish that the sources compile and selected behaviors work. The
     │   └── site.css                 # Shared overview and study-page styling
     ├── tests/
     │   ├── project-data.test.js    # Catalog, file, page, and source checks
-    │   └── lesson-parser.test.js   # Markdown walkthrough-to-source checks
-    ├── tests/fixtures/
-    │   └── ProjectIdFixture.java   # Unique-ID test fixture
+    │   ├── lesson-parser.test.js   # Markdown walkthrough-to-source checks
+    │   ├── test_project_id.py      # Shell ID-generator tests
+    │   └── fixtures/
+    │       └── ProjectIdFixture.java # Unique-ID test fixture
     ├── index.html
     ├── project.html
     └── package.json
