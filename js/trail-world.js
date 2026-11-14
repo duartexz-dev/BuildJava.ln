@@ -1,39 +1,37 @@
 import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { projects } from "./trail-data.js";
 
 const canvas = document.querySelector("#trail-canvas");
-const scrollSection = document.querySelector("#trail-scroll");
-const stickyStage = document.querySelector(".trail-sticky");
+const stage = document.querySelector("#trail-stage");
 const hotspotLayer = document.querySelector("#island-hotspots");
 const preview = document.querySelector("#island-preview");
-const counter = document.querySelector("#scene-counter");
 const fallback = document.querySelector("#scene-fallback");
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const resetButton = document.querySelector("#reset-view");
 
-if (!canvas || !scrollSection || !stickyStage || projects.length === 0) {
-  throw new Error("The 3D trail could not find its required page elements.");
+if (!canvas || !stage || !hotspotLayer || !preview || !resetButton || projects.length === 0) {
+  throw new Error("The 3D trail is missing a required element or project.");
 }
 
 const COLORS = {
-  background: 0x08090d,
-  rock: 0x242531,
-  rockSide: 0x171821,
-  stone: 0x343544,
-  stoneLight: 0x4a465b,
-  violet: 0xa78bfa,
-  violetLight: 0xd8d3f0,
-  pale: 0xf2f0f7,
-  muted: 0x9694a3
+  background: 0x0d0e13,
+  rock: 0x262832,
+  rockSide: 0x191b22,
+  stone: 0x363842,
+  stoneLight: 0x555661,
+  violet: 0x8f7ac4,
+  violetLight: 0xc9c2d8,
+  pale: 0xe9e7ef,
+  muted: 0x9998a3
 };
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(COLORS.background);
-scene.fog = new THREE.FogExp2(COLORS.background, 0.0105);
+scene.fog = new THREE.Fog(COLORS.background, 58, 100);
 
-const camera = new THREE.OrthographicCamera(-9, 9, 5.5, -5.5, 0.1, 160);
-camera.position.set(0, 10, 16);
-camera.zoom = 1.08;
-camera.updateProjectionMatrix();
+const camera = new THREE.PerspectiveCamera(43, 1, 0.1, 140);
+const startTarget = new THREE.Vector3(0, 2.4, -11.7);
+camera.position.set(21, 22, 27);
 
 let renderer;
 try {
@@ -47,78 +45,73 @@ try {
   console.error("WebGL could not be initialized.", error);
   fallback.hidden = false;
   canvas.hidden = true;
+  resetButton.disabled = true;
   throw error;
 }
 
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
-renderer.setSize(stickyStage.clientWidth, stickyStage.clientHeight, false);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+renderer.setSize(stage.clientWidth, stage.clientHeight, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
 
-scene.add(new THREE.HemisphereLight(0xe8e1ff, 0x17151f, 2.0));
+scene.add(new THREE.HemisphereLight(0xe6e1ef, 0x24232a, 1.35));
 
-const keyLight = new THREE.DirectionalLight(0xe5dcff, 3.2);
-keyLight.position.set(-8, 18, 12);
+const keyLight = new THREE.DirectionalLight(0xf0edf6, 2.3);
+keyLight.position.set(-10, 22, 14);
 keyLight.castShadow = true;
-keyLight.shadow.mapSize.set(1024, 1024);
-keyLight.shadow.camera.left = -18;
-keyLight.shadow.camera.right = 18;
-keyLight.shadow.camera.top = 26;
-keyLight.shadow.camera.bottom = -26;
-keyLight.shadow.bias = -0.00025;
+keyLight.shadow.mapSize.set(768, 768);
+keyLight.shadow.camera.left = -20;
+keyLight.shadow.camera.right = 20;
+keyLight.shadow.camera.top = 28;
+keyLight.shadow.camera.bottom = -28;
+keyLight.shadow.bias = -0.0003;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x8c75c2, 1.25);
-fillLight.position.set(10, 8, -16);
+const fillLight = new THREE.DirectionalLight(0x9a8eb8, 0.35);
+fillLight.position.set(12, 10, -20);
 scene.add(fillLight);
 
 const materials = {
-  deep: new THREE.MeshStandardMaterial({ color: COLORS.rockSide, roughness: 0.92 }),
-  rock: new THREE.MeshStandardMaterial({ color: COLORS.rock, roughness: 0.9 }),
-  stone: new THREE.MeshStandardMaterial({ color: COLORS.stone, roughness: 0.84 }),
-  lightStone: new THREE.MeshStandardMaterial({ color: COLORS.stoneLight, roughness: 0.72 }),
-  metal: new THREE.MeshStandardMaterial({ color: 0x625d72, metalness: 0.55, roughness: 0.42 }),
-  pale: new THREE.MeshStandardMaterial({ color: COLORS.pale, roughness: 0.56 }),
-  violet: new THREE.MeshStandardMaterial({
-    color: COLORS.violet,
-    emissive: 0x514073,
-    emissiveIntensity: 0.68,
-    roughness: 0.45,
-    metalness: 0.16
-  }),
-  glow: new THREE.MeshStandardMaterial({
-    color: COLORS.violetLight,
-    emissive: 0x9e7de8,
-    emissiveIntensity: 1.1,
-    roughness: 0.38
-  }),
-  darkGlass: new THREE.MeshStandardMaterial({
-    color: 0x1b1925,
-    emissive: 0x251e35,
-    emissiveIntensity: 0.5,
-    metalness: 0.22,
-    roughness: 0.25
-  })
+  deep: new THREE.MeshStandardMaterial({ color: COLORS.rockSide, roughness: 0.96 }),
+  rock: new THREE.MeshStandardMaterial({ color: COLORS.rock, roughness: 0.92 }),
+  stone: new THREE.MeshStandardMaterial({ color: COLORS.stone, roughness: 0.88 }),
+  lightStone: new THREE.MeshStandardMaterial({ color: COLORS.stoneLight, roughness: 0.82 }),
+  metal: new THREE.MeshStandardMaterial({ color: 0x66636f, metalness: 0.2, roughness: 0.7 }),
+  pale: new THREE.MeshStandardMaterial({ color: COLORS.pale, roughness: 0.72 }),
+  violet: new THREE.MeshStandardMaterial({ color: COLORS.violet, emissive: 0x20192e, emissiveIntensity: 0.14, roughness: 0.65 }),
+  glow: new THREE.MeshStandardMaterial({ color: COLORS.violetLight, emissive: 0x30283f, emissiveIntensity: 0.2, roughness: 0.65 }),
+  darkGlass: new THREE.MeshStandardMaterial({ color: 0x1a1b22, metalness: 0.1, roughness: 0.42 })
 };
 
 const world = new THREE.Group();
 scene.add(world);
 
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.copy(startTarget);
+controls.enableDamping = true;
+controls.dampingFactor = 0.075;
+controls.enableRotate = true;
+controls.enablePan = true;
+controls.enableZoom = true;
+controls.screenSpacePanning = true;
+controls.zoomToCursor = true;
+controls.rotateSpeed = 0.72;
+controls.panSpeed = 0.75;
+controls.zoomSpeed = 0.82;
+controls.minDistance = 12;
+controls.maxDistance = 62;
+controls.minPolarAngle = 0.2;
+controls.maxPolarAngle = 1.46;
+controls.update();
+controls.saveState();
+controls.listenToKeyEvents(canvas);
+
 const nodes = [];
-const nodeById = new Map();
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-const clock = new THREE.Clock();
 let activeId = null;
-let scrollProgress = 0;
-let frameHandle = 0;
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value));
-}
+let pointerDown = null;
 
 function makeMesh(parent, geometry, material, x, y, z, options = {}) {
   const mesh = new THREE.Mesh(geometry, material);
@@ -133,54 +126,37 @@ function makeMesh(parent, geometry, material, x, y, z, options = {}) {
 }
 
 function addBox(parent, width, height, depth, x, y, z, material, rotation = null) {
-  return makeMesh(
-    parent,
-    new THREE.BoxGeometry(width, height, depth),
-    material,
-    x, y, z,
-    rotation ? { rotation } : {}
-  );
+  return makeMesh(parent, new THREE.BoxGeometry(width, height, depth), material, x, y, z,
+    rotation ? { rotation } : {});
 }
 
 function addCylinder(parent, topRadius, bottomRadius, height, segments, x, y, z, material, rotation = null) {
-  return makeMesh(
-    parent,
-    new THREE.CylinderGeometry(topRadius, bottomRadius, height, segments),
-    material,
-    x, y, z,
-    rotation ? { rotation } : {}
-  );
+  return makeMesh(parent, new THREE.CylinderGeometry(topRadius, bottomRadius, height, segments), material, x, y, z,
+    rotation ? { rotation } : {});
 }
 
 function addSphere(parent, radius, x, y, z, material, scale = null) {
-  const mesh = makeMesh(parent, new THREE.SphereGeometry(radius, 18, 14), material, x, y, z);
+  const mesh = makeMesh(parent, new THREE.SphereGeometry(radius, 16, 12), material, x, y, z);
   if (scale) mesh.scale.set(scale.x, scale.y, scale.z);
   return mesh;
 }
 
 function makePanelTexture(title, detail) {
   const surface = document.createElement("canvas");
-  surface.width = 640;
-  surface.height = 320;
+  surface.width = 512;
+  surface.height = 256;
   const context = surface.getContext("2d");
-  const gradient = context.createLinearGradient(0, 0, 640, 320);
-  gradient.addColorStop(0, "#242132");
-  gradient.addColorStop(1, "#11121a");
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, 640, 320);
-  context.strokeStyle = "rgba(216,211,240,.27)";
-  context.lineWidth = 4;
-  context.strokeRect(13, 13, 614, 294);
-  context.fillStyle = "#a78bfa";
-  context.fillRect(34, 36, 45, 4);
-  context.fillStyle = "#f2f0f7";
-  context.font = "700 38px Manrope, sans-serif";
-  context.fillText(String(title).slice(0, 26), 34, 142);
-  context.fillStyle = "#bdb6cc";
-  context.font = "500 21px 'DM Mono', monospace";
-  context.fillText(String(detail).slice(0, 42), 36, 202);
-  context.fillStyle = "rgba(167,139,250,.7)";
-  context.fillRect(36, 248, 170, 3);
+  context.fillStyle = "#191a21";
+  context.fillRect(0, 0, surface.width, surface.height);
+  context.strokeStyle = "#565360";
+  context.lineWidth = 3;
+  context.strokeRect(9, 9, 494, 238);
+  context.fillStyle = "#c9c2d8";
+  context.font = "600 32px Manrope, sans-serif";
+  context.fillText(String(title).slice(0, 26), 28, 112);
+  context.fillStyle = "#96939f";
+  context.font = "18px 'DM Mono', monospace";
+  context.fillText(String(detail).slice(0, 40), 29, 162);
   const texture = new THREE.CanvasTexture(surface);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
@@ -189,52 +165,71 @@ function makePanelTexture(title, detail) {
 
 function addScreen(parent, title, detail, width, height, x, y, z, rotation = null) {
   const texture = makePanelTexture(title, detail);
-  const mesh = makeMesh(
-    parent,
-    new THREE.PlaneGeometry(width, height),
-    new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }),
-    x, y, z,
-    rotation ? { rotation } : {}
-  );
-  return mesh;
+  return makeMesh(parent, new THREE.PlaneGeometry(width, height),
+    new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }), x, y, z,
+    rotation ? { rotation } : {});
 }
 
-function addCrystal(parent, x, y, z, size, rotation = 0) {
-  const crystal = makeMesh(
-    parent,
-    new THREE.OctahedronGeometry(size, 0),
-    materials.violet,
-    x, y, z,
-    { rotation: { x: 0.15, y: rotation, z: 0.18 } }
-  );
-  crystal.scale.y = 1.75;
-  return crystal;
+function islandShape(index) {
+  const shape = new THREE.Shape();
+  const points = 11;
+  for (let i = 0; i < points; i += 1) {
+    const angle = (i / points) * Math.PI * 2;
+    const radius = 1.5 + Math.sin(i * 1.71 + index * 0.63) * 0.13 + Math.cos(i * 2.13 + index) * 0.07;
+    const x = Math.cos(angle) * radius * 1.08;
+    const y = Math.sin(angle) * radius * 0.78;
+    if (i === 0) shape.moveTo(x, y);
+    else shape.lineTo(x, y);
+  }
+  shape.closePath();
+  return shape;
+}
+
+function terrainGeometry(index) {
+  const geometry = new THREE.ExtrudeGeometry(islandShape(index), {
+    depth: 0.46,
+    steps: 1,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelSize: 0.08,
+    bevelThickness: 0.07,
+    curveSegments: 2
+  });
+  geometry.rotateX(-Math.PI / 2);
+  geometry.computeVertexNormals();
+  return geometry;
 }
 
 function addIslandBase(group, index) {
-  makeMesh(
-    group,
-    new THREE.ConeGeometry(1.47, 0.9, 9, 1),
-    materials.deep,
-    0, -0.25, 0,
-    { rotation: { x: 0, y: index * 0.21, z: 0 } }
-  );
-  addCylinder(group, 1.54, 1.29, 0.52, 10, 0, 0.12, 0, materials.rock);
-  addCylinder(group, 1.62, 1.58, 0.13, 10, 0, 0.42, 0, materials.stone);
-  addCylinder(group, 1.46, 1.46, 0.035, 10, 0, 0.50, 0, materials.lightStone);
+  const lower = makeMesh(group, terrainGeometry(index), materials.deep, 0, -0.05, 0);
+  lower.scale.set(0.93, 0.78, 0.93);
+  lower.rotation.y = index * 0.19;
 
-  const rim = makeMesh(
-    group,
-    new THREE.TorusGeometry(1.48, 0.025, 5, 40),
-    materials.violet,
-    0, 0.53, 0,
-    { rotation: { x: Math.PI / 2, y: 0, z: 0 } }
-  );
-  rim.castShadow = false;
+  const top = makeMesh(group, terrainGeometry(index), [materials.rock, materials.stone], 0, 0.08, 0);
+  top.rotation.y = index * 0.19;
 
-  addCrystal(group, -1.15, 0.62, 0.74, 0.17, index * 0.3);
-  addCrystal(group, 1.14, 0.62, -0.78, 0.13, index * 0.5);
-  addSphere(group, 0.09, -0.78, 0.61, -1.08, materials.glow, { x: 1.2, y: 0.55, z: 1.2 });
+  addBox(group, 0.48, 0.07, 0.32, -0.65, 0.55, 0.66, materials.lightStone,
+    { x: 0, y: index * 0.2, z: 0.08 });
+  addSphere(group, 0.07, 0.82, 0.61, -0.55, materials.stoneLight);
+}
+
+function buildStepPath(start, end) {
+  const delta = end.clone().sub(start);
+  const yaw = Math.atan2(delta.x, delta.z);
+  const count = 6;
+  for (let i = 1; i <= count; i += 1) {
+    const t = i / (count + 1);
+    const x = THREE.MathUtils.lerp(start.x, end.x, t);
+    const y = THREE.MathUtils.lerp(start.y, end.y, t) + 0.57;
+    const z = THREE.MathUtils.lerp(start.z, end.z, t);
+    const step = addBox(world, 0.9, 0.14, 0.78, x, y, z, materials.stone);
+    step.rotation.y = yaw;
+  }
+}
+
+function islandPosition(index) {
+  const side = index % 2 === 0 ? -1 : 1;
+  return new THREE.Vector3(side * 3.05, index * 0.48, -index * 2.6);
 }
 
 function themeProfile(group) {
@@ -398,118 +393,13 @@ const themeBuilders = {
   archive: themeArchive
 };
 
-function islandPosition(index) {
-  const side = index % 2 === 0 ? -1 : 1;
-  return new THREE.Vector3(side * 3.15, index * 0.62, -index * 3.45);
-}
-
-function buildIsland(project, index) {
-  const group = new THREE.Group();
-  const position = islandPosition(index);
-  group.position.copy(position);
-  group.userData.projectId = project.id;
-  addIslandBase(group, index);
-
-  const builder = themeBuilders[project.theme];
-  if (builder) builder(group);
-
-  group.traverse((child) => {
-    if (child.isMesh) {
-      child.userData.projectId = project.id;
-    }
-  });
-
-  world.add(group);
-
-  const hotspot = document.createElement("button");
-  hotspot.className = "island-hotspot";
-  hotspot.type = "button";
-  hotspot.setAttribute("aria-label", "Open " + project.name + " project study");
-  hotspot.innerHTML = '<span class="hotspot-number">' + String(project.step).padStart(2, "0") + '</span><span class="hotspot-name"></span>';
-  hotspot.querySelector(".hotspot-name").textContent = project.name;
-  hotspot.addEventListener("mouseenter", () => setActive(project.id));
-  hotspot.addEventListener("focus", () => setActive(project.id));
-  hotspot.addEventListener("mouseleave", (event) => {
-    const nextTarget = event.relatedTarget;
-    if (nextTarget && (preview.contains(nextTarget) || hotspotLayer.contains(nextTarget))) return;
-    if (document.activeElement !== hotspot) setActive(null);
-  });
-  hotspot.addEventListener("blur", (event) => {
-    const nextTarget = event.relatedTarget;
-    if (nextTarget && (preview.contains(nextTarget) || hotspotLayer.contains(nextTarget))) return;
-    setActive(null);
-  });
-  hotspot.addEventListener("click", () => openProject(project));
-  hotspotLayer.appendChild(hotspot);
-
-  const node = {
-    project,
-    group,
-    position,
-    hotspot,
-    targetScale: 1,
-    ring: group.children.find((child) => child.geometry && child.geometry.type === "TorusGeometry") || null
-  };
-  nodes.push(node);
-  nodeById.set(project.id, node);
-}
-
-function buildStairway() {
-  for (let index = 0; index < projects.length - 1; index += 1) {
-    const start = islandPosition(index);
-    const end = islandPosition(index + 1);
-    const delta = end.clone().sub(start);
-    const steps = 7;
-    const yaw = Math.atan2(delta.x, delta.z);
-
-    for (let step = 1; step <= steps; step += 1) {
-      const t = step / (steps + 1);
-      const x = THREE.MathUtils.lerp(start.x, end.x, t);
-      const y = THREE.MathUtils.lerp(start.y, end.y, t) + 0.54;
-      const z = THREE.MathUtils.lerp(start.z, end.z, t);
-      const stair = addBox(world, 0.88, 0.15, 0.78, x, y, z, step === steps ? materials.violet : materials.stone);
-      stair.rotation.y = yaw;
-      stair.castShadow = true;
-    }
-  }
-}
-
-function buildAtmosphere() {
-  const positions = [];
-  for (let index = 0; index < 420; index += 1) {
-    const x = Math.sin(index * 12.9898) * 15;
-    const y = ((index * 37) % 46) - 11;
-    const z = -((index * 17) % 46) + 7;
-    positions.push(x, y, z);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  const points = new THREE.Points(
-    geometry,
-    new THREE.PointsMaterial({ color: COLORS.violetLight, size: 0.035, transparent: true, opacity: 0.6 })
-  );
-  world.add(points);
-
-  for (let index = 0; index < 18; index += 1) {
-    const z = -3 - index * 2.7;
-    const x = Math.sin(index * 1.7) * 9.5;
-    const rock = makeMesh(
-      world,
-      new THREE.IcosahedronGeometry(0.22 + (index % 3) * 0.11, 0),
-      materials.deep,
-      x, 0.8 + (index % 4) * 0.45, z
-    );
-    rock.rotation.set(index * 0.12, index * 0.3, index * 0.08);
-  }
-}
-
 function setActive(projectId) {
   if (activeId === projectId) return;
   activeId = projectId;
 
   for (const node of nodes) {
-    node.targetScale = node.project.id === projectId ? 1.075 : 1;
     node.hotspot.classList.toggle("is-active", node.project.id === projectId);
+    node.group.scale.setScalar(node.project.id === projectId ? 1.035 : 1);
   }
 
   const project = projects.find((item) => item.id === projectId);
@@ -518,23 +408,68 @@ function setActive(projectId) {
     return;
   }
 
-  document.querySelector("#preview-step").textContent = "STOP " + String(project.step).padStart(2, "0");
+  document.querySelector("#preview-step").textContent =
+    String(project.step).padStart(2, "0") + " / " + String(projects.length).padStart(2, "0");
   document.querySelector("#preview-level").textContent = project.difficulty.toUpperCase();
   document.querySelector("#preview-title").textContent = project.name;
   document.querySelector("#preview-description").textContent = project.description;
-  document.querySelector("#preview-concepts").replaceChildren(
-    ...project.concepts.map((concept) => {
-      const tag = document.createElement("span");
-      tag.textContent = concept;
-      return tag;
-    })
-  );
-  document.querySelector("#preview-link").href = "project.html?project=" + encodeURIComponent(project.id);
+  document.querySelector("#preview-concepts").replaceChildren(...project.concepts.map((concept) => {
+    const tag = document.createElement("span");
+    tag.textContent = concept;
+    return tag;
+  }));
+  document.querySelector("#preview-link").href =
+    "project.html?project=" + encodeURIComponent(project.id);
   preview.hidden = false;
 }
 
 function openProject(project) {
   window.location.href = "project.html?project=" + encodeURIComponent(project.id);
+}
+
+function buildIsland(project, index) {
+  const position = islandPosition(index);
+  const group = new THREE.Group();
+  group.position.copy(position);
+  group.userData.projectId = project.id;
+
+  addIslandBase(group, index);
+  const builder = themeBuilders[project.theme];
+  if (builder) builder(group);
+
+  group.traverse((child) => {
+    if (child.isMesh) child.userData.projectId = project.id;
+  });
+  world.add(group);
+
+  const hotspot = document.createElement("button");
+  hotspot.type = "button";
+  hotspot.className = "island-hotspot";
+  hotspot.setAttribute("aria-label", "Open " + project.name + " study");
+  hotspot.dataset.side = index % 2 === 0 ? "left" : "right";
+
+  const number = document.createElement("span");
+  number.className = "hotspot-number";
+  number.textContent = String(project.step).padStart(2, "0");
+  const name = document.createElement("span");
+  name.className = "hotspot-name";
+  name.textContent = project.name;
+  hotspot.append(number, name);
+
+  hotspot.addEventListener("pointerenter", () => setActive(project.id));
+  hotspot.addEventListener("pointerleave", (event) => {
+    if (event.relatedTarget && (preview.contains(event.relatedTarget) || hotspotLayer.contains(event.relatedTarget))) return;
+    if (document.activeElement !== hotspot) setActive(null);
+  });
+  hotspot.addEventListener("focus", () => setActive(project.id));
+  hotspot.addEventListener("blur", (event) => {
+    if (event.relatedTarget && (preview.contains(event.relatedTarget) || hotspotLayer.contains(event.relatedTarget))) return;
+    setActive(null);
+  });
+  hotspot.addEventListener("click", () => openProject(project));
+  hotspotLayer.appendChild(hotspot);
+
+  nodes.push({ project, group, position, hotspot, labelSide: index % 2 === 0 ? -1 : 1 });
 }
 
 function pickProject(event) {
@@ -543,66 +478,21 @@ function pickProject(event) {
   pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
   raycaster.setFromCamera(pointer, camera);
   const hits = raycaster.intersectObjects(nodes.map((node) => node.group), true);
-  if (hits.length === 0) return null;
-  const id = hits[0].object.userData.projectId || hits[0].object.parent?.userData.projectId;
+  if (!hits.length) return null;
+  const id = hits[0].object.userData.projectId;
   return projects.find((project) => project.id === id) || null;
 }
 
-canvas.addEventListener("pointermove", (event) => {
-  const project = pickProject(event);
-  setActive(project ? project.id : null);
-  canvas.style.cursor = project ? "pointer" : "grab";
-});
-canvas.addEventListener("pointerleave", (event) => {
-  const nextTarget = event.relatedTarget;
-  if (nextTarget && (preview.contains(nextTarget) || hotspotLayer.contains(nextTarget))) return;
-  setActive(null);
-  canvas.style.cursor = "grab";
-});
-preview.addEventListener("pointerleave", (event) => {
-  const nextTarget = event.relatedTarget;
-  if (nextTarget && (hotspotLayer.contains(nextTarget) || canvas.contains(nextTarget))) return;
-  setActive(null);
-});
-canvas.addEventListener("click", (event) => {
-  const project = pickProject(event);
-  if (project) openProject(project);
-});
-canvas.style.cursor = "grab";
-
-for (let index = 0; index < projects.length; index += 1) buildIsland(projects[index], index);
-buildStairway();
-buildAtmosphere();
-
-const lookTarget = new THREE.Vector3();
-const desiredTarget = new THREE.Vector3();
-const cameraOffset = new THREE.Vector3(0, 8.8, 14.5);
-
-function updateScrollProgress() {
-  const sectionTop = scrollSection.getBoundingClientRect().top + window.scrollY;
-  const scrollDistance = Math.max(1, scrollSection.offsetHeight - window.innerHeight);
-  scrollProgress = clamp((window.scrollY - sectionTop) / scrollDistance, 0, 1);
-}
-
-function getTrailPosition(progress) {
-  const location = progress * (nodes.length - 1);
-  const index = Math.min(nodes.length - 2, Math.floor(location));
-  const blend = location - index;
-  if (progress >= 1) return nodes[nodes.length - 1].position.clone();
-  return nodes[index].position.clone().lerp(nodes[index + 1].position, blend);
-}
-
 function updateHotspots() {
-  const width = stickyStage.clientWidth;
-  const height = stickyStage.clientHeight;
+  const width = stage.clientWidth;
+  const height = stage.clientHeight;
 
   for (const node of nodes) {
-    const screenPosition = node.position.clone().add(new THREE.Vector3(0, 2.55, 0));
-    screenPosition.project(camera);
-    const x = (screenPosition.x * 0.5 + 0.5) * width;
-    const y = (-screenPosition.y * 0.5 + 0.5) * height;
-    const visible = screenPosition.z > -1 && screenPosition.z < 1 && x > 30 && x < width - 30 && y > 65 && y < height - 70;
-
+    const anchor = node.position.clone().add(new THREE.Vector3(node.labelSide * 1.55, 2.05, 0));
+    anchor.project(camera);
+    const x = (anchor.x * 0.5 + 0.5) * width;
+    const y = (-anchor.y * 0.5 + 0.5) * height;
+    const visible = anchor.z > -1 && anchor.z < 1 && x > 38 && x < width - 38 && y > 44 && y < height - 45;
     node.hotspot.classList.toggle("is-visible", visible);
     node.hotspot.tabIndex = visible ? 0 : -1;
     if (visible) {
@@ -612,66 +502,80 @@ function updateHotspots() {
   }
 }
 
-function updateCounter(progress) {
-  const step = Math.min(projects.length, Math.floor(progress * (projects.length - 1)) + 1);
-  counter.innerHTML = String(step).padStart(2, "0") + " <i>/</i> " + String(projects.length).padStart(2, "0");
+for (let index = 0; index < projects.length; index += 1) {
+  buildIsland(projects[index], index);
+}
+for (let index = 0; index < nodes.length - 1; index += 1) {
+  buildStepPath(nodes[index].position, nodes[index + 1].position);
 }
 
-function resize() {
-  const width = stickyStage.clientWidth;
-  const height = stickyStage.clientHeight;
-  if (width < 1 || height < 1) return;
-
-  const halfHeight = 5.5;
-  const aspect = width / height;
-  camera.left = -halfHeight * aspect;
-  camera.right = halfHeight * aspect;
-  camera.top = halfHeight;
-  camera.bottom = -halfHeight;
+const resize = () => {
+  const width = stage.clientWidth;
+  const height = stage.clientHeight;
+  if (!width || !height) return;
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setSize(width, height, false);
   updateHotspots();
-}
+};
+
+canvas.addEventListener("pointermove", (event) => {
+  if (pointerDown) return;
+  const project = pickProject(event);
+  setActive(project ? project.id : null);
+  canvas.style.cursor = project ? "pointer" : "grab";
+});
+
+canvas.addEventListener("pointerleave", (event) => {
+  if (event.relatedTarget && (preview.contains(event.relatedTarget) || hotspotLayer.contains(event.relatedTarget))) return;
+  if (!pointerDown) setActive(null);
+  canvas.style.cursor = "grab";
+});
+
+canvas.addEventListener("pointerdown", (event) => {
+  if (event.button !== 0) return;
+  pointerDown = { x: event.clientX, y: event.clientY };
+});
+
+canvas.addEventListener("pointerup", (event) => {
+  if (!pointerDown) return;
+  const distance = Math.hypot(event.clientX - pointerDown.x, event.clientY - pointerDown.y);
+  pointerDown = null;
+  if (distance > 5) return;
+  const project = pickProject(event);
+  if (project) openProject(project);
+});
+
+canvas.addEventListener("pointercancel", () => { pointerDown = null; });
+preview.addEventListener("pointerleave", (event) => {
+  if (event.relatedTarget && (canvas.contains(event.relatedTarget) || hotspotLayer.contains(event.relatedTarget))) return;
+  setActive(null);
+});
+
+controls.addEventListener("start", () => canvas.classList.add("is-dragging"));
+controls.addEventListener("end", () => {
+  canvas.classList.remove("is-dragging");
+  updateHotspots();
+});
+controls.addEventListener("change", updateHotspots);
+
+resetButton.addEventListener("click", () => {
+  controls.reset();
+  setActive(null);
+  updateHotspots();
+});
+
+const observer = new ResizeObserver(resize);
+observer.observe(stage);
+window.addEventListener("resize", resize, { passive: true });
 
 function animate() {
-  frameHandle = window.requestAnimationFrame(animate);
-
-  const progressTarget = getTrailPosition(scrollProgress);
-  desiredTarget.copy(progressTarget);
-  if (reducedMotion.matches) {
-    lookTarget.copy(desiredTarget);
-  } else {
-    lookTarget.lerp(desiredTarget, 0.075);
-  }
-
-  const cameraGoal = lookTarget.clone().add(cameraOffset);
-  if (reducedMotion.matches) camera.position.copy(cameraGoal);
-  else camera.position.lerp(cameraGoal, 0.065);
-  camera.lookAt(lookTarget);
-
-  const elapsed = clock.getElapsedTime();
-  for (const node of nodes) {
-    const floating = reducedMotion.matches ? 0 : Math.sin(elapsed * 0.75 + node.project.step) * 0.035;
-    node.group.position.y = node.position.y + floating;
-    const scaleNow = node.group.scale.x;
-    const scaleNext = THREE.MathUtils.lerp(scaleNow, node.targetScale, reducedMotion.matches ? 1 : 0.12);
-    node.group.scale.setScalar(scaleNext);
-  }
-
-  updateHotspots();
-  updateCounter(scrollProgress);
+  window.requestAnimationFrame(animate);
+  controls.update();
   renderer.render(scene, camera);
 }
 
-window.addEventListener("scroll", updateScrollProgress, { passive: true });
-window.addEventListener("resize", resize);
-reducedMotion.addEventListener?.("change", () => {
-  if (reducedMotion.matches) {
-    for (const node of nodes) node.group.scale.setScalar(node.targetScale);
-  }
-});
-
-updateScrollProgress();
 resize();
+updateHotspots();
 animate();

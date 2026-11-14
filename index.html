@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#08090D">
-  <meta name="description" content="A 3D trail through ten small Java projects. Every stop is a thematic island, from first inputs to collections and object-oriented programs.">
-  <meta property="og:title" content="BuildJava.ln — A path through Java">
-  <meta property="og:description" content="Ten Java projects. Ten thematic islands. One ascending 3D trail.">
+  <meta name="theme-color" content="#090A0E">
+  <meta name="description" content="Explore ten Java projects in a free-roaming 3D learning trail.">
+  <meta property="og:title" content="BuildJava.ln — Java by building">
+  <meta property="og:description" content="Ten projects arranged as a freely explorable 3D path.">
   <meta property="og:type" content="website">
-  <title>BuildJava.ln — The Java trail</title>
+  <title>BuildJava.ln — Java by building</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,78 +16,74 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
       }
     }
   </script>
   <script type="module" src="./js/trail-world.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#trail-scroll">Skip to the learning trail</a>
+  <a class="skip-link" href="#trail-stage">Skip to the project trail</a>
 
   <header class="site-header">
-    <a class="brand" href="./index.html" aria-label="BuildJava.ln home">
-      <span class="brand-mark" aria-hidden="true">B.</span>
-      <span>BUILDJAVA<span class="brand-suffix">.LN</span></span>
-    </a>
-    <a class="header-link" href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">
-      <span>Repository</span><span aria-hidden="true">↗</span>
-    </a>
+    <a class="brand" href="./index.html">BuildJava<span>.ln</span></a>
+    <a class="header-link" href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
   </header>
 
   <main>
     <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow"><span class="eyebrow-line"></span> A learning journey in Java</p>
-      <h1 id="page-title">One step at a time.<br><span>One world at a time.</span></h1>
-      <p class="intro-copy">Start with the simplest ideas and climb through ten small projects. Each island is built around the program it represents.</p>
+      <p class="eyebrow">A JAVA LEARNING LOG <span>—</span> 10 PROJECTS</p>
+      <h1 id="page-title">Java, learned <span>by building.</span></h1>
+      <p class="intro-copy">A collection of small programs, arranged from first inputs to object-based projects. Pick an island and see how it was made.</p>
     </section>
 
-    <section class="trail-scroll" id="trail-scroll" aria-label="Ascending 3D Java learning trail">
-      <div class="trail-sticky">
-        <canvas id="trail-canvas" aria-label="Interactive three-dimensional staircase of ten thematic Java project islands"></canvas>
+    <section class="trail-section" aria-labelledby="trail-heading">
+      <div class="trail-heading">
+        <div>
+          <p class="section-label">THE PROJECT PATH</p>
+          <h2 id="trail-heading">Explore the trail</h2>
+        </div>
+        <span class="trail-count">10 stops <i>·</i> beginner to intermediate</span>
+      </div>
 
-        <div class="scene-topline" aria-hidden="true">
-          <span>THE JAVA TRAIL</span>
-          <span class="scene-counter" id="scene-counter">01 <i>/</i> 10</span>
+      <div class="trail-stage" id="trail-stage">
+        <canvas id="trail-canvas" tabindex="0" aria-label="Interactive 3D map of ten Java project islands. Drag to rotate, right-drag to pan, and use the mouse wheel to zoom."></canvas>
+
+        <div class="stage-topline" aria-hidden="true">
+          <span>3D MAP</span>
+          <span>START ↙ <span class="topline-separator">/</span> ADVANCE ↗</span>
         </div>
 
-        <div class="scene-bottomline" aria-hidden="true">
-          <span class="scene-start">01 — BEGIN WITH THE BASICS</span>
-          <span class="scroll-hint"><span class="scroll-wheel"></span> SCROLL TO CLIMB</span>
-        </div>
-
-        <div class="island-hotspots" id="island-hotspots" aria-label="Choose a project island"></div>
+        <div class="island-hotspots" id="island-hotspots" aria-label="Project islands"></div>
 
         <aside class="island-preview" id="island-preview" hidden aria-live="polite" aria-atomic="true">
-          <div class="preview-topline">
-            <span id="preview-step">STOP 01</span>
+          <div class="preview-meta">
+            <span id="preview-step">01 / 10</span>
             <span id="preview-level">BEGINNER</span>
           </div>
-          <h2 id="preview-title">Project name</h2>
+          <h3 id="preview-title">Project name</h3>
           <p id="preview-description"></p>
           <div class="preview-concepts" id="preview-concepts"></div>
-          <a class="preview-link" id="preview-link" href="project.html">Open project study <span aria-hidden="true">↗</span></a>
+          <a id="preview-link" href="project.html">Open study <span aria-hidden="true">↗</span></a>
         </aside>
 
         <div class="scene-fallback" id="scene-fallback" hidden>
-          <p class="fallback-kicker">3D view unavailable</p>
-          <h2>This browser could not start WebGL.</h2>
-          <p>Try a browser with WebGL enabled to explore the islands in 3D.</p>
+          <h2>3D view unavailable</h2>
+          <p>This browser could not start WebGL. Try a browser with WebGL support enabled.</p>
+        </div>
+
+        <div class="stage-controls">
+          <p class="interaction-help"><span>Drag</span> to rotate <i>·</i> <span>Right-drag</span> to move <i>·</i> <span>Wheel</span> to zoom</p>
+          <button class="reset-view" id="reset-view" type="button">Reset view <span aria-hidden="true">↺</span></button>
         </div>
       </div>
-    </section>
-
-    <section class="trail-ending" aria-label="End of current trail">
-      <span class="ending-mark" aria-hidden="true"></span>
-      <p>THE CURRENT JOURNEY</p>
-      <h2>Ten projects.<br><span>More to come.</span></h2>
-      <a href="https://github.com/duartexz-dev/BuildJava.ln" target="_blank" rel="noopener noreferrer">Follow the work on GitHub <span aria-hidden="true">↗</span></a>
     </section>
   </main>
 
   <footer class="site-footer">
-    <span>BUILDJAVA.LN</span>
-    <span>LEARNING IN PUBLIC</span>
+    <span>BuildJava.ln</span>
+    <span>Learning in public</span>
   </footer>
 </body>
 </html>
