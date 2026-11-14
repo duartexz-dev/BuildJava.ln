@@ -429,10 +429,16 @@ function buildIsland(project, index) {
   hotspot.querySelector(".hotspot-name").textContent = project.name;
   hotspot.addEventListener("mouseenter", () => setActive(project.id));
   hotspot.addEventListener("focus", () => setActive(project.id));
-  hotspot.addEventListener("mouseleave", () => {
+  hotspot.addEventListener("mouseleave", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget && (preview.contains(nextTarget) || hotspotLayer.contains(nextTarget))) return;
     if (document.activeElement !== hotspot) setActive(null);
   });
-  hotspot.addEventListener("blur", () => setActive(null));
+  hotspot.addEventListener("blur", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget && (preview.contains(nextTarget) || hotspotLayer.contains(nextTarget))) return;
+    setActive(null);
+  });
   hotspot.addEventListener("click", () => openProject(project));
   hotspotLayer.appendChild(hotspot);
 
@@ -547,9 +553,16 @@ canvas.addEventListener("pointermove", (event) => {
   setActive(project ? project.id : null);
   canvas.style.cursor = project ? "pointer" : "grab";
 });
-canvas.addEventListener("pointerleave", () => {
+canvas.addEventListener("pointerleave", (event) => {
+  const nextTarget = event.relatedTarget;
+  if (nextTarget && (preview.contains(nextTarget) || hotspotLayer.contains(nextTarget))) return;
   setActive(null);
   canvas.style.cursor = "grab";
+});
+preview.addEventListener("pointerleave", (event) => {
+  const nextTarget = event.relatedTarget;
+  if (nextTarget && (hotspotLayer.contains(nextTarget) || canvas.contains(nextTarget))) return;
+  setActive(null);
 });
 canvas.addEventListener("click", (event) => {
   const project = pickProject(event);
@@ -591,6 +604,7 @@ function updateHotspots() {
     const visible = screenPosition.z > -1 && screenPosition.z < 1 && x > 30 && x < width - 30 && y > 65 && y < height - 70;
 
     node.hotspot.classList.toggle("is-visible", visible);
+    node.hotspot.tabIndex = visible ? 0 : -1;
     if (visible) {
       node.hotspot.style.left = x + "px";
       node.hotspot.style.top = y + "px";
