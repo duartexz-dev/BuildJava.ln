@@ -150,6 +150,20 @@ const projects = [
     repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/JoKenPo.java",
     roadmapOrder: 6,
     documentationPath: "projects/md/JoKenPo.md"
+  },
+  {
+    name: "Vehicle",
+    status: "in-progress",
+    type: "Fundamentals",
+    difficulty: "Intermediate",
+    focus: ["input", "objects", "output"],
+    codePreview: ['int YearVehicle = scanner.nextInt();', 'String NameVehicle = scanner.nextLine();', 'vehicle vehicle = new vehicle(NameVehicle, MarkVehicle, ColorVehicle, HorsesPotence, YearVehicle);'],
+    description: "Collect a vehicle's year, name, horsepower, brand, and color, then build an object with that data and print the final summary. The exercise demonstrates a simple data model and the console sequence used to gather the values.",
+    learningOutcomes: ["Read numeric and textual input with Scanner in sequence.", "Model related values in an inner class and initialize them through a constructor.", "Store object data in fields and then print it back to the console.", "Recognize the newline-buffer issue created by calling nextInt() before a later nextLine()."],
+    concepts: ["Scanner input", "Nested classes", "Constructors", "Object fields", "Formatted output", "Input buffering issues"],
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/Vehicle.java",
+    roadmapOrder: 7,
+    documentationPath: ""
   }
 ];
 

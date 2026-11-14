@@ -26,7 +26,7 @@ function readProjects() {
   }
 
   const match = source.match(
-    /const\s+projects\s*=\s*([\s\S]*?);\s*function\s+LoadProjects\s*\(/
+    /const\s+projects\s*=\s*([\s\S]*?);\s*(?:const\s+\w+\s*=|function\s+LoadProjects\s*\()/
   );
   if (!match) {
     throw new Error(
