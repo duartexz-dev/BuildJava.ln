@@ -64,7 +64,7 @@ const projects = [
     description: "Convert a number from 1 to 7 into its weekday name. If the number does not match a day, the program prints an invalid-input message.",
     learningOutcomes: ["Read a numeric choice with Scanner.", "Use switch and case labels to select one result from several options.", "Handle unmatched values with default and end each traditional case with break."],
     concepts: ["Scanner input", "Switch statements", "Cases and default", "Integer input"],
-    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/WeekDay.java"
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Beginner/WeekDay.java"
   }, {
     name: "Calculator",
     status: "in-progress",
@@ -87,7 +87,7 @@ const projects = [
     description: "Ask for an email and password, compare them with credentials stored in the source code, and allow up to three attempts. The program combines a loop, a login-state flag, and a conditional result message; hardcoded credentials are for practice only.",
     learningOutcomes: ["Compare String contents with equals() rather than ==.", "Combine an attempt limit with a boolean login state to control a while loop.", "Use ! to negate a boolean and ?: to choose between two messages.", "Recognize that hardcoded credentials are not appropriate for real authentication."],
     concepts: ["Scanner input", "String comparison", "While loops", "Boolean logic", "Conditional expressions", "Attempt limits"],
-    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/LoginIntermediary.java"
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/LoginIntermediary.java"
   },
   {
     name: "bulletin",
@@ -99,7 +99,7 @@ const projects = [
     description: "Collect a student's name and grades in four subjects, group the values in a Student object, calculate the average, and report whether it reaches 60. The prompts request grades from 10 to 100, but the program does not validate that range.",
     learningOutcomes: ["Model related values with a class, fields, and a constructor.", "Create an object with new and read its fields.", "Add grades and divide by the number of subjects to calculate an average.", "Compare the average with a threshold and use a conditional expression to select a message."],
     concepts: ["Scanner input", "Classes and objects", "Constructors", "Fields", "Arithmetic", "Boolean comparisons", "Conditional expressions"],
-    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/bulletin.java"
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/bulletin.java"
   },
   {
     name: "DeveloperProfile",
@@ -111,7 +111,7 @@ const projects = [
     description: "Build a developer profile from a name, favorite language, and any number of project names. Ask whether to add another project, store each entry in an ArrayList, and print the completed profile.",
     learningOutcomes: ["Group profile data in a class and initialize its project list in a constructor.", "Use an ArrayList to store a collection that can grow as projects are added.", "Repeat prompts with while and compare answers without case sensitivity using equalsIgnoreCase().", "Visit and print each list item with an enhanced for loop."],
     concepts: ["Scanner input", "Classes and objects", "Constructors", "ArrayList", "While loops", "Enhanced for loops"],
-    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/DeveloperProfile.java"
+    repoUrl: "https://github.com/duartexz-dev/BuildJava.ln/blob/main/projects/Intermediate/DeveloperProfile.java"
   },
   {
     name: "library",
