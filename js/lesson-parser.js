@@ -19,7 +19,7 @@ export function parseGuidedWalkthrough(markdown) {
     const sectionStart = match.index + match[0].length;
     const sectionEnd = index + 1 < headings.length ? headings[index + 1].index : body.length;
     const sectionBody = body.slice(sectionStart, sectionEnd).trim();
-    const anchorMatch = sectionBody.match(/^\*\*Anchor:\*\*\s+\`([^\`]+)\`\s*$/m);
+    const anchorMatch = sectionBody.match(/^\*\*Anchor:\*\*\s+\x60([^\x60]+)\x60\s*$/m);
     const termsMatch = /^\*\*Terms\*\*\s*$/m.exec(sectionBody);
 
     if (!anchorMatch) {
@@ -40,7 +40,7 @@ export function parseGuidedWalkthrough(markdown) {
 
     const termLines = sectionBody.slice(termsMatch.index + termsMatch[0].length).split(/\r?\n/);
     const items = termLines
-      .map((line) => line.match(/^\s*-\s+\`([^\`]+)\`:\s*(.+)$/))
+      .map((line) => line.match(/^\s*-\s+\x60([^\x60]+)\x60:\s*(.+)$/))
       .filter(Boolean)
       .map((item) => ({ term: item[1], meaning: item[2].trim() }));
 
