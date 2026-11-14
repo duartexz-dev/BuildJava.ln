@@ -241,6 +241,7 @@
     if (elements.difficulty) elements.difficulty.textContent = project.difficulty || "Difficulty not set";
     if (elements.status) {
       elements.status.textContent = String(project.status || "planned").replace(/-/g, " ");
+      elements.status.dataset.status = project.status || "planned";
     }
 
     const javaUrl = `./${resource.javaPath}`;
