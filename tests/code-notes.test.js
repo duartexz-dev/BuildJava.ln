@@ -58,6 +58,7 @@ test("the study page connects the selectable code, explanation index, and full g
   const html = readFileSync(resolve(root, "project.html"), "utf8");
   const script = readFileSync(resolve(root, "js/project-study.js"), "utf8");
 
+  assert.match(html, /id="study-flow"/);
   assert.match(html, /id="guided-code"/);
   assert.match(html, /id="code-explanation"/);
   assert.match(html, /id="explanation-index"/);
@@ -67,4 +68,6 @@ test("the study page connects the selectable code, explanation index, and full g
   assert.match(script, /getCodeNotes\(project\.id\)/);
   assert.match(script, /function renderGuidedCode/);
   assert.match(script, /function selectExplanation/);
+  assert.match(script, /event.key === "Enter"/);
+  assert.match(script, /role="button" tabindex="0"/);
 });
