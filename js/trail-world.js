@@ -459,7 +459,7 @@ function buildStairway() {
     for (let step = 1; step <= steps; step += 1) {
       const t = step / (steps + 1);
       const x = THREE.MathUtils.lerp(start.x, end.x, t);
-      const y = THREE.MathUtils.lerp(start.y, end.y, t) + 0.02;
+      const y = THREE.MathUtils.lerp(start.y, end.y, t) + 0.54;
       const z = THREE.MathUtils.lerp(start.z, end.z, t);
       const stair = addBox(world, 0.88, 0.15, 0.78, x, y, z, step === steps ? materials.violet : materials.stone);
       stair.rotation.y = yaw;
