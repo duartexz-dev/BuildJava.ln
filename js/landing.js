@@ -42,7 +42,7 @@ function createProjectCard(project) {
   const link = document.createElement("a");
   link.className = "project-open";
   link.href = "./project.html?project=" + encodeURIComponent(project.id);
-  link.append(document.createTextNode("Open guided code lesson"));
+  link.append(document.createTextNode("Study the Java code"));
 
   const arrow = document.createElement("span");
   arrow.setAttribute("aria-hidden", "true");
