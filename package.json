@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check js/project-data.js && node --check js/code-notes.js && node --check js/landing.js && node --check js/project-study.js && node --check tests/project-data.test.js && node --check tests/code-notes.test.js",
+    "check": "node --check js/project-data.js && node --check js/lesson-parser.js && node --check js/landing.js && node --check js/project-study.js && node --check scripts/project-id.mjs && node --check tests/project-data.test.js && node --check tests/code-notes.test.js && node --check tests/project-id.test.js",
     "test": "node --test"
   }
 }
