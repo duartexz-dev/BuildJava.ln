@@ -33,27 +33,30 @@ button{font:inherit}
 .island-hotspots{position:absolute;z-index:3;inset:0;pointer-events:none}
 .island-hotspot{position:absolute;display:inline-flex;min-height:28px;align-items:center;gap:7px;padding:4px 8px 4px 5px;border:1px solid #42424a;border-radius:3px;color:#e5e4e9;background:rgba(12,13,18,.96);cursor:pointer;opacity:0;pointer-events:none;transform:translate(-50%,-50%);transition:opacity .12s,border-color .12s,color .12s;white-space:nowrap}
 .island-hotspot.is-visible{opacity:1;pointer-events:auto}
-.island-hotspot:hover,.island-hotspot:focus-visible,.island-hotspot.is-active{border-color:#fff;color:#fff;outline:none}
+.island-hotspot:hover,.island-hotspot:focus-visible,.island-hotspot.is-active{border-color:#fff;color:#fff;outline:none;box-shadow:0 0 0 2px rgba(255,255,255,.12)}
 .hotspot-number{color:#fff;font:9px var(--mono)}
 .hotspot-name{font-size:10px;font-weight:650}
 .island-preview{position:absolute;z-index:5;right:18px;bottom:58px;width:min(310px,calc(100% - 36px));padding:17px 18px 15px;border:1px solid #414149;border-left:2px solid #fff;background:var(--panel);animation:preview-in .16s ease both}
 .preview-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font:8px/1.5 var(--mono);letter-spacing:.09em}
 .preview-meta span:first-child{color:#fff}
 .island-preview h3{margin:11px 0 6px;font-size:19px;font-weight:700;letter-spacing:-.045em}
-.island-preview p{margin:0;color:#b3b1bb;font-size:11px;line-height:1.65}
+.island-preview p{margin:0;color:#b3b1bb;font-size:12px;line-height:1.7}
 .preview-concepts{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
-.preview-concepts span{padding:3px 6px;border:1px solid #30313a;color:#bebbc8;font:8px/1.5 var(--mono)}
+.preview-concepts span{padding:3px 6px;border:1px solid #30313a;color:#bebbc8;font:9px/1.55 var(--mono)}
 .island-preview a{display:flex;justify-content:space-between;margin-top:13px;padding-top:10px;border-top:1px solid var(--line);color:#fff;font-size:10px;text-decoration:none}
 .island-preview a:hover{color:#cfcdd7}
 .stage-controls{position:absolute;z-index:4;right:18px;bottom:14px;left:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;pointer-events:none}
-.interaction-help{margin:0;color:#85848e;font:8px/1.5 var(--mono)}
-.interaction-help span{color:#e4e2e9}
+.interaction-help{margin:0;color:#85848e;font:9px/1.6 var(--mono)}
+.interaction-help span{color:#e4e2e9;font-weight:500}
 .interaction-help i{padding-inline:4px;color:var(--subtle);font-style:normal}
 .reset-view{min-height:30px;padding:5px 9px;border:1px solid #414149;border-radius:3px;color:#e4e2e9;background:var(--panel);cursor:pointer;font:9px var(--mono);pointer-events:auto;transition:background .15s,color .15s}
 .reset-view:hover{color:#090a0e;background:#fff}
 .scene-fallback{position:absolute;z-index:6;inset:0;display:grid;align-content:center;justify-items:center;padding:30px;background:var(--bg);text-align:center}
 .scene-fallback h2{margin:0 0 8px;font-size:22px}
-.scene-fallback p{max-width:360px;margin:0;color:var(--muted);font-size:12px}
+.scene-fallback p{max-width:420px;margin:0;color:var(--muted);font-size:13px}
+.fallback-links{display:flex;max-width:640px;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+.fallback-links a{padding:7px 10px;border:1px solid var(--line);color:var(--ink);font:10px var(--mono);text-decoration:none}
+.fallback-links a:hover,.fallback-links a:focus-visible{border-color:#fff;background:#171920;outline:none}
 .site-footer{display:flex;justify-content:space-between;padding:18px 0 22px;border-top:1px solid var(--line);color:var(--subtle);font:8px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase}
 @keyframes preview-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:720px){.site-header,.intro,main,.site-footer{width:calc(100% - 36px)}.site-header{height:64px}.intro{padding-top:47px;padding-bottom:28px}.intro h1{font-size:clamp(38px,10vw,56px)}.trail-heading{align-items:start;flex-direction:column;gap:5px}.trail-stage{height:68svh;min-height:480px}.stage-topline{top:13px;right:13px;left:13px;font-size:7px}.stage-controls{right:11px;bottom:10px;left:11px;align-items:end}.interaction-help{max-width:220px;line-height:1.8}.island-hotspot{min-height:26px;gap:5px;padding:3px 6px}.hotspot-name{max-width:96px;overflow:hidden;font-size:9px;text-overflow:ellipsis}.island-preview{right:11px;bottom:52px;width:min(290px,calc(100% - 22px));padding:14px}}

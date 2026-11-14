@@ -3,182 +3,139 @@
 ![Learning roadmap progress](./assets/progress.svg)
 ![Java](https://img.shields.io/badge/Java-learning%20log-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
 ![Frontend](https://img.shields.io/badge/frontend-HTML%20%7C%20CSS%20%7C%20JavaScript-3776AB?style=flat-square)
+![Three.js](https://img.shields.io/badge/3D-Three.js-111111?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-**Learn Java by building, documenting, and improving small projects.**
+**A Java learning log explored through a free-roaming 3D trail.**
 
-BuildJava.ln is a public learning log for practicing Java through small programs. The repository combines Java exercises with a lightweight website that organizes each exercise, the concepts it practices, and the next steps in the learning process.
+BuildJava.ln documents the process of learning Java through small, practical projects. Each project has its own themed island in a single 3D environment. Open an island to read its study guide beside the original Java source.
 
-This is a work in progress, not a finished course or a collection of production-ready applications. The catalog and roadmap can change as the code, understanding, and documentation improve. A planned exercise is an idea to explore; it should not be mistaken for completed code or a separate published repository.
+This is a learning project, not a finished course or a collection of production-ready applications. Exercises, explanations, and the trail itself can evolve as the underlying understanding improves.
 
-## Contents
+## The experience
 
-- [About](#about)
-- [Project principles](#project-principles)
-- [Progress indicator](#progress-indicator)
-- [Technologies](#technologies)
-- [Repository structure](#repository-structure)
-- [Run the website locally](#run-the-website-locally)
-- [Java exercise files](#java-exercise-files)
-- [How the project catalog works](#how-the-project-catalog-works)
-- [Automation and GitHub Pages](#automation-and-github-pages)
-- [Learning direction](#learning-direction)
-- [Feedback](#feedback)
-- [License](#license)
+The landing page is intentionally centered on one interactive 3D trail rather than a dashboard or a permanent project-card catalogue.
 
-## About
+- Each island has a theme connected to the program it represents.
+- The islands are connected by a rising path of steps.
+- The camera can rotate, pan, and zoom freely; movement is not tied to page scrolling.
+- Selecting an island opens its guide and Java source.
+- The study page keeps explanation and implementation visible side by side on larger screens.
+- If WebGL is unavailable, direct links to all study pages remain available.
 
-The purpose of BuildJava.ln is to make the learning process visible and easier to follow. Each exercise is an opportunity to practice a concept, run the code, notice what can be improved, and record the result.
+### Controls
 
-The website is part of that practice. It uses standard web technologies to present the exercise catalog and provide ways to explore relationships between concepts. The website does not need a backend or database for its current functionality.
+| Action | Desktop | Touch |
+| --- | --- | --- |
+| Rotate | Drag with the primary mouse button | One-finger drag |
+| Pan | Right-drag | Two-finger drag |
+| Zoom | Mouse wheel | Pinch |
+| Select | Hover or click an island | Tap an island |
+| Keyboard navigation | Focus the canvas, use arrow keys, then Enter | Not applicable |
+| Reset | Select Reset view | Select Reset view |
 
-## Project principles
+The scene respects the operating system's reduced-motion preference. Three.js and the font files are loaded from external CDNs, so the 3D website requires an internet connection.
 
-- **Practice before polish.** Exercises are built to develop understanding, not to claim production readiness.
-- **Explain the learning goal.** Descriptions and concept tags should help readers understand what an exercise is intended to practice.
-- **Keep progress honest.** A roadmap item is not complete just because it has been planned or added to the catalog.
-- **Improve in small steps.** Code, accessibility, validation, and documentation can be refined over time.
+## Projects on the current trail
 
-## Progress indicator
+1. **TypeProfile** — Java data types and console input.
+2. **WeekDay** — selection with switch.
+3. **Calculator** — arithmetic and operators.
+4. **JoKenPo** — random choices, conditions, and repetition.
+5. **LoginIntermediary** — strings, boolean logic, and limited attempts.
+6. **bulletin** — classes, objects, and averages.
+7. **Vehicle** — constructors and object attributes.
+8. **DeveloperProfile** — objects and ArrayList.
+9. **library** — collection operations.
+10. **CandidateManager** — searching, removing, and menu-driven collections.
 
-The progress graphic at the top of this README is generated from the catalog in `js/projects.js` by `scripts/update-progress.mjs`. It is a weighted indicator of the learning roadmap, not a measure of time spent, lines of code, course completion, or the number of separate GitHub repositories.
-
-The generator uses the project statuses and the target configured in the script. Its current status weights are:
-
-| Status        | Weight | Meaning                                                      |
-| ------------- | -----: | ------------------------------------------------------------ |
-| `planned`     |      0 | Listed as a future exercise; implementation has not started. |
-| `in-progress` |    1.0 | Work is underway or the exercise is being improved.          |
-| `completed`   |      2 | The exercise is implemented, run or tested, and documented.  |
-
-The weighted total is compared with the configured roadmap target, and the result is capped at 100%. The graphic also reports how many exercises are currently tracked in the catalog. For the exact target and calculation, see `scripts/update-progress.mjs`; the script is the source of truth for those values.
-
-To regenerate the graphic locally, use Node.js:
-
-```bash
-node scripts/update-progress.mjs
-```
-
-The progress workflow can run automatically when the catalog or generator changes on `main`, and it can also be started manually from the **Actions** tab. It commits the SVG only when the generated file changes.
+The order represents the current teaching progression. It is not a claim that every topic is a strict prerequisite for the next one.
 
 ## Technologies
 
-| Technology      | Role in the repository                                      |
-| --------------- | ----------------------------------------------------------- |
-| Java            | Language used for the practice exercises.                   |
-| HTML5           | Website structure.                                          |
-| CSS3            | Layout, responsive styles, themes, and visual presentation. |
-| JavaScript      | Project catalog, rendering, and browser interactions.       |
-| Bootstrap 5     | Layout utilities and responsive components.                 |
-| Bootstrap Icons | Interface icons.                                            |
-| Node.js         | Runs the progress graphic generator.                        |
-| Git and GitHub  | Version control, source hosting, and automation.            |
-| GitHub Pages    | Static website deployment.                                  |
+| Technology | Role |
+| --- | --- |
+| Java | Language used for the practice projects. |
+| HTML and CSS | Page structure, layout, and responsive presentation. |
+| JavaScript | Project data, 3D interactions, and study-page behavior. |
+| Three.js | 3D scene, camera, lighting, meshes, and interaction. |
+| Node.js | Syntax checks, automated tests, and progress graphic generation. |
+| Git and GitHub | Version control, source hosting, and automation. |
+| GitHub Actions | Quality checks and static-site deployment. |
+| GitHub Pages | Hosting for the static website. |
 
-The website loads Bootstrap, Bootstrap Icons, and web fonts from external CDNs. Those resources require an internet connection. Viewing the website does not require installing packages or running a build command.
+The current site does not require a backend, database, or runtime package installation. The package scripts use Node.js built-in tools only.
 
 ## Repository structure
 
-```text
-BuildJava.ln/
-├── .github/
-│   └── workflows/
-│       ├── pages.yml                 # Deploys the static website
-│       └── update-progress.yml       # Regenerates the progress graphic
-├── assets/
-│   └── progress.svg                  # Generated learning progress graphic
-├── js/
-│   ├── app.js                        # Theme and accent settings
-│   ├── knowledge-map.js              # Interactive concept map
-│   └── projects.js                   # Catalog data and card rendering
-├── projects/
-│   ├── Beginner/                     # Beginner Java exercises
-│   ├── Intermediate/                 # Intermediate Java exercises
-│   ├── Advanced/                     # Advanced Java exercises
-│   └── md/                           # Exercise lesson guides and their index
-├── scripts/
-│   └── update-progress.mjs           # Generates assets/progress.svg
-├── styles/
-│   ├── knowledge-map.css             # Concept map styles
-│   └── style.css                     # Main website styles
-├── index.html                        # Website entry point
-├── LICENSE
-└── README.md
-```
+    BuildJava.ln/
+    ├── .github/
+    │   ├── agents/                 # Project and design workflow agents
+    │   └── workflows/
+    │       ├── pages.yml           # Checks, tests, and GitHub Pages deployment
+    │       └── update-progress.yml # Regenerates the progress graphic
+    ├── assets/
+    │   └── progress.svg            # Generated learning progress graphic
+    ├── js/
+    │   ├── trail-data.js           # The ten projects and their study paths
+    │   ├── trail-world.js          # Three.js scene and camera interactions
+    │   ├── project-study.js        # Guide rendering and Java source display
+    │   └── projects.js             # Existing progress workflow data
+    ├── projects/
+    │   ├── Beginner/               # Beginner Java source files
+    │   ├── Intermediate/            # Intermediate Java source files
+    │   └── md/                     # Project study guides
+    ├── scripts/
+    │   └── update-progress.mjs     # Progress SVG generator
+    ├── styles/
+    │   ├── trail-world.css         # Landing page styles
+    │   └── project-study.css       # Study page styles
+    ├── tests/
+    │   └── trail-data.test.js      # Project and file-integrity tests
+    ├── index.html                  # 3D trail landing page
+    ├── project.html                # Guide and Java source page
+    └── package.json                # Node.js validation commands
 
-## Run the website locally
+## Run locally
 
-### Requirements
+Requirements: a modern browser, Node.js 22 or later for checks, and an internet connection for the Three.js module and remote fonts.
 
-- A modern web browser.
-- Git, if you want to clone the repository.
-- Optional: Visual Studio Code with the Live Server extension.
+Clone the repository and start a local HTTP server:
 
-### Steps
+    git clone https://github.com/duartexz-dev/BuildJava.ln.git
+    cd BuildJava.ln
+    python -m http.server 8000
 
-```bash
-git clone https://github.com/duartexz-dev/BuildJava.ln.git
-cd BuildJava.ln
-```
+Open http://localhost:8000 in the browser. ES modules and project files are fetched over HTTP, so opening index.html directly from the file system is not supported.
 
-Open `index.html` in a browser, or open the folder in VS Code and start it with Live Server. No dependency installation is needed to view the current static website.
+## Quality checks
 
-### Running the Java exercises
+No third-party Node.js packages are required.
 
-The Java source files are stored in `projects/`. Use a JDK compatible with the source code, open an exercise in your Java editor, and run its main class. Exercises are independent practice programs; check each file for its class name, input requirements, and implementation before running it. The code and instructions for an exercise should be kept aligned as it changes.
+Run the syntax checks:
 
-## How the project catalog works
+    npm run check
 
-The website reads its catalog data from `js/projects.js`. Each entry describes an exercise and includes fields for its name, status, type, difficulty, description, concepts, and repository URL.
+Run the automated tests:
 
-Exercise guides live in `projects/md/`; the folder's `README.md` indexes the available guides. When an entry has a `documentationPath`, its project card links to that guide. `roadmapOrder` is a positive, unique sequence number for entries assigned a place in the learning path; it expresses teaching order rather than creation date. The current roadmap on the website is a stage overview and does not yet render individual catalog entries.
+    npm test
 
-A catalog entry follows this general shape:
+The tests verify the trail's project count and ordering, unique IDs and themes, required project metadata, and the existence of each referenced Java source and Markdown guide.
 
-```js
-{
-  name: "ExampleExercise",
-  status: "planned",
-  type: "Fundamentals",
-  difficulty: "Beginner",
-  description: "Describe the problem the exercise is intended to solve.",
-  concepts: ["Input", "Conditionals"],
-  repoUrl: "",
-  roadmapOrder: 1,
-  documentationPath: "projects/md/ExampleExercise.md"
-}
-```
+The GitHub Pages workflow runs these checks for pull requests and before publishing changes from main. A passing workflow verifies these automated checks; it does not replace manual browser, accessibility, or visual testing.
 
-Use one of the supported status values: `planned`, `in-progress`, or `completed`. Set `repoUrl` only when there is a real destination to link to; an empty value means a repository link is not available. Keep each description and concept list consistent with the actual exercise.
+## Progress indicator
 
-The **Knowledge map** view compares the concepts attached to catalog entries and visualizes their relationships. It also supports searching by project or concept and filtering by difficulty. These connections represent shared tags in the catalog; they are not a claim that the exercises depend on one another in code.
+The progress graphic at the top of this README is generated from js/projects.js by scripts/update-progress.mjs. It represents the weighted status of the learning roadmap; it is not a measure of time spent, lines of code, course completion, or the number of separate repositories.
 
-Appearance preferences, including the color theme and accent selection, are stored in the current browser through `localStorage`. They are local preferences, not user accounts or server-side settings.
+The progress workflow runs when its source files change on main, or when manually started. It commits the SVG only when the generated file changes.
 
-## Automation and GitHub Pages
+## Learning principles
 
-The repository contains two GitHub Actions workflows:
-
-- **`pages.yml`** publishes the static website to GitHub Pages when changes are pushed to `main`; it can also be started manually.
-- **`update-progress.yml`** runs the progress generator when relevant catalog or generator files change, or when manually started. If the SVG changes, the workflow attempts to commit the updated file.
-
-To inspect a workflow run, open the repository's **Actions** tab and select the run. A successful deployment means the publishing workflow completed; it does not automatically verify every link, card, exercise, or visual detail.
-
-If the progress workflow cannot push its generated file, check **Settings → Actions → General → Workflow permissions** and any branch protection rules. The workflow uses GitHub's provided token, so a personal access token should not be added just for this task.
-
-To find the published website URL, open **Settings → Pages** in the repository. The configured publishing source and URL shown there are the source of truth if deployment settings change.
-
-## Learning direction
-
-The learning path is intentionally flexible rather than tied to a calendar. As the exercises evolve, useful areas to work on include:
-
-- Strengthening fundamentals such as input, output, operators, conditions, and loops.
-- Practicing methods, arrays, classes, objects, and other object-oriented programming concepts.
-- Improving input validation, naming, code organization, and error handling.
-- Adding clear run instructions and useful explanations to exercises.
-- Introducing more structured tests and more involved exercises when the underlying concepts are understood.
-
-These are learning priorities, not claims that every item is already implemented. The catalog and source files show the current state of the work.
+- **Practice before polish.** The exercises exist to build understanding, not to claim production readiness.
+- **Keep the record honest.** A planned exercise is not a completed exercise.
+- **Explain the learning goal.** Each guide should describe what the program practices and how its implementation works.
+- **Improve in small steps.** Source code, accessibility, validation, and documentation should be refined as the project grows.
 
 ## Feedback
 
@@ -186,7 +143,7 @@ Constructive feedback, issue reports, and beginner-friendly suggestions are welc
 
 ## License
 
-This project is distributed under the MIT License. See [LICENSE](./LICENSE) for the license text.
+This project is distributed under the MIT License. See LICENSE for the license text.
 
 ---
 

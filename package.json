@@ -1,0 +1,9 @@
+{
+  "name": "buildjava-ln",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check js/trail-data.js && node --check js/trail-world.js && node --check js/project-study.js && node --check scripts/update-progress.mjs && node --check tests/trail-data.test.js",
+    "test": "node --test"
+  }
+}

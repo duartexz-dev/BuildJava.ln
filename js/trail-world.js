@@ -117,11 +117,13 @@ controls.minPolarAngle = 0.2;
 controls.maxPolarAngle = 1.46;
 controls.update();
 controls.saveState();
-controls.listenToKeyEvents(canvas);
-
 const nodes = [];
 const motionObjects = [];
 const clock = new THREE.Clock();
+let navigationTarget = null;
+let activeIndex = -1;
+let lastHotspotUpdate = 0;
+let animationFrame = null;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -199,30 +201,42 @@ function addScreen(parent, title, detail, width, height, x, y, z, rotation = nul
     rotation ? { rotation } : {});
 }
 
-function islandShape(index) {
+const ISLAND_OUTLINES = {
+  profile: [[0,-1.25],[0.82,-1.05],[1.35,-0.42],[1.42,0.32],[0.92,1.02],[0.18,1.28],[-0.72,1.12],[-1.34,0.52],[-1.42,-0.26],[-0.88,-0.98]],
+  calendar: [[-1.3,-1.05],[1.3,-1.05],[1.3,0.58],[0.82,1.05],[-0.82,1.05],[-1.3,0.58]],
+  calculator: [[-0.92,-1.32],[0.72,-1.32],[1.05,-0.98],[1.05,0.98],[0.72,1.32],[-0.92,1.32],[-1.08,1.08],[-1.08,-1.08]],
+  arena: [[0,-1.42],[0.92,-1.08],[1.42,-0.18],[1.1,0.92],[0.22,1.42],[-0.82,1.16],[-1.4,0.32],[-1.12,-0.78]],
+  checkpoint: [[-1.2,-1.0],[1.2,-1.0],[1.2,0.52],[0.72,1.02],[0,1.32],[-0.72,1.02],[-1.2,0.52]],
+  bulletin: [[-1.48,-0.82],[-1.18,-1.08],[1.18,-1.08],[1.48,-0.82],[1.48,0.82],[1.18,1.08],[-1.18,1.08],[-1.48,0.82]],
+  garage: [[-1.52,-0.72],[-1.12,-1.02],[0.94,-1.02],[1.52,-0.52],[1.52,0.52],[0.94,1.02],[-1.12,1.02],[-1.52,0.72]],
+  workstation: [[-1.45,-1.05],[0.2,-1.05],[0.2,-0.35],[1.35,-0.35],[1.35,1.05],[-1.45,1.05]],
+  library: [[-1.42,-1.08],[1.42,-1.08],[1.42,1.08],[0.48,1.08],[0.48,-0.22],[-0.48,-0.22],[-0.48,1.08],[-1.42,1.08]],
+  archive: [[-0.98,-1.18],[0.65,-1.3],[1.42,-0.46],[1.18,0.82],[0.22,1.3],[-1.18,0.92],[-1.42,-0.22]]
+};
+
+function islandShape(index, theme) {
   const shape = new THREE.Shape();
-  const points = 11;
-  for (let i = 0; i < points; i += 1) {
-    const angle = (i / points) * Math.PI * 2;
-    const radius = 1.5 + Math.sin(i * 1.71 + index * 0.63) * 0.13 + Math.cos(i * 2.13 + index) * 0.07;
-    const x = Math.cos(angle) * radius * 1.08;
-    const y = Math.sin(angle) * radius * 0.78;
-    if (i === 0) shape.moveTo(x, y);
+  const outline = ISLAND_OUTLINES[theme] || ISLAND_OUTLINES.profile;
+  outline.forEach((point, pointIndex) => {
+    const variation = 1 + Math.sin((index + 2) * (pointIndex + 1) * 0.41) * 0.018;
+    const x = point[0] * variation;
+    const y = point[1] * variation;
+    if (pointIndex === 0) shape.moveTo(x, y);
     else shape.lineTo(x, y);
-  }
+  });
   shape.closePath();
   return shape;
 }
 
-function terrainGeometry(index) {
-  const geometry = new THREE.ExtrudeGeometry(islandShape(index), {
-    depth: 0.46,
+function terrainGeometry(index, theme) {
+  const geometry = new THREE.ExtrudeGeometry(islandShape(index, theme), {
+    depth: 0.5,
     steps: 1,
     bevelEnabled: true,
-    bevelSegments: 2,
-    bevelSize: 0.08,
-    bevelThickness: 0.07,
-    curveSegments: 2
+    bevelSegments: 3,
+    bevelSize: 0.1,
+    bevelThickness: 0.08,
+    curveSegments: 3
   });
   geometry.rotateX(-Math.PI / 2);
   geometry.computeVertexNormals();
@@ -231,7 +245,7 @@ function terrainGeometry(index) {
 
 function addIslandBase(group, index) {
   const accent = themeAccent(group);
-  const lower = makeMesh(group, terrainGeometry(index), materials.deep, 0, -0.05, 0);
+  const lower = makeMesh(group, terrainGeometry(index, group.userData.theme), materials.deep, 0, -0.05, 0);
   lower.scale.set(0.93, 0.78, 0.93);
   lower.rotation.y = index * 0.19;
 
@@ -240,12 +254,15 @@ function addIslandBase(group, index) {
     roughness: 0.88,
     metalness: 0.02
   });
-  const top = makeMesh(group, terrainGeometry(index), [materials.rock, surface], 0, 0.08, 0);
+  const top = makeMesh(group, terrainGeometry(index, group.userData.theme), [materials.rock, surface], 0, 0.08, 0);
   top.rotation.y = index * 0.19;
 
-  addBox(group, 0.48, 0.07, 0.32, -0.65, 0.55, 0.66, materials.lightStone,
-    { x: 0, y: index * 0.2, z: 0.08 });
-  registerMotion(addSphere(group, 0.07, 0.82, 0.61, -0.55, accent), "float", 0.9, 0.08);
+  const islandMarker = makeMesh(group, new THREE.TorusGeometry(0.17, 0.028, 8, 22), accent, 0.82, 0.62, -0.55);
+  islandMarker.rotation.x = Math.PI / 2;
+  registerMotion(islandMarker, "rotate", 0.24, 0.12);
+  registerMotion(addSphere(group, 0.075, -0.82, 0.58, 0.55, accent), "float", 0.8, 0.07);
+  addSphere(group, 0.16, -1.05, 0.18, -0.62, materials.stone);
+  addSphere(group, 0.11, 1.08, 0.16, 0.56, materials.lightStone);
 }
 
 function buildStepPath(start, end, fromTheme, toTheme) {
@@ -290,8 +307,11 @@ function themeCalendar(group) {
   addBox(group, 0.92, 0.72, 0.13, 0, 1.14, 0, materials.stone);
   addBox(group, 0.78, 0.52, 0.04, 0, 1.16, 0.09, materials.darkGlass);
   addScreen(group, "WEEK", "01 — 07", 0.69, 0.4, 0, 1.16, 0.12);
-  const calendarHand = addBox(group, 0.035, 0.3, 0.035, 0.2, 1.17, 0.15, accent);
-  registerMotion(calendarHand, "rotateZ", 0.35, 0.2);
+  const calendarPivot = new THREE.Group();
+  calendarPivot.position.set(0.2, 1.17, 0.15);
+  group.add(calendarPivot);
+  addBox(calendarPivot, 0.035, 0.3, 0.035, 0, 0.15, 0, accent);
+  registerMotion(calendarPivot, "rotateZ", 0.35, 0.58);
   for (let i = 0; i < 7; i += 1) {
     const height = 0.22 + (i % 3) * 0.09;
     const x = -0.95 + i * 0.315;
@@ -359,8 +379,11 @@ function themeBulletin(group) {
   const heights = [0.22, 0.35, 0.28, 0.48];
   for (let i = 0; i < 4; i += 1) {
     const x = -0.42 + i * 0.28;
-    const bar = addBox(group, 0.14, heights[i], 0.05, x, 0.95 + heights[i] / 2, 0.14, i === 3 ? accent : materials.lightStone);
-    registerMotion(bar, "pulse", 0.65 + i * 0.12, 0.08);
+    const barPivot = new THREE.Group();
+    barPivot.position.set(x, 0.95, 0.14);
+    group.add(barPivot);
+    addBox(barPivot, 0.14, heights[i], 0.05, 0, heights[i] / 2, 0, i === 3 ? accent : materials.lightStone);
+    registerMotion(barPivot, "grow", 0.65 + i * 0.12, 0.12);
   }
   addBox(group, 1.05, 0.035, 0.035, 0, 0.92, 0.14, materials.metal);
   addBox(group, 0.8, 0.035, 0.035, 0, 0.83, 0.14, materials.metal);
@@ -401,7 +424,7 @@ function themeWorkstation(group) {
   }
   addBox(group, 0.3, 0.4, 0.3, 0.93, 0.85, -0.25, materials.stone);
   const cursor = addBox(group, 0.17, 0.08, 0.035, 0.93, 0.88, -0.08, accent);
-  registerMotion(cursor, "pulse", 1.8, 0.42);
+  registerMotion(cursor, "pulse", 1.8, 0.09);
 }
 
 function themeLibrary(group) {
@@ -416,8 +439,11 @@ function themeLibrary(group) {
       const width = 0.12 + (book % 2) * 0.035;
       const x = -0.49 + book * 0.19;
       const height = 0.23 + ((book + shelf) % 3) * 0.055;
-      const volume = addBox(group, width, height, 0.2, x, y + 0.035 + height / 2, 0.035, (book + shelf) % 4 === 0 ? accent : materials.lightStone);
-      if ((book + shelf) % 3 === 0) registerMotion(volume, "sway", 0.4 + book * 0.04, 0.035);
+      const bookPivot = new THREE.Group();
+      bookPivot.position.set(x, y + 0.035, 0.035);
+      group.add(bookPivot);
+      addBox(bookPivot, width, height, 0.2, 0, height / 2, 0, (book + shelf) % 4 === 0 ? accent : materials.lightStone);
+      if ((book + shelf) % 3 === 0) registerMotion(bookPivot, "sway", 0.4 + book * 0.04, 0.035);
     }
   }
   addBox(group, 0.95, 0.08, 0.24, 0, 2.02, 0.02, materials.stone);
@@ -434,8 +460,8 @@ function themeArchive(group) {
     addBox(group, 0.18, 0.025, 0.035, x, 1.1, 0.18, materials.metal);
     addBox(group, 0.12, 0.025, 0.035, x, 1.0, 0.18, materials.metal);
   }
-  const archiveDial = addCylinder(group, 0.52, 0.52, 0.08, 12, 0, 0.79, -0.42, materials.metal);
-  registerMotion(archiveDial, "rotateY", 0.16, 0.2);
+  const archiveDial = makeMesh(group, new THREE.TorusGeometry(0.25, 0.035, 8, 24), materials.metal, 0, 1.12, -0.42);
+  registerMotion(archiveDial, "rotate", 0.2, 0.16);
   addScreen(group, "CANDIDATES", "ADD / FIND / REMOVE", 1.05, 0.32, 0, 1.75, -0.05);
   addBox(group, 1.12, 0.08, 0.42, 0, 0.65, 0.02, accent);
 }
@@ -463,6 +489,7 @@ function setActive(projectId) {
   }
 
   const project = projects.find((item) => item.id === projectId);
+  if (project) activeIndex = projects.findIndex((item) => item.id === projectId);
   if (!project) {
     preview.hidden = true;
     return;
@@ -534,6 +561,42 @@ function buildIsland(project, index) {
   nodes.push({ project, group, position, hotspot, labelSide: index % 2 === 0 ? -1 : 1, targetScale: 1 });
 }
 
+function navigateProject(direction) {
+  const nextIndex = activeIndex < 0
+    ? (direction > 0 ? 0 : projects.length - 1)
+    : (activeIndex + direction + projects.length) % projects.length;
+  const node = nodes[nextIndex];
+  if (!node) return;
+
+  activeIndex = nextIndex;
+  setActive(node.project.id);
+  const target = node.group.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.85, 0));
+  const cameraOffset = camera.position.clone().sub(controls.target);
+  navigationTarget = { target, camera: target.clone().add(cameraOffset) };
+}
+
+canvas.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    event.preventDefault();
+    navigateProject(1);
+  } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    event.preventDefault();
+    navigateProject(-1);
+  } else if (event.key === "Home") {
+    event.preventDefault();
+    activeIndex = -1;
+    navigateProject(1);
+  } else if (event.key === "End") {
+    event.preventDefault();
+    activeIndex = 0;
+    navigateProject(-1);
+  } else if (event.key === "Enter" && activeId) {
+    event.preventDefault();
+    const project = projects.find((item) => item.id === activeId);
+    if (project) openProject(project);
+  }
+});
+
 function pickProject(event) {
   const bounds = canvas.getBoundingClientRect();
   pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
@@ -550,7 +613,8 @@ function updateHotspots() {
   const height = stage.clientHeight;
 
   for (const node of nodes) {
-    const anchor = node.position.clone().add(new THREE.Vector3(node.labelSide * 1.55, 2.05, 0));
+    const anchor = node.group.getWorldPosition(new THREE.Vector3())
+      .add(new THREE.Vector3(node.labelSide * 1.55, 2.05, 0));
     anchor.project(camera);
     const x = (anchor.x * 0.5 + 0.5) * width;
     const y = (-anchor.y * 0.5 + 0.5) * height;
@@ -615,7 +679,10 @@ preview.addEventListener("pointerleave", (event) => {
   setActive(null);
 });
 
-controls.addEventListener("start", () => canvas.classList.add("is-dragging"));
+controls.addEventListener("start", () => {
+  navigationTarget = null;
+  canvas.classList.add("is-dragging");
+});
 controls.addEventListener("end", () => {
   canvas.classList.remove("is-dragging");
   updateHotspots();
@@ -633,8 +700,21 @@ observer.observe(stage);
 window.addEventListener("resize", resize, { passive: true });
 
 function animate() {
-  window.requestAnimationFrame(animate);
+  if (document.hidden) {
+    animationFrame = null;
+    return;
+  }
+  animationFrame = window.requestAnimationFrame(animate);
   const elapsed = clock.getElapsedTime();
+
+  if (navigationTarget) {
+    camera.position.lerp(navigationTarget.camera, 0.075);
+    controls.target.lerp(navigationTarget.target, 0.075);
+    if (camera.position.distanceToSquared(navigationTarget.camera) < 0.0009
+      && controls.target.distanceToSquared(navigationTarget.target) < 0.0009) {
+      navigationTarget = null;
+    }
+  }
 
   if (!reducedMotion.matches) {
     for (const item of motionObjects) {
@@ -648,6 +728,9 @@ function animate() {
       else if (type === "pulse") {
         const scale = 1 + wave * amount;
         mesh.scale.set(baseScale.x * scale, baseScale.y * scale, baseScale.z * scale);
+      } else if (type === "grow") {
+        const growth = 1 - amount + ((wave + 1) / 2) * amount;
+        mesh.scale.set(baseScale.x, baseScale.y * growth, baseScale.z);
       }
     }
   }
@@ -660,9 +743,21 @@ function animate() {
   }
 
   controls.update();
-  updateHotspots();
+  if (elapsed - lastHotspotUpdate > 0.12) {
+    updateHotspots();
+    lastHotspotUpdate = elapsed;
+  }
   renderer.render(scene, camera);
 }
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+  } else if (animationFrame === null) {
+    animate();
+  }
+});
 
 resize();
 updateHotspots();

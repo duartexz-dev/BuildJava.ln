@@ -21,6 +21,40 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+const JAVA_KEYWORDS = new Set([
+  "abstract","assert","boolean","break","byte","case","catch","char","class","const","continue",
+  "default","do","double","else","enum","extends","final","finally","float","for","if","implements",
+  "import","instanceof","int","interface","long","native","new","package","private","protected",
+  "public","return","short","static","strictfp","super","switch","synchronized","this","throw",
+  "throws","transient","try","void","volatile","while","true","false","null"
+]);
+const JAVA_TYPES = new Set([
+  "String","Scanner","ArrayList","Integer","Double","Float","Character","Boolean","Object",
+  "Random","Math","System","List","Map","Set"
+]);
+const JAVA_TOKEN_PATTERN = /\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|@[A-Za-z_$][\w$]*|\b[A-Za-z_$][\w$]*\b|\b\d+(?:\.\d+)?[fFdDlL]?\b/g;
+
+function highlightJava(source) {
+  let output = "";
+  let cursor = 0;
+  for (const match of String(source).matchAll(JAVA_TOKEN_PATTERN)) {
+    const token = match[0];
+    output += escapeHtml(source.slice(cursor, match.index));
+    let tokenType = "";
+    if (token.startsWith("//") || token.startsWith("/*")) tokenType = "comment";
+    else if (token[0] === '"' || token[0] === "'") tokenType = "string";
+    else if (token[0] === "@") tokenType = "annotation";
+    else if (JAVA_KEYWORDS.has(token)) tokenType = "keyword";
+    else if (JAVA_TYPES.has(token)) tokenType = "type";
+    else if (/^\d/.test(token)) tokenType = "number";
+    output += tokenType
+      ? '<span class="tok-' + tokenType + '">' + escapeHtml(token) + "</span>"
+      : escapeHtml(token);
+    cursor = match.index + token.length;
+  }
+  return output + escapeHtml(source.slice(cursor));
+}
+
 function renderInline(value) {
   const savedCode = [];
   const codeTick = String.fromCharCode(96);
@@ -217,7 +251,7 @@ if (!project) {
 
   const sourcePromise = loadFile(project.javaPath)
     .then((source) => {
-      javaSource.textContent = source;
+      javaSource.innerHTML = highlightJava(source);
       javaSource.classList.remove("loading-state");
       copyButton.disabled = false;
     })
