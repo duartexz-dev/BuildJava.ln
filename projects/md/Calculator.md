@@ -91,3 +91,105 @@ The displayed quotient is `3`, not `3.5`, because both operands are integers. Th
 This exercise practices console input, `int`, arithmetic, `switch`, and formatted output. Its main subtlety is that integer division truncates the fractional part.
 
 Source: [`Calculator.java`](../Beginner/Calculator.java).
+
+## Guided code walkthrough
+
+**Execution flow:** Ler os operandos → ler o símbolo → escolher a operação → mostrar o resultado ou avisar que o símbolo não é aceito.
+
+Select a code section on the website to read its matching explanation. Each anchor is taken from the Java source and is checked by the repository tests.
+
+### 1. Preparar a entrada
+
+**Anchor:** `import java.util.Scanner;`
+
+Scanner permite receber os dois números e o operador digitados pela pessoa.
+
+**Terms**
+- `java.util.Scanner`: Classe da biblioteca padrão usada para ler dados.
+
+### 2. Definir a classe e o ponto de partida
+
+**Anchor:** `public class Calculator {`
+
+Calculator é a classe pública. O Java começa a executar o programa pelo método main.
+
+**Terms**
+- `public`: Permite acesso a partir de outras partes do programa e ao lançador Java.
+- `static`: Permite chamar main diretamente pela classe.
+- `void`: O método não devolve um resultado para quem o chamou.
+- `String[] args`: Recebe argumentos opcionais enviados ao iniciar o programa.
+
+### 3. Criar o leitor de dados
+
+**Anchor:** `Scanner scanner = new Scanner(System.in);`
+
+new cria um Scanner conectado à entrada padrão. A variável scanner permite reutilizar esse mesmo leitor em várias linhas.
+
+**Terms**
+- `Scanner`: Tipo do objeto que lê a entrada.
+- `scanner`: Nome da variável que guarda a referência ao leitor.
+- `System.in`: Entrada padrão, geralmente o teclado.
+
+### 4. Ler os dois operandos
+
+**Anchor:** `int number1 = scanner.nextInt();`
+
+Cada nextInt() lê um inteiro e armazena o resultado em uma variável diferente. number1 e number2 são os operandos: os valores sobre os quais a operação será feita.
+
+**Terms**
+- `number1`: Primeiro número informado.
+- `number2`: Segundo número informado.
+- `int`: Tipo inteiro. A divisão entre dois int também produz um resultado inteiro.
+
+### 5. Ler o operador escolhido
+
+**Anchor:** `var sign = scanner.next();`
+
+next() lê um token de texto, como +, - ou /. A palavra-chave var deixa o compilador inferir o tipo: como next() devolve String, sign é uma String. O tipo não fica dinâmico nem muda depois.
+
+**Terms**
+- `var`: Inferência de tipo para variável local; o compilador descobre o tipo na inicialização.
+- `sign`: Variável que guarda o símbolo da operação.
+- `next()`: Lê o próximo token, parando em espaços em branco.
+
+### 6. Escolher a operação
+
+**Anchor:** `switch (sign) {`
+
+O switch verifica o conteúdo de sign. Cada case implementa uma operação diferente. O símbolo x é apenas a opção mostrada à pessoa; a multiplicação real é feita pelo operador *.
+
+**Terms**
+- `switch`: Seleciona um bloco com base no valor de uma expressão.
+- `case "+":`: Executa a soma quando sign contém +.
+- `break`: Sai do switch após executar o caso escolhido.
+
+### 7. Entender a divisão inteira
+
+**Anchor:** `case "/":`
+
+Como os dois valores são int, number1 / number2 descarta a parte decimal. Por exemplo, 7 / 2 resulta em 3. Se o segundo número for zero, Java lança ArithmeticException; o código atual não trata esse caso.
+
+**Terms**
+- `/`: Operador de divisão. O tipo dos operandos influencia o tipo do resultado.
+- `%d`: Marcador do printf para imprimir um inteiro.
+- `%n`: Quebra de linha independente do sistema operacional.
+
+### 8. Criar um caminho para operador inválido
+
+**Anchor:** `default:`
+
+default será executado quando o símbolo não for +, -, / ou x. Esse ramo evita que uma entrada desconhecida seja tratada silenciosamente como uma operação válida.
+
+**Terms**
+- `default`: Caso alternativo de um switch.
+- `break`: Encerra o switch; aqui é o último ramo, mas mantém a estrutura explícita.
+
+### 9. Finalizar a leitura
+
+**Anchor:** `scanner.close();`
+
+O programa encerra o Scanner depois da operação. Este exercício realiza apenas um cálculo; para repetir, seria necessário adicionar um laço ao redor da leitura e do switch.
+
+**Terms**
+- `close()`: Fecha o Scanner e a entrada associada.
+
