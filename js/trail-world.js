@@ -19,16 +19,16 @@ const COLORS = {
   rockSide: 0x191b22,
   stone: 0x363842,
   stoneLight: 0x555661,
-  violet: 0x8f7ac4,
-  violetLight: 0xc9c2d8,
+  violet: 0x8b8e97,
+  violetLight: 0xd5d2dc,
   pale: 0xe9e7ef,
   muted: 0x9998a3
 };
 
 const ISLAND_COLORS = {
-  profile: 0x46b5c7, calendar: 0x6089d6, calculator: 0xe0a34b,
-  arena: 0xd96d63, checkpoint: 0xc56f8c, bulletin: 0x5b9e85,
-  garage: 0xd47c50, workstation: 0x7e91bd, library: 0xc3a354, archive: 0x9b82b8
+  profile: 0x41afc2, calendar: 0x5a82c6, calculator: 0xe3a24b,
+  arena: 0xd96a62, checkpoint: 0xbd6687, bulletin: 0x599fb5,
+  garage: 0xc87550, workstation: 0x748bb4, library: 0xc0a04a, archive: 0x8e98aa
 };
 
 const themeMaterials = Object.fromEntries(
@@ -80,7 +80,7 @@ keyLight.shadow.camera.bottom = -28;
 keyLight.shadow.bias = -0.0003;
 scene.add(keyLight);
 
-const fillLight = new THREE.DirectionalLight(0x9a8eb8, 0.35);
+const fillLight = new THREE.DirectionalLight(0x9b9ba3, 0.45);
 fillLight.position.set(12, 10, -20);
 scene.add(fillLight);
 
