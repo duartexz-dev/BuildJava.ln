@@ -118,8 +118,7 @@ These checks establish that the sources compile and selected behaviors work. The
     │   ├── Intermediate/           # Six combined and object-oriented exercises
     │   └── md/                     # Ten Markdown study guides
     ├── styles/
-    │   ├── landing.css             # Project overview styling
-    │   └── study.css               # Exercise study-page styling
+    │   └── site.css                 # Shared overview and study-page styling
     ├── tests/
     │   └── project-data.test.js    # Data, file, page, and source checks
     ├── index.html
