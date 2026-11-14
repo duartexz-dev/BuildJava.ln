@@ -1450,3 +1450,57 @@ body.site-shell :focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Links that open dedicated study pages and verified repository history. */
+.project-study-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 13px;
+  color: var(--accent);
+  font: 750 10px/1.5 var(--font-body);
+  text-decoration: none;
+}
+
+.project-study-link:hover {
+  color: var(--platform-highlight);
+  text-decoration: underline;
+}
+
+.timeline-commit-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--accent);
+  font: 600 9px/1.5 var(--font-mono);
+  text-decoration: none;
+}
+
+.timeline-commit-link:hover {
+  text-decoration: underline;
+}
+
+.timeline-source-note {
+  max-width: 950px;
+  margin: 15px auto 0;
+  color: var(--muted);
+  font: 450 9px/1.6 var(--font-body);
+}
+
+.project-study-labels .project-status[data-status="completed"] {
+  border-color: color-mix(in srgb, var(--status-completed) 36%, var(--line));
+  color: var(--status-completed);
+  background: color-mix(in srgb, var(--status-completed) 8%, transparent);
+}
+
+.project-study-labels .project-status[data-status="in-progress"] {
+  border-color: color-mix(in srgb, var(--status-in-progress) 36%, var(--line));
+  color: var(--status-in-progress);
+  background: color-mix(in srgb, var(--status-in-progress) 8%, transparent);
+}
+
+.project-study-labels .project-status[data-status="planned"] {
+  border-color: var(--line);
+  color: var(--status-planned);
+  background: var(--surface-soft);
+}
