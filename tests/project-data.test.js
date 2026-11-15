@@ -41,7 +41,7 @@ test("the project index is driven by the canonical catalogue", () => {
   assert.ok(html.includes('href="#projects"'));
   assert.ok(html.includes("js/landing.js"));
   assert.ok(script.includes('from "./project-data.js"'));
-  assert.ok(script.includes('projects.filter'));
+  assert.ok(script.includes('.filter((project) => project.difficulty === difficulty)'));
   assert.ok(script.includes("project.description"));
   assert.ok(script.includes("project.markdownPath"));
   assert.ok(script.includes("project.javaPath"));
