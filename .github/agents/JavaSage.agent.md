@@ -168,7 +168,7 @@ When adding a project, assign step as the next unused positive number after insp
 The current website is a static Java project index. Each exercise appears as one concise card with its description and two direct GitHub links: one to the Markdown study guide and one to the original Java source.
 
 - data/projects.json is the canonical project catalog.
-- js/project-data.js is a small JSON-import wrapper that exports projects and getProject(id).
+- js/project-data.js is a small JSON-import wrapper that exports the canonical `projects` array.
 - js/landing.js renders one card per project from the canonical catalog. Each card contains its description and two direct GitHub links: `markdownPath` for the guide and `javaPath` for the original Java source.
 - projects/md/ stores one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs for new Java projects.
