@@ -296,10 +296,13 @@ async function selectResource(resourceId) {
   try {
     const content = await loadFile(resource.path);
     loadedResources.set(resource.path, content);
+    if (!activeResource || activeResource.id !== resource.id) return;
     renderResource(resource, content);
     if (resource.type === "java") copyButton.disabled = false;
   } catch (error) {
-    showError("The selected resource could not be loaded. " + error.message);
+    if (activeResource && activeResource.id === resource.id) {
+      showError("The selected resource could not be loaded. " + error.message);
+    }
   }
 }
 
