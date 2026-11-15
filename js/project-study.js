@@ -1,7 +1,6 @@
 import { getProject, projects } from "./project-data.js";
 
-const params = new URLSearchParams(window.location.search);
-const project = getProject(params.get("project"));
+const project = getProject(new URLSearchParams(window.location.search).get("project"));
 
 const title = document.querySelector("#study-title");
 const description = document.querySelector("#study-description");
@@ -11,16 +10,18 @@ const concepts = document.querySelector("#study-concepts");
 const level = document.querySelector("#study-level");
 const breadcrumb = document.querySelector("#study-breadcrumb");
 
-const javaCode = document.querySelector("#java-source");
+const resourceOptions = document.querySelector("#resource-options");
+const resourceTitle = document.querySelector("#resource-title");
+const resourceDescription = document.querySelector("#resource-description");
+const resourceLink = document.querySelector("#resource-source-link");
+const resourceContent = document.querySelector("#resource-content");
 const copyButton = document.querySelector("#copy-code");
-const sourceLink = document.querySelector("#source-file-link");
-const markdownLink = document.querySelector("#markdown-source-link");
-const codePath = document.querySelector("#code-path");
-const markdownContainer = document.querySelector("#markdown-content");
 
 const previousProject = document.querySelector("#previous-project");
 const nextProject = document.querySelector("#next-project");
 
+const loadedResources = new Map();
+let activeResource = null;
 let markdownBasePath = "./";
 
 function escapeHtml(value) {
@@ -49,6 +50,7 @@ function renderInline(value) {
     const href = /^(https?:\/\/|mailto:|#)/i.test(url) ? url : markdownBasePath + url;
     return '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' + label + "</a>";
   });
+
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
 
@@ -75,12 +77,14 @@ function renderMarkdown(markdown) {
       paragraph = [];
     }
   }
+
   function closeList() {
     if (listType) {
       output.push("</" + listType + ">");
       listType = null;
     }
   }
+
   function flushQuote() {
     if (quoteLines.length) {
       output.push("<blockquote>" + quoteLines.map((line) => "<p>" + renderInline(line) + "</p>").join("") + "</blockquote>");
@@ -142,8 +146,8 @@ function renderMarkdown(markdown) {
       flushParagraph();
       closeList();
       flushQuote();
-      const level = heading[1].length;
-      output.push("<h" + level + ">" + renderInline(heading[2]) + "</h" + level + ">");
+      const headingLevel = heading[1].length;
+      output.push("<h" + headingLevel + ">" + renderInline(heading[2]) + "</h" + headingLevel + ">");
       continue;
     }
 
@@ -189,7 +193,6 @@ function renderMarkdown(markdown) {
   return output.join("\n");
 }
 
-
 async function loadFile(path) {
   const response = await fetch(path);
   if (!response.ok) {
@@ -198,11 +201,15 @@ async function loadFile(path) {
   return response.text();
 }
 
-function showError(container, message) {
-  container.innerHTML = '<p class="study-error">' + escapeHtml(message) + "</p>";
+function showError(message) {
+  resourceContent.replaceChildren();
+  const error = document.createElement("p");
+  error.className = "study-error";
+  error.textContent = message;
+  resourceContent.append(error);
 }
 
-function setProjectNavigation(index) {
+function renderProjectsNavigation(index) {
   const previous = projects[index - 1];
   const next = projects[index + 1];
 
@@ -223,6 +230,94 @@ function setProjectNavigation(index) {
   }
 }
 
+function renderResource(resource, content) {
+  resourceContent.replaceChildren();
+
+  if (resource.type === "java") {
+    const pre = document.createElement("pre");
+    pre.className = "java-source";
+    pre.setAttribute("aria-label", "Original Java source code");
+
+    const code = document.createElement("code");
+    code.textContent = content;
+    pre.append(code);
+    resourceContent.append(pre);
+    return;
+  }
+
+  if (resource.type === "markdown") {
+    markdownBasePath = "./" + resource.path.slice(0, resource.path.lastIndexOf("/") + 1);
+    const guide = document.createElement("article");
+    guide.className = "markdown-content";
+    guide.innerHTML = renderMarkdown(content);
+    resourceContent.append(guide);
+    return;
+  }
+
+  throw new Error("Unsupported resource type: " + resource.type);
+}
+
+async function selectResource(resourceId) {
+  const resource = project.materials.find((item) => item.id === resourceId);
+  if (!resource) {
+    showError("This project resource is not registered correctly.");
+    return;
+  }
+
+  activeResource = resource;
+  resourceOptions.querySelectorAll("button").forEach((button) => {
+    const selected = button.dataset.resourceId === resource.id;
+    button.setAttribute("aria-pressed", String(selected));
+  });
+
+  resourceTitle.textContent = resource.label;
+  resourceDescription.textContent = resource.type === "java"
+    ? "The exact original Java source file stored in this repository."
+    : "The study guide explains the original Java implementation without replacing or rewriting it.";
+
+  resourceLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + resource.path;
+  resourceLink.textContent = "Open on GitHub ↗";
+  copyButton.hidden = resource.type !== "java";
+  copyButton.disabled = resource.type !== "java";
+
+  const cached = loadedResources.get(resource.path);
+  if (cached !== undefined) {
+    try {
+      renderResource(resource, cached);
+      if (resource.type === "java") copyButton.disabled = false;
+    } catch (error) {
+      showError("Could not render this resource. " + error.message);
+    }
+    return;
+  }
+
+  resourceContent.innerHTML = '<p class="resource-loading">Loading ' + escapeHtml(resource.label.toLowerCase()) + "…</p>";
+
+  try {
+    const content = await loadFile(resource.path);
+    loadedResources.set(resource.path, content);
+    renderResource(resource, content);
+    if (resource.type === "java") copyButton.disabled = false;
+  } catch (error) {
+    showError("The selected resource could not be loaded. " + error.message);
+  }
+}
+
+function renderResourceOptions() {
+  resourceOptions.replaceChildren();
+
+  project.materials.forEach((resource) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "resource-tab";
+    button.dataset.resourceId = resource.id;
+    button.textContent = resource.label;
+    button.setAttribute("aria-pressed", "false");
+    button.addEventListener("click", () => selectResource(resource.id));
+    resourceOptions.append(button);
+  });
+}
+
 if (!project) {
   document.title = "Project not found — BuildJava.ln";
   title.textContent = "Project not found";
@@ -232,14 +327,13 @@ if (!project) {
   breadcrumb.textContent = "Not found";
   concepts.textContent = "";
   level.textContent = "NO RESULT";
-  showError(javaCode, "No Java source is associated with this address.");
-  showError(markdownContainer, "Return to the home page and choose an available Java exercise.");
-  copyButton.disabled = true;
+  resourceTitle.textContent = "No project selected";
+  resourceDescription.textContent = "Return to the project index and choose an available exercise.";
+  showError("No project resources are associated with this address.");
+  copyButton.hidden = true;
   previousProject.href = "./index.html#projects";
   nextProject.href = "./index.html#projects";
 } else {
-  const projectIndex = projects.findIndex((item) => item.id === project.id);
-
   document.title = project.name + " — BuildJava.ln";
   title.textContent = project.name;
   description.textContent = project.description;
@@ -248,41 +342,34 @@ if (!project) {
   breadcrumb.textContent = project.name;
   concepts.textContent = project.concepts.join(" · ");
   level.textContent = "LEVEL " + project.difficulty.toUpperCase();
-  codePath.textContent = project.javaPath;
 
-  sourceLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.javaPath;
-  markdownLink.href = "https://github.com/duartexz-dev/BuildJava.ln/blob/main/" + project.markdownPath;
-  markdownBasePath = "./" + project.markdownPath.slice(0, project.markdownPath.lastIndexOf("/") + 1);
-  setProjectNavigation(projectIndex);
+  renderProjectsNavigation(projects.findIndex((item) => item.id === project.id));
 
-  loadFile(project.javaPath)
-    .then((source) => {
-      javaCode.textContent = source;
-      copyButton.disabled = false;
-    })
-    .catch((error) => {
-      showError(javaCode, "The Java source could not be loaded. " + error.message);
-      copyButton.disabled = true;
-    });
+  const materialsAreValid = Array.isArray(project.materials) &&
+    project.materials.some((item) => item.id === "code" && item.type === "java") &&
+    project.materials.some((item) => item.id === "didactic" && item.type === "markdown");
 
-  loadFile(project.markdownPath)
-    .then((markdown) => {
-      markdownContainer.innerHTML = renderMarkdown(markdown);
-    })
-    .catch((error) => {
-      showError(markdownContainer, "The study guide could not be loaded. " + error.message);
-    });
+  if (!materialsAreValid) {
+    showError("This project must define an original Java code resource and a study material resource.");
+    resourceTitle.textContent = "Project resources are incomplete";
+    resourceDescription.textContent = "Check the materials array in data/projects.json.";
+    copyButton.hidden = true;
+  } else {
+    renderResourceOptions();
+    selectResource("code");
+  }
 }
 
 copyButton.addEventListener("click", async () => {
-  const source = javaCode.textContent;
-  if (!source || copyButton.disabled) return;
+  if (!activeResource || activeResource.type !== "java" || copyButton.disabled) return;
+  const source = loadedResources.get(activeResource.path);
+  if (!source) return;
 
   try {
     await navigator.clipboard.writeText(source);
     copyButton.textContent = "Copied";
     window.setTimeout(() => {
-      copyButton.textContent = "Copy Java";
+      copyButton.textContent = "Copy original code";
     }, 1600);
   } catch (error) {
     copyButton.textContent = "Copy unavailable";
