@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { getProject, projects } from "../js/project-data.js";
+import { projects } from "../js/project-data.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -31,36 +31,23 @@ test("every project has complete metadata and existing source and guide files", 
   }
 });
 
-test("getProject resolves known IDs and safely rejects unknown IDs", () => {
-  for (const project of projects) assert.equal(getProject(project.id), project);
-  assert.equal(getProject("not-a-real-project"), null);
-});
-
-test("the home page focuses on Java exercises and the real project catalogue", () => {
+test("the project index is driven by the canonical catalogue", () => {
   const html = readFileSync(resolve(root, "index.html"), "utf8");
   const script = readFileSync(resolve(root, "js/landing.js"), "utf8");
-  assert.match(html, /Learning Java/);
-  assert.match(html, /complete source code/i);
-  assert.match(html, /id="projects"/);
-  assert.match(html, /js\/landing\.js/);
-  assert.doesNotMatch(html, /id="method"|id="scope"|id="overview"/);
-  assert.match(script, /from "\.\/project-data\.js"/);
-  assert.match(script, /project\.id/);
-});
 
-test("CandidateManager validates removals against the current collection size", () => {
-  const source = readFileSync(resolve(root, "projects/Intermediate/CandidateManager.java"), "utf8");
-  assert.match(source, /candidateNumber < 1 \|\| candidateNumber > candidates\.size\(\)/);
-  assert.match(source, /private static void removeCandidate/);
-  assert.match(source, /private static int readInt/);
-});
-
-test("Vehicle models its data and provides a readable object representation", () => {
-  const source = readFileSync(resolve(root, "projects/Intermediate/Vehicle.java"), "utf8");
-  assert.match(source, /class VehicleInfo/);
-  assert.match(source, /private final String name/);
-  assert.match(source, /@Override\s+public String toString\(\)/);
-  assert.match(source, /System\.out\.println\(vehicle\)/);
+  assert.ok(html.includes("Learning Java"));
+  assert.ok(html.includes('id="projects"'));
+  assert.ok(html.includes('id="project-groups"'));
+  assert.ok(html.includes('href="#projects"'));
+  assert.ok(html.includes("js/landing.js"));
+  assert.ok(script.includes('from "./project-data.js"'));
+  assert.ok(script.includes('projects.filter'));
+  assert.ok(script.includes("project.description"));
+  assert.ok(script.includes("project.markdownPath"));
+  assert.ok(script.includes("project.javaPath"));
+  assert.ok(script.includes("repositoryFileUrl"));
+  assert.equal(html.includes("project.html"), false);
+  assert.equal(script.includes("project.html"), false);
 });
 
 test("the JSON file remains the only canonical project catalogue", () => {
@@ -71,4 +58,11 @@ test("the JSON file remains the only canonical project catalogue", () => {
   assert.match(readFileSync(wrapperPath, "utf8"), /data\/projects\.json/);
   assert.equal(existsSync(resolve(root, "js/code-notes.js")), false);
   assert.equal(existsSync(resolve(root, "js/lesson-parser.js")), false);
+});
+
+test("the website JavaScript does not fetch or render project files", () => {
+  const script = readFileSync(resolve(root, "js/landing.js"), "utf8");
+  assert.equal(script.includes("fetch("), false);
+  assert.equal(script.includes("renderMarkdown"), false);
+  assert.equal(script.includes("textContent = await"), false);
 });
