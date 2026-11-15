@@ -28,49 +28,59 @@ test("every Java project has the same complete study-guide structure", () => {
     assert.ok(existsSync(guidePath), project.id + " is missing its study guide");
 
     const guide = readFileSync(guidePath, "utf8");
-    assert.match(guide, /^#\s+.+/m, project.id + " needs a title");
+    assert.ok(guide.startsWith("# "), project.id + " needs a title");
 
     let previousHeadingIndex = -1;
     guideSections.forEach((heading, index) => {
-      const expression = new RegExp("^##\\s+" + (index + 1) + "\\.\\s+" + heading + "$", "m");
-      const match = expression.exec(guide);
-      assert.ok(match, project.id + " is missing guide section " + (index + 1) + ": " + heading);
-      assert.ok(match.index > previousHeadingIndex, project.id + " has guide sections out of order");
-      previousHeadingIndex = match.index;
+      const expectedHeading = "## " + (index + 1) + ". " + heading;
+      const matchIndex = guide.indexOf(expectedHeading);
+      assert.ok(matchIndex >= 0, project.id + " is missing guide section: " + expectedHeading);
+      assert.ok(matchIndex > previousHeadingIndex, project.id + " has guide sections out of order");
+      previousHeadingIndex = matchIndex;
     });
 
-    assert.doesNotMatch(guide, /^##\s+Guided code walkthrough/m, project.id + " still has duplicated interface-only content");
+    assert.equal(guide.includes("## Guided code walkthrough"), false, project.id + " has duplicated interface-only content");
     const sourceReference = "../" + project.javaPath.replace(/^projects\//, "");
     assert.ok(guide.includes(sourceReference), project.id + " guide must link to its exact Java source");
   }
 });
 
-test("the study page puts the complete Java source before the full study guide", () => {
-  const html = readFileSync(resolve(root, "project.html"), "utf8");
-  const script = readFileSync(resolve(root, "js/project-study.js"), "utf8");
+test("each project card contains its description and two direct GitHub file links", () => {
+  const html = readFileSync(resolve(root, "index.html"), "utf8");
+  const script = readFileSync(resolve(root, "js/landing.js"), "utf8");
   const styles = readFileSync(resolve(root, "styles/site.css"), "utf8");
 
-  assert.ok(html.indexOf('class="source-panel"') < html.indexOf('class="guide-panel"'));
-  assert.match(html, /class="java-source"/);
-  assert.match(html, /id="java-source"/);
-  assert.match(html, /id="markdown-content"/);
-  assert.match(html, /id="copy-code"/);
-  assert.match(script, /loadFile\(project\.javaPath\)/);
-  assert.match(script, /loadFile\(project\.markdownPath\)/);
-  assert.match(script, /renderMarkdown\(markdown\)/);
-  assert.match(styles, /grid-template-columns:\s*minmax\(0, 1\.42fr\)\s+minmax\(300px, \.78fr\)/);
-  assert.match(styles, /\.markdown-content[\s\S]*?font-size:\s*12px/);
-  assert.doesNotMatch(html + script, /guided-code|explanation-index|selectExplanation|previous-section|next-section/);
+  assert.ok(html.includes('id="project-groups"'));
+  assert.ok(script.includes("project.markdownPath"));
+  assert.ok(script.includes("project.javaPath"));
+  assert.ok(script.includes("repositoryFileUrl"));
+  assert.ok(script.includes("Study guide"));
+  assert.ok(script.includes("Java source"));
+  assert.ok(script.includes("project-description"));
+  assert.ok(script.includes("project-actions"));
+  assert.ok(styles.includes(".project-card"));
+  assert.ok(styles.includes(".project-actions"));
+  assert.ok(styles.includes(".project-action-guide"));
+  assert.ok(styles.includes(".project-action-source"));
+
+  assert.equal(existsSync(resolve(root, "project.html")), false, "the site should not have a separate study page");
+  assert.equal(existsSync(resolve(root, "js/project-study.js")), false, "the site should not render file contents");
 });
 
-test("the Java source remains larger than the website JavaScript layer", () => {
-  const javaFiles = projects.map((project) => project.javaPath);
-  const appScripts = ["js/landing.js", "js/project-data.js", "js/project-study.js"];
+test("JavaSage describes the two-link project index", () => {
+  const agent = readFileSync(resolve(root, ".github/agents/JavaSage.agent.md"), "utf8");
 
-  const javaBytes = javaFiles.reduce((total, path) => {
-    return total + readFileSync(resolve(root, path)).byteLength;
+  assert.ok(agent.includes("direct links to its Markdown guide and original Java source"));
+  assert.ok(agent.includes("static Java project index"));
+  assert.equal(agent.includes("project.html and js/project-study.js load"), false);
+  assert.equal(agent.includes("copy-code action, and previous/next navigation"), false);
+});
+
+test("the Java source remains larger than the small website JavaScript layer", () => {
+  const javaBytes = projects.reduce((total, project) => {
+    return total + readFileSync(resolve(root, project.javaPath)).byteLength;
   }, 0);
-  const javascriptBytes = appScripts.reduce((total, path) => {
+  const javascriptBytes = ["js/landing.js", "js/project-data.js"].reduce((total, path) => {
     return total + readFileSync(resolve(root, path)).byteLength;
   }, 0);
 
@@ -78,14 +88,6 @@ test("the Java source remains larger than the website JavaScript layer", () => {
     javaBytes > javascriptBytes,
     "Java source (" + javaBytes + " bytes) should remain larger than website JavaScript (" + javascriptBytes + " bytes)"
   );
-});
-
-test("JavaSage applies the same guide standard to future projects", () => {
-  const agent = readFileSync(resolve(root, ".github/agents/JavaSage.agent.md"), "utf8");
-  for (const heading of guideSections) {
-    assert.ok(agent.includes("**" + heading + "**"), "JavaSage is missing the required guide heading: " + heading);
-  }
-  assert.match(agent, /Do not create a second "Guided code walkthrough"/);
 });
 
 test("each guide identifies the matching Java source filename", () => {
