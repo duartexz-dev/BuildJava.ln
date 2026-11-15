@@ -6,7 +6,14 @@
 
 **A Java-first record of learning through practical exercises, original source code, and careful explanations.**
 
-[Open the website](https://duartexz-dev.github.io/BuildJava.ln/) · [Browse the Java source](./projects/)
+[Open the website](https://duartexz-dev.github.io/BuildJava.ln/) · [GitHub profile](https://github.com/duartexz-dev) · [Instagram](https://www.instagram.com/duarteeo.dev/) · [YouTube](https://www.youtube.com/@duarteeo-dev)
+
+<p align="center">
+  <strong>10 of 20 planned projects · 50%</strong><br />
+  <code>██████████░░░░░░░░░░</code>
+</p>
+
+The progress indicator tracks the ten currently catalogued Java exercises against the twenty-project learning goal.
 
 ## Purpose
 
