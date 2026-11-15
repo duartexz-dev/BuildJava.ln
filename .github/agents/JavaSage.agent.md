@@ -169,7 +169,6 @@ The current website is a static Java project index. Each exercise appears as one
 
 - data/projects.json is the canonical project catalog.
 - js/project-data.js is a small JSON-import wrapper that exports projects and getProject(id).
-- js/landing.js renders project cards from the catalog.
 - js/landing.js renders one card per project from the canonical catalog. Each card contains its description and two direct GitHub links: `markdownPath` for the guide and `javaPath` for the original Java source.
 - projects/md/ stores one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs for new Java projects.
