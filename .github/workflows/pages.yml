@@ -41,27 +41,30 @@ jobs:
       - name: Check JavaScript syntax
         run: npm run check
 
-      - name: Test project catalogue, guides, and source links
+      - name: Test project catalogue, original code, and study guides
         run: npm test
 
-      - name: Compile all Java exercises
+      - name: Compile all original Java exercises
         run: |
           mkdir -p "$RUNNER_TEMP/buildjava-classes"
           javac -d "$RUNNER_TEMP/buildjava-classes" $(find projects -type f -name "*.java" -print)
 
-      - name: Smoke-test representative Java programs
+      - name: Smoke-test representative original Java programs
         shell: bash
         run: |
           set -euo pipefail
           classes="$RUNNER_TEMP/buildjava-classes"
 
-          candidate_output="$(printf '4\n20\n4\n20\n0\n' | java -cp "$classes" Intermediate.CandidateManager)"
-          grep -Fq "Removed: Vinicius Teixeira" <<< "$candidate_output"
-          grep -Fq "Invalid position. Choose a number between 1 and 19." <<< "$candidate_output"
+          candidate_output="$(printf '4\n20\nfalse\n' | java -cp "$classes" Intermediate.CandidateManager)"
+          candidate_occurrences="$(grep -Fc "Vinicius Teixeira" <<< "$candidate_output" || true)"
+          test "$candidate_occurrences" -eq 1
 
           vehicle_output="$(printf '2020\nCivic\n155\nHonda\nSilver\n' | java -cp "$classes" Intermediate.Vehicle)"
-          grep -Fq "Vehicle: Civic" <<< "$vehicle_output"
+          grep -Fq "Name: Civic" <<< "$vehicle_output"
+          grep -Fq "Year: 2020" <<< "$vehicle_output"
+          grep -Fq "Horse power: 155" <<< "$vehicle_output"
           grep -Fq "Brand: Honda" <<< "$vehicle_output"
+          grep -Fq "Vehicle color: Silver" <<< "$vehicle_output"
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
