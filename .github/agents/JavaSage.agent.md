@@ -175,7 +175,7 @@ The current website is a static Java project index. Each exercise appears as one
 - js/project-data.js is a small JSON-import wrapper that exports the canonical projects array.
 - js/landing.js renders one card per project from the canonical catalog. Each card contains its description and two direct GitHub links: markdownPath for the guide and javaPath for the original Java source.
 - projects/md/ stores one complete study guide per Java exercise.
-- tests/ validates catalogue integrity, guide structure, and the two direct links using Node.js.
+- tests/ validates catalogue integrity, guide structure, the two direct links, and the README progress count using Node.js.
 - .github/workflows/pages.yml runs JavaScript checks, Node.js tests, compiles the Java exercises, and deploys the static website.
 - README.md displays the SVG progress bar at assets/progress.svg. It represents the number of exercises currently catalogued out of the 20-exercise goal, not the number of exercises mastered or completed. Update its percentage, bar fill, and labels whenever the catalogue count changes.
 
