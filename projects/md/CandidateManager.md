@@ -2,205 +2,192 @@
 
 ## 1. Overview
 
-**CandidateManager** is a console exercise that stores candidate names in an `ArrayList`. A menu lets the user add, list, search, and remove names or display the current count. The program repeats the menu while the user answers `true` to the continuation prompt.
+**CandidateManager** is a console application that manages a list of candidate names. The user interacts with a menu to add, list, search, remove, and count candidates. The exercise brings together object-oriented programming foundations, collections, methods, loops, input validation, and control flow.
 
-This guide explains the original implementation as it exists in [CandidateManager.java](../Intermediate/CandidateManager.java). It does not silently replace the original code with a refactored version.
+The program starts with twenty example names. Changes exist only in memory while the application is running.
 
 ## 2. Learning goals
 
-After studying this program, you should be able to:
+After studying this source, you should be able to:
 
-- Create a resizable `ArrayList<String>` from an initial group of values.
-- Use `Scanner` to read numbers, names, and boolean responses.
-- Explain how a `do-while` loop repeats a menu.
-- Use `switch`, `case`, `break`, and `default` to select an action.
-- Add and search for values with `add()`, `contains()`, and `indexOf()`.
-- Display collection elements with `for` and `while` loops.
-- Convert a one-based position shown to a person into a zero-based list index.
-- Identify why an unchecked index can cause an exception.
+- Explain why a variable declared as `List<String>` can reference an `ArrayList<String>`.
+- Create a resizable list from an initial group of values.
+- Separate a program into methods with different responsibilities.
+- Distinguish a method parameter from the argument passed when the method is called.
+- Explain the difference between `void`, `int`, and `String` return types.
+- Use `while`, `switch`, `if`, and early `return` statements to control execution.
+- Validate console input with `Scanner.hasNextInt()`.
+- Convert a human-friendly list position into a zero-based Java index.
+- Explain how try-with-resources closes a resource automatically.
 
 ## 3. Prerequisites
 
-You should understand variables, strings, integer values, boolean values, conditions, loops, and basic console input.
+You should recognize variables, primitive types, strings, conditions, loops, methods, and basic console input.
 
-An *array list* is a collection that stores several elements and can grow or shrink. An *index* is the zero-based position used by Java to access an element. A *boolean* stores either `true` or `false`.
+A *collection* stores multiple values in one object. A *method* is a named block of code that performs a task. A *parameter* receives a value when a method is called; the value supplied at the call site is the *argument*.
 
 ## 4. Project and file structure
 
-The source file is [CandidateManager.java](../Intermediate/CandidateManager.java), inside the `Intermediate` package.
+The source is [CandidateManager.java](../Intermediate/CandidateManager.java), inside the `Intermediate` package.
 
-The program is contained in one public class, `CandidateManager`, with one entry point: `main(String[] args)`. The menu actions are written directly inside the `switch`; the original version does not separate them into helper methods.
+The program has one public class, `CandidateManager`. Its `main` method coordinates the application, while private static methods handle the menu actions:
 
-The imports provide:
-- `Scanner` for reading console input.
-- `ArrayList` for a resizable collection.
-- `Arrays` for creating the initial group of names with `Arrays.asList(...)`.
+| Method | Return type | Responsibility |
+| --- | --- | --- |
+| `showMenu()` | `void` | Displays the available options. |
+| `readInt(...)` | `int` | Reads and returns a valid integer. |
+| `readName(...)` | `String` | Reads a name and removes surrounding whitespace. |
+| `addCandidate(...)` | `void` | Validates and adds a name. |
+| `listCandidates(...)` | `void` | Displays all stored names. |
+| `searchCandidate(...)` | `void` | Looks for an exact name match. |
+| `removeCandidate(...)` | `void` | Validates a position and removes that entry. |
+
+The list is created in `main` and passed to the methods that need to read or change it. Each method receives a reference to the same list object, so an addition or removal is visible to later menu actions.
 
 ## 5. Program execution
 
-1. Java starts in `main` and creates a scanner for keyboard input.
-2. The program builds an `ArrayList` containing twenty sample names.
-3. The variable `shouldContinue` starts as `false`, but the `do-while` body executes once before this value is checked.
-4. The program prints the menu, reads an integer option, and clears the rest of that input line.
-5. The `switch` executes the selected case. Most cases ask whether the user wants another menu cycle and store the answer in `shouldContinue`.
-6. The loop repeats while `shouldContinue` is true.
-7. When the loop ends, `scanner.close()` closes the input reader.
-
-The original option 0 is not an unconditional exit: it asks whether the user wants to continue. Answering `true` displays the menu again.
+1. Java starts in `main`. The program builds an `ArrayList` from twenty sample names and opens a `Scanner` inside a try-with-resources block.
+2. The `while` loop displays the menu and calls `readInt` to obtain an option.
+3. A `switch` statement sends options 1–5 to the matching method. Option 0 changes `running` to `false`, which ends the loop.
+4. `readInt` keeps asking until the next token is an integer. When the input is invalid, it consumes the rest of that line before trying again.
+5. Methods that change the list update the same collection created in `main`. The list and its current size are therefore shared by all menu actions.
+6. When the user exits, execution leaves the try block and Java closes the `Scanner` automatically.
 
 ## 6. Complete code walkthrough
 
 ### 6.1 Package and imports
 
-`package Intermediate;` places the class in the `Intermediate` package.
+`package Intermediate;` places the class in the `Intermediate` package. The imports provide the collection and input types:
 
-The imports make three Java library classes available:
-- `Scanner` reads values entered in the console.
-- `ArrayList` stores a resizable collection.
-- `Arrays` provides `asList(...)`, which creates the initial group of names.
+- `ArrayList` is the resizable list implementation.
+- `Arrays` provides `asList(...)`, which turns the initial names into a list.
+- `List` is the interface used as the variable type.
+- `Scanner` reads the user's console input.
 
-### 6.2 Declaring the class and main method
+Using the `List` interface on the left side keeps the code less dependent on one concrete list implementation.
 
-`public class CandidateManager` declares the public class. Its filename matches the class name.
+### 6.2 Creating the initial collection
 
-`public static void main(String[] args)` is the entry point. The `public` modifier allows the Java launcher to call it, `static` means it belongs to the class, and `void` means it does not return a value.
+`List<String> candidates = new ArrayList<>(Arrays.asList(...));` creates a new resizable `ArrayList` containing the twenty initial names.
 
-### 6.3 Creating the scanner and candidate list
+The `<String>` type argument means that the collection stores strings. `Arrays.asList(...)` supplies the initial elements; passing that result to the `ArrayList` constructor creates a list that can later grow and shrink.
 
-`Scanner scanner = new Scanner(System.in);` creates a scanner that reads from standard input, normally the keyboard.
+### 6.3 Managing the scanner and loop state
 
-`ArrayList<String> candidates = new ArrayList<>(Arrays.asList(...));` creates a resizable list containing the twenty sample names.
+`try (Scanner scanner = new Scanner(System.in))` opens the input reader as a resource. A try-with-resources statement closes it automatically when the block ends, including when an exception interrupts the block.
 
-The generic type `<String>` means that this list is intended to store strings. `Arrays.asList(...)` supplies the initial values, and the `ArrayList` constructor copies those values into a collection that can later add or remove entries.
+The primitive variable `boolean running = true` controls the menu loop. The loop continues while that value remains true.
 
-### 6.4 Controlling repetition with shouldContinue
+### 6.4 Repeating the menu and choosing an action
 
-`boolean shouldContinue = false;` declares the variable used by the loop condition.
+`while (running)` repeats the menu. Each cycle calls `showMenu()`, then stores the result of `readInt(...)` in `option`.
 
-The program then enters `do {` rather than a regular `while`. A `do-while` always executes its body at least once, so the initial false value does not prevent the first menu from appearing.
+`switch (option)` selects one branch:
 
-At the bottom, `while (shouldContinue);` checks whether another cycle should run.
+- `case 1` adds a candidate.
+- `case 2` lists the candidates.
+- `case 3` searches by name.
+- `case 4` removes a candidate.
+- `case 5` prints `candidates.size()`.
+- `case 0` changes `running` to false and prints the closing message.
+- `default` handles an option outside the supported range.
 
-### 6.5 Printing the menu and reading the option
+Each `break` exits the current switch branch. It does not end the surrounding `while` loop. The loop ends because the exit branch changes the boolean condition.
 
-The consecutive `System.out.println(...)` statements display the menu.
+### 6.5 Displaying the menu
 
-`int option = scanner.nextInt();` reads the selected number. Because `nextInt()` reads the numeric token but does not consume the line break created by Enter, `scanner.nextLine();` consumes the remainder of that line.
+`showMenu()` has the return type `void`, so it performs an action but does not return a value. It prints the available choices and does not need parameters because it does not depend on the candidate list or scanner.
 
-That second call is important before cases such as option 1 or 3 use `nextLine()` to read a full name. Without it, the next line-reading call could return the leftover empty line.
+### 6.6 Reading and validating an integer
 
-### 6.6 Selecting a menu action with switch
+`readInt(Scanner scanner, String prompt)` receives two parameters: the existing scanner and the message to display.
 
-`switch (option)` checks the integer and enters the matching `case`.
+Inside `while (true)`, the method prints the prompt and checks `scanner.hasNextInt()`:
 
-A `break` exits the current switch case. It does not end the surrounding `do-while` loop. The loop ends only when its condition becomes false.
+- When the next token is an integer, `nextInt()` reads it. The following `nextLine()` consumes the remainder of that input line. The `return value` statement sends the integer back to the caller and immediately exits this method.
+- When the token is not an integer, `nextLine()` discards that invalid line and the method prints an instruction before repeating.
 
-The `default` branch handles an integer that does not match any listed case.
+The return type is `int` because the caller needs the selected numeric option. The infinite-looking loop is safe in ordinary interactive use because a valid integer causes the method to return.
 
-### 6.7 Case 1: adding a candidate
+### 6.7 Reading a candidate name
 
-The program prints a prompt and reads the full name with `scanner.nextLine()`.
+`readName(Scanner scanner, String prompt)` prints the requested message and returns `scanner.nextLine().trim()`.
 
-`candidates.add(name)` appends the entered string to the end of the list. The program then prints a confirmation and the current collection.
+`nextLine()` reads the entire line, including spaces between first and last names. `trim()` removes whitespace at the beginning and end. The method returns a `String`, allowing callers to reuse the same input behavior.
 
-Finally, `scanner.nextBoolean()` reads whether the user wants another menu cycle and stores the result in `shouldContinue`.
+### 6.8 Adding a candidate
 
-The original code does not reject blank names or duplicates.
+`addCandidate(List<String> candidates, Scanner scanner)` calls `readName(...)` to get the name. If `name.isEmpty()` is true, it prints an error and uses `return;` to stop this method early.
 
-### 6.8 Case 2: listing candidates
+This `return;` does not close the application. It only finishes the current method, so the menu loop in `main` can continue. Otherwise, `candidates.add(name)` appends the name to the shared list.
 
-The condition `candidates.size() <= 0` checks whether the list is empty. When it is, the program prints a message.
+### 6.9 Listing candidates
 
-The `for` loop starts at index zero and continues while `counter < candidates.size()`. Each iteration prints `candidates.get(counter)`, so the names appear in list order.
+`listCandidates(List<String> candidates)` first checks whether the collection is empty. If it is, the method prints a message and returns.
 
-After listing, the program asks whether to continue and reads a boolean response. The semicolon after the loop is an empty statement; it has no useful effect here.
+Otherwise, a `for` loop visits each index from zero up to (but not including) `candidates.size()`. The display uses `index + 1` so the user sees positions beginning at 1. The actual Java list index still begins at 0.
 
-### 6.9 Case 3: searching for a name
+### 6.10 Searching by name
 
-The program reads the search text with `scanner.nextLine()`.
+`searchCandidate(...)` reads a name and calls `candidates.indexOf(name)`. This method returns the index of the first exact match, or `-1` when no match exists.
 
-`candidates.contains(nameSearch)` checks whether the exact string exists in the list. If it does, `candidates.indexOf(nameSearch)` returns the index of its first occurrence. If it does not, the program displays `Candidate not found.`
+The condition `index == -1` detects the missing case. When a match exists, the program displays the stored name and converts its zero-based index to a one-based position for the user.
 
-The displayed value is a zero-based index, even though the removal menu displays positions beginning at one. This is a difference in presentation between the two cases.
+The search is case-sensitive because `indexOf` compares the string contents exactly.
 
-The search is case-sensitive. A name with different capitalization is treated as a different string.
+### 6.11 Removing a candidate safely
 
-### 6.10 Case 4: displaying and removing a candidate
+`removeCandidate(...)` first checks whether the list is empty. If it is, the method returns before asking for a position.
 
-The variable `candidateIndex` starts at zero. The `while` loop displays each name with `candidateIndex + 1`, so the person sees positions beginning at one. The index itself is still zero-based.
+After displaying the current list, it reads `candidateNumber`. The condition `candidateNumber < 1 || candidateNumber > candidates.size()` rejects positions below 1 or above the current number of candidates.
 
-The program then reads `candidateNumber` and calculates `candidatePosition = candidateNumber - 1`. This converts the displayed one-based position into the index expected by Java.
-
-`candidates.remove(candidatePosition)` removes the element at that index. The following `for` loop displays the remaining candidates.
-
-**Important limitation of the original code:** there is no range check before `remove(...)`. Entering zero, a negative number, or a number greater than the last valid position can cause an `IndexOutOfBoundsException`. The program does not catch that exception, so an invalid position can terminate the application.
-
-### 6.11 Case 5: showing the total
-
-`candidates.size()` returns the current number of elements. The `printf` statement inserts that value into the message.
-
-The program then reads another boolean response to decide whether the menu repeats.
-
-### 6.12 Case 0 and the default case
-
-Case 0 prints a message that asks whether the user wants to continue. The entered boolean is stored in `shouldContinue`. Therefore, choosing 0 does not itself force the loop to stop.
-
-The `default` branch prints an invalid-option message and sets `shouldContinue = true`. It does not ask for a boolean response; the menu simply repeats.
-
-### 6.13 Closing the scanner
-
-After the loop ends, `scanner.close()` closes the scanner and its underlying input stream. In this original version, the scanner is closed explicitly rather than with try-with-resources.
+A valid position is converted with `candidateNumber - 1` before calling `candidates.remove(...)`. The removed name is stored in `removedCandidate` and displayed. Checking the current `size()` prevents a stale position such as 20 from being accepted after the list has shrunk to 19 entries.
 
 ## 7. Key Java concepts in context
 
-| Concept | Example | What it does here |
+| Concept | Where it appears | Why it matters |
 | --- | --- | --- |
-| Generic collection | `ArrayList<String>` | Stores multiple candidate names as strings. |
-| Initial collection values | `Arrays.asList(...)` | Supplies the twenty starting names. |
-| `do-while` | `do { ... } while (shouldContinue);` | Guarantees that the menu appears once before the condition is checked. |
-| `switch` | `switch (option)` | Routes the selected number to a menu action. |
-| `break` | End of each case | Exits the current switch branch. |
-| Collection size | `candidates.size()` | Reports how many names are currently stored. |
-| Membership search | `contains(nameSearch)` | Checks whether an exact name is present. |
-| Index search | `indexOf(nameSearch)` | Returns the first matching zero-based index. |
-| Add and remove | `add(name)`, `remove(candidatePosition)` | Changes the contents of the shared list. |
-| Boolean input | `nextBoolean()` | Decides whether another menu cycle runs. |
+| Interface and implementation | `List<String>` and `new ArrayList<>()` | The variable depends on the list contract, not only on ArrayList. |
+| Generics | `List<String>` | The compiler checks that list elements are strings. |
+| Arguments and parameters | Calls to `addCandidate(...)`, `readInt(...)`, and other methods | Values are passed into methods so each method can do one job. |
+| Return values | `readInt`, `readName`, `indexOf`, `size`, `isEmpty` | A caller can use information returned by another method. |
+| `void` and `return;` | Menu action methods | A method can perform an action without returning data, and can stop early. |
+| `break` | The `switch` statement | It exits the current switch branch, not the menu loop. |
+| Early return | Empty-name, empty-list, and invalid-position checks | It avoids running code that cannot succeed. |
+| Try-with-resources | The Scanner block | It closes the resource automatically. |
 
 ## 8. Example execution
 
-A normal removal sequence can be:
+A representative sequence is:
 
-1. Choose option 4.
-2. The program displays the twenty names with positions from 1 to 20.
-3. Enter `20`.
-4. The program subtracts one, removes the element at index 19, and prints the remaining names.
-5. Enter `false` when asked whether to continue.
-6. The loop ends and the scanner is closed.
+1. Choose option 4 to remove a candidate.
+2. The program lists twenty names and asks for a position.
+3. Enter `20`; the program removes the twentieth name.
+4. Choose option 4 again. The list now contains nineteen names.
+5. Enter `20` again. The program rejects it because the valid range is now 1–19.
+6. Choose option 5 to see the current total, then choose option 0 to exit.
 
-In this example, the twentieth name is removed. This demonstration uses a valid position; the original program does not protect against invalid positions.
+The important detail is that the removal check uses the list's current size, not the original number of sample names.
 
 ## 9. Limitations and common mistakes
 
-- The removal operation does not validate the selected position. An invalid number can throw an exception and terminate the program.
-- Search is case-sensitive and returns only the first occurrence of a duplicated name.
-- The search result displays a zero-based index, while the removal list displays one-based positions.
-- Blank names and duplicate names can be added.
-- Option 0 asks whether to continue rather than exiting unconditionally.
-- Most actions require an additional `true` or `false` response before the next menu.
-- The list exists only in memory. All changes are lost when the program exits.
-- The scanner is closed explicitly and is not protected by try-with-resources.
+- The candidates exist only in memory and disappear when the program exits.
+- Search is exact and case-sensitive. The program does not treat `Ana Silva` and `ana silva` as the same name.
+- Duplicate names are allowed.
+- Menu input is checked for integer type, but unsupported integer values are only reported as invalid options.
+- A blank name is rejected, but the program does not enforce a minimum name length or other personal-data rules.
+- If standard input closes before a valid integer is entered, the retry loop has no explicit end-of-input handling.
 
 ## 10. Practice and extensions
 
-1. Validate the removal position before calling `remove(...)`.
-2. Display search results using a one-based position.
-3. Reject blank names and prevent duplicate entries.
-4. Extract the add, list, search, and remove actions into separate methods.
-5. Replace the boolean continuation question with a clearer menu option that exits directly.
-6. Save the list to a file so candidates remain available after the application closes.
+1. Change the search to ignore letter case by comparing with `equalsIgnoreCase()`.
+2. Reject duplicate names before adding them.
+3. Add an edit operation while preserving the same position validation.
+4. Move the list operations into a separate class and keep `main` focused on the menu.
+5. Save and reload the candidates from a text file.
 
 ## 11. Summary and source
 
-The original CandidateManager practices collections, console input, menu selection, loops, searching, and index conversion. Its most important weakness is that the removal index is not validated before it is used.
+CandidateManager combines a shared `ArrayList`, methods, menu control flow, input validation, and safe list-index handling. The key design idea is to let `main` coordinate the application while small methods perform individual tasks.
 
 Source: [CandidateManager.java](../Intermediate/CandidateManager.java).
