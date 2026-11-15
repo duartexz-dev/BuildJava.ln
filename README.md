@@ -24,10 +24,10 @@ This is a record of practical learning, not a claim that the exercises are produ
 | 04 | [JoKenPo](./projects/Beginner/JoKenPo.java) | Random, conditions, loops | Beginner |
 | 05 | [LoginIntermediary](./projects/Intermediate/LoginIntermediary.java) | String comparison, boolean logic, while | Intermediate |
 | 06 | [bulletin](./projects/Intermediate/bulletin.java) | Classes, objects, constructors | Intermediate |
-| 07 | [Vehicle](./projects/Intermediate/Vehicle.java) | Object state, constructors, toString | Intermediate |
+| 07 | [Vehicle](./projects/Intermediate/Vehicle.java) | Classes, objects, constructors, fields | Intermediate |
 | 08 | [DeveloperProfile](./projects/Intermediate/DeveloperProfile.java) | Objects, ArrayList, enhanced for | Intermediate |
 | 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
-| 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | Methods, collections, validation, menu flow | Intermediate |
+| 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | ArrayList, switch, do-while, index handling | Intermediate |
 
 ## How each project is taught
 
