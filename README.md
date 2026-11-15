@@ -68,14 +68,14 @@ Requirements: Java 21 or later.
 
 Compile and run CandidateManager:
 
-```bash
+```console
 javac -d out projects/Intermediate/CandidateManager.java
 java -cp out Intermediate.CandidateManager
 ```
 
 Compile and run Calculator:
 
-```bash
+```console
 javac -d out projects/Beginner/Calculator.java
 java -cp out Calculator
 ```
@@ -92,7 +92,7 @@ Requirements: Node.js 22 or later and Java 21 or later.
 
 Run the repository checks:
 
-```bash
+```console
 npm run check
 npm test
 ```
