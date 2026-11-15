@@ -35,15 +35,17 @@ Open a project on the [website](https://duartexz-dev.github.io/BuildJava.ln/) an
 
 Every guide follows the same eleven-section learning structure:
 
-1. **Overview and learning goals** — what the program does and what the reader should understand.
-2. **Prerequisites and structure** — the minimum background, package, imports, classes, and related files.
-3. **Program execution** — the real path from `main` through the methods and branches.
-4. **Complete code walkthrough** — meaningful statements explained in source order, including types, fields, constructors, parameters, return values, and control flow.
-5. **Java concepts in context** — why each concept is used in this exact implementation.
-6. **Example execution** — a realistic interaction based on the actual program.
-7. **Limitations and common mistakes** — existing constraints or defects, separated from possible improvements.
-8. **Practice and extensions** — small next steps that build on the concepts already present.
-9. **Summary and source** — a concise recap and a link to the original Java file.
+1. **Overview** — what the program does.
+2. **Learning goals** — what the learner should understand.
+3. **Prerequisites** — the concepts needed before reading the code.
+4. **Project and file structure** — the source file, package, imports, and related classes.
+5. **Program execution** — the actual path through the program.
+6. **Complete code walkthrough** — the implementation explained in source order.
+7. **Key Java concepts in context** — why each language feature is used here.
+8. **Example execution** — input and output that match the source.
+9. **Limitations and common mistakes** — real defects and constraints.
+10. **Practice and extensions** — exercises that build on the existing code.
+11. **Summary and source** — a recap and the exact Java file link.
 
 Explanations must describe what the source actually does. They must not invent features, validation, output, or behavior that has not been implemented.
 
