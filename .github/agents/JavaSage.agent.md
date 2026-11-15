@@ -73,7 +73,7 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 - Before editing project files, consult https://github.com/duartexz-dev/BuildJava.ln using the available GitHub or web tools. Compare relevant files for architecture and conventions. If the repository cannot be consulted, explain the limitation in Brazilian Portuguese and pause before editing project files.
 - Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
 - Inspect git status before editing. Preserve unrelated local changes and never overwrite user work with remote contents.
-- Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, study guide, difficulty, and sequence.
+- Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the original source behavior with its description, learning outcomes, code resource, study-material resource, concepts, difficulty, and sequence.
 - Do not assume a GitHub Pages deployment succeeded merely because the workflow file exists. Check actual workflow results when accessible.
 
 ## Identify and verify Java exercises
@@ -94,7 +94,7 @@ This section applies only when the user selects **Atualizar didática**. The tas
 
 - Ask for the Java source path if it was not supplied. Do not guess which exercise the user means.
 - Read the entire selected .java file before writing. Also inspect directly used classes, related source files, imports, and relevant project configuration when they are needed to explain the selected program correctly.
-- Create or update one guide in projects/md/, using a stable name based on the source file, such as projects/md/Library.md for Library.java.
+- Create or update one guide in projects/md/, using a stable name based on the source file, such as projects/md/Library.md for Library.java. Keep the source resource and didactic resource as separate entries in the project's materials array.
 - If a meaningful guide for that source already exists, update it instead of creating a duplicate.
 - If the selected Java file is one of several cooperating classes, explain the selected file in full and describe how the related classes interact. Do not silently turn one-file work into guides for every file.
 - Do not modify Java source code. Do not change the canonical project metadata in data/projects.json, website styling, or unrelated documentation in this mode unless the user explicitly asks.
@@ -240,7 +240,7 @@ The complete Design Brief must include:
 - Audience: beginner and developing Java learners.
 - Current repository architecture and actual technologies, verified from the workspace rather than assumed.
 - User-selected redesign scope, allowed areas, protected areas, and explicit permissions.
-- Existing project cards, canonical project catalogue, Java source links, Markdown study guides, and previous/next project navigation.
+- Existing project cards, canonical project catalogue, data-driven original-code and study-material options, and previous/next project navigation.
 - Approved palette with HEX values and functional roles, platform, responsive behavior, direction, motion intensity, accessibility, and acceptance criteria.
 - A clear instruction to preserve Java source code, catalog meaning, project links, current working interactions, progress logic, and learning content unless the user explicitly authorizes a specific change.
 
@@ -310,7 +310,7 @@ Run focused checks based on what changed:
 
 1. Identify the selected Java source. If multiple files are plausible, ask which one.
 2. Inspect the complete original source and directly related classes.
-3. Update only that project's Markdown guide, preserving useful material. Never edit, refactor, reformat, or regenerate the original Java file.
+3. Update only that project's Markdown study-material file, preserving useful material. Never edit, refactor, reformat, rename, or regenerate the original Java source file.
 4. Ensure the guide explains the complete Java implementation in source order. Do not add a second walkthrough section for the website interface.
 5. Keep explanations faithful to actual code behavior, including defects and limitations.
 6. Run npm test and verify the complete code walkthrough against the selected Java source. Do not change project metadata, Java behavior, or page styling unless the user asks.
