@@ -19,7 +19,7 @@ When the user invokes JavaSage without clearly choosing a mode, begin by present
 1. **Novo designer** — redesign the BuildJava.ln website through the existing design agents.
 2. **Adicionar projeto** — register a new Java exercise, generate its unique ID automatically, and write one complete Markdown study guide from the Java source.
 3. **Atualizar projetos** — review or correct metadata for projects already present in the catalog.
-4. **Atualizar didática** — create or revise only the Markdown study material for an existing Java source file. Preserve the original .java file unchanged.
+4. **Atualizar didática** — create or revise the detailed Markdown lesson for an existing Java source file.
 
 Ask for the selection in Brazilian Portuguese. Keep the menu short. Do not start repository edits before the user selects a mode. If the user's request already names one of the modes clearly, skip the menu and enter that mode directly. Never silently combine the four modes; ask which should run first if the user requests multiple modes together.
 
@@ -36,15 +36,15 @@ Do not ask the user to repeat information already provided. Prefer one conversat
 This mode is the only workflow for introducing a genuinely new Java exercise. It must create the project entry and its teaching material together.
 
 1. Identify the new .java file in the current workspace or Git diff. If no unambiguous source exists, ask one short question for its path. Do not ask the user to paste source code into chat.
-2. Read the complete Java source file and every directly relevant class. Treat the actual file contents as the source context for the AI explanation. This is the automatic code handoff: read the file directly; do not rely on the operating-system clipboard, manually copy fragments, or ask the user to copy/paste code. Keep the source read-only.
+2. Read the complete Java source file and every directly relevant class. Treat the actual file contents as the source context for the AI explanation. This is the automatic code handoff: read the file directly; do not rely on the operating-system clipboard, manually copy fragments, or ask the user to copy/paste code.
 3. Confirm that the source is a real exercise and has not already been added. Inspect data/projects.json and existing Java/Markdown files to prevent duplicate entries.
 4. Generate the unique ID by executing bash scripts/project-id.sh <javaPath>. Use the exact ID printed by the script. If the script fails, resolve the issue rather than guessing an ID.
-5. Create one Markdown guide at the stable path projects/md/<JavaFileName>.md. Explain the actual original program, not an improved or intended version. Keep the repository's English documentation convention unless the user asks otherwise.
+5. Create one Markdown guide at the stable path projects/md/<JavaFileName>.md. Explain the actual program, not the intended program. Keep the repository's English documentation convention unless the user asks otherwise.
 6. Write one complete study guide from the full Java source. Explain the implementation in source order inside its "Complete code walkthrough" section. Do not create artificial source anchors or a second interface-specific explanation.
-7. Add one project object to data/projects.json with the generated id, an unused sequential step, an accurate description, a learning goal, concepts, and a "materials" array with exactly two resources: { "id": "code", "label": "Original code", "type": "java", "path": "<exact .java path>" } and { "id": "didactic", "label": "Study material", "type": "markdown", "path": "<exact .md path>" }. Do not add separate javaPath or markdownPath fields. Do not paste Java source into any JavaScript data file.
+7. Add one project object to data/projects.json with the generated id, an unused sequential step, an accurate description, a learning goal, concepts, and the exact Java and Markdown paths. Do not paste the Java source into any JavaScript data file.
 8. Validate the explanations against the actual Java source, confirm the ID is unique, and ensure the project appears on the landing page and opens its study page.
 9. Update README.md only where the project list or project count needs to stay accurate. Run npm run check, npm test, Java compilation for the new file, and git diff --check. Report any validation that could not be performed.
-10. Never modify, refactor, reformat, rename, or regenerate the original Java source during project registration or didactic updates. The code resource must point to the exact source file as authored. Do not change Java program behavior, unrelated projects, or approved design. Do not commit unless the user explicitly asks.
+10. Do not change the Java program's behavior, the existing study-page design, or unrelated projects as part of this workflow. Do not commit unless the user explicitly asks.
 
 The study guide is authored at project-add time by JavaSage and stored beside the Java source in Markdown. The website does not call an AI model at runtime, does not need an API key, and never stores lesson content in JavaScript. Adding a project should add Java source, catalogue metadata, and one guide — not a new block of interface code.
 
@@ -73,7 +73,7 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 - Before editing project files, consult https://github.com/duartexz-dev/BuildJava.ln using the available GitHub or web tools. Compare relevant files for architecture and conventions. If the repository cannot be consulted, explain the limitation in Brazilian Portuguese and pause before editing project files.
 - Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
 - Inspect git status before editing. Preserve unrelated local changes and never overwrite user work with remote contents.
-- Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the original source behavior with its description, learning outcomes, code resource, study-material resource, concepts, difficulty, and sequence.
+- Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, study guide, difficulty, and sequence.
 - Do not assume a GitHub Pages deployment succeeded merely because the workflow file exists. Check actual workflow results when accessible.
 
 ## Identify and verify Java exercises
@@ -94,7 +94,7 @@ This section applies only when the user selects **Atualizar didática**. The tas
 
 - Ask for the Java source path if it was not supplied. Do not guess which exercise the user means.
 - Read the entire selected .java file before writing. Also inspect directly used classes, related source files, imports, and relevant project configuration when they are needed to explain the selected program correctly.
-- Create or update one guide in projects/md/, using a stable name based on the source file, such as projects/md/Library.md for Library.java. Keep the source resource and didactic resource as separate entries in the project's materials array.
+- Create or update one guide in projects/md/, using a stable name based on the source file, such as projects/md/Library.md for Library.java.
 - If a meaningful guide for that source already exists, update it instead of creating a duplicate.
 - If the selected Java file is one of several cooperating classes, explain the selected file in full and describe how the related classes interact. Do not silently turn one-file work into guides for every file.
 - Do not modify Java source code. Do not change the canonical project metadata in data/projects.json, website styling, or unrelated documentation in this mode unless the user explicitly asks.
@@ -137,7 +137,7 @@ Review the new Java program before documenting it. Report issues such as non-sta
 - Define technical vocabulary in beginner-friendly language and use small, relevant examples where they clarify a difficult concept.
 - Keep the repository's existing documentation language (currently English) unless the user explicitly requests another language.
 - Do not claim compilation or execution was tested unless the command was actually run and its result was observed.
-- Before finishing, verify that the guide's examples, code excerpts, filenames, links, and explanations agree with the inspected source. Verify that the original Java file was not modified.
+- Before finishing, verify that the guide's examples, code excerpts, filenames, links, and explanations agree with the inspected source.
 
 ## Canonical project catalog and automatic IDs
 
@@ -152,7 +152,8 @@ Each project object uses this schema:
 5. description — concise explanation of what the program actually does.
 6. lesson — one-sentence learning goal or execution context.
 7. concepts — array of relevant Java concepts.
-8. materials — array of exactly two resources: the original Java source ("code") and the didactic Markdown guide ("didactic"). Each resource has an id, user-facing label, type, and repository-relative path.
+8. javaPath — repository-relative path to the exact Java source file.
+9. markdownPath — repository-relative path to that project's Markdown guide.
 
 For every new Java exercise, generate its ID by running:
 
@@ -164,12 +165,12 @@ When adding a project, assign step as the next unused positive number after insp
 
 ## Current website data flow
 
-The current website is a static Java project catalogue and project-resource viewer. It does not have a separate knowledge map, roadmap, or progress generator. Do not recreate those retired systems unless the user explicitly requests them.
+The current website is a static Java project catalogue and source-and-guide study page. It does not have a separate knowledge map, roadmap, or progress generator. Do not recreate those retired systems unless the user explicitly requests them.
 
 - data/projects.json is the canonical project catalog.
 - js/project-data.js is a small JSON-import wrapper that exports projects and getProject(id).
 - js/landing.js renders project cards from the catalog.
-- project.html and js/project-study.js generate resource choices from each project's materials array and load one selected resource at a time into the same content area.
+- project.html and js/project-study.js load the complete Java source and its Markdown guide, then display them side by side.
 - projects/md/ stores one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs for new Java projects.
 - tests/ validates catalogue links, study-guide structure, and ID generation.
@@ -240,7 +241,7 @@ The complete Design Brief must include:
 - Audience: beginner and developing Java learners.
 - Current repository architecture and actual technologies, verified from the workspace rather than assumed.
 - User-selected redesign scope, allowed areas, protected areas, and explicit permissions.
-- Existing project cards, canonical project catalogue, data-driven original-code and study-material options, and previous/next project navigation.
+- Existing project cards, canonical project catalogue, Java source links, Markdown study guides, and previous/next project navigation.
 - Approved palette with HEX values and functional roles, platform, responsive behavior, direction, motion intensity, accessibility, and acceptance criteria.
 - A clear instruction to preserve Java source code, catalog meaning, project links, current working interactions, progress logic, and learning content unless the user explicitly authorizes a specific change.
 
@@ -260,12 +261,12 @@ The user requests a redesign, not a rewrite of the learning product. Restrict im
 - data/projects.json is the canonical catalog. Do not maintain a second list or duplicate project objects in JavaScript.
 - js/project-data.js provides the small projects/getProject API consumed by the website.
 - js/landing.js renders the project cards from the canonical array.
-- js/project-study.js generates resource tabs from the project's materials array and displays the selected original code or study material in one content area.
+- js/project-study.js loads the selected Java source and Markdown guide, then displays them side by side.
 - projects/md/ contains one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs from Java class names or filenames and checks data/projects.json for collisions.
 - tests/ checks catalogue integrity, study-guide structure, and ID generation.
 - .github/workflows/pages.yml runs checks, compiles Java sources, and deploys the static website.
-- Preserve the Java-first landing page, data-driven resource tabs, responsive styling, original-code copy action, and previous/next navigation.
+- Preserve the current Java-first landing page, Java-source-and-guide study layout, responsive styling, copy-code action, and previous/next navigation.
 - Do not add a roadmap, knowledge map, progress generator, AI runtime API, or second project catalog unless the user explicitly requests it.
 - Preserve existing project entries and unrelated workspace changes. Do not stage or commit unless the user explicitly asks.
 
@@ -290,27 +291,26 @@ Run focused checks based on what changed:
 ### Adicionar projeto
 
 1. Inspect git status, the new Java file, related classes, data/projects.json, and recent Git history.
-2. Read the complete original Java source directly. Do not ask the user to copy or paste it.
+2. Read the complete source file directly. Do not ask the user to copy or paste it.
 3. Run bash scripts/project-id.sh path/to/Project.java and use its exact output as the project ID.
-4. Preserve the Java file byte-for-byte. Never rewrite it to match an explanation, design, or preferred style.
-5. Create one Markdown guide at projects/md/<JavaFileName>.md. Explain the exact original program in source order, including its real limitations and defects.
-6. Add one catalog object to data/projects.json with a materials array containing exactly two entries: code (type java, exact original source path) and didactic (type markdown, guide path).
-7. Do not paste Java source or guide content into JavaScript. Do not add runtime AI APIs or keys.
-8. Validate the guide against the original source, verify both materials paths, compile the unchanged Java file, and run npm run check, npm test, and git diff --check.
+4. Create or update one guide at projects/md/<JavaFileName>.md, including the complete teaching material and one source-order code walkthrough.
+5. Add one metadata object to data/projects.json with the generated ID, next unused step, actual description, learning goal, concepts, and exact source/guide paths.
+6. Do not paste Java code or explanation content into any JavaScript file. Do not add new runtime AI features or API keys.
+7. Validate the ID, guide accuracy, metadata, links, Java compilation, npm run check, npm test, and git diff --check.
 8. Update README project counts/list when needed. Preserve site styling and existing behavior. Do not commit unless the user explicitly asks.
 
 ### Atualizar projetos
 
-1. Inspect the selected existing entry in data/projects.json and read its complete original Java source.
-2. Correct only the selected project's description, lesson, concepts, difficulty, materials labels/types/paths, or sequence number based on the real implementation. Never rewrite the Java source.
+1. Inspect the selected existing entry in data/projects.json and read its complete Java source.
+2. Correct only the selected project's description, lesson, concepts, difficulty, source path, guide path, or sequence number based on the real implementation.
 3. Do not add a new project, generate a new guide, redesign the website, or add a parallel catalog in this mode.
 4. Run npm run check, npm test, and Java compilation if source files changed. Do not commit unless the user explicitly asks.
 
 ### Atualizar didática
 
 1. Identify the selected Java source. If multiple files are plausible, ask which one.
-2. Inspect the complete original source and directly related classes.
-3. Update only that project's Markdown study-material file, preserving useful material. Never edit, refactor, reformat, rename, or regenerate the original Java source file.
+2. Inspect the complete source and directly related classes.
+3. Update only that project's Markdown guide, preserving useful material.
 4. Ensure the guide explains the complete Java implementation in source order. Do not add a second walkthrough section for the website interface.
 5. Keep explanations faithful to actual code behavior, including defects and limitations.
 6. Run npm test and verify the complete code walkthrough against the selected Java source. Do not change project metadata, Java behavior, or page styling unless the user asks.

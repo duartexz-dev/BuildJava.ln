@@ -24,28 +24,26 @@ This is a record of practical learning, not a claim that the exercises are produ
 | 04 | [JoKenPo](./projects/Beginner/JoKenPo.java) | Random, conditions, loops | Beginner |
 | 05 | [LoginIntermediary](./projects/Intermediate/LoginIntermediary.java) | String comparison, boolean logic, while | Intermediate |
 | 06 | [bulletin](./projects/Intermediate/bulletin.java) | Classes, objects, constructors | Intermediate |
-| 07 | [Vehicle](./projects/Intermediate/Vehicle.java) | Classes, objects, constructors, fields | Intermediate |
+| 07 | [Vehicle](./projects/Intermediate/Vehicle.java) | Object state, constructors, toString | Intermediate |
 | 08 | [DeveloperProfile](./projects/Intermediate/DeveloperProfile.java) | Objects, ArrayList, enhanced for | Intermediate |
 | 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
-| 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | ArrayList, switch, do-while, index handling | Intermediate |
+| 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | Methods, collections, validation, menu flow | Intermediate |
 
 ## How each project is taught
 
-Open a project on the [website](https://duartexz-dev.github.io/BuildJava.ln/) and choose between **Original code** and **Study material**. Both options are generated from that project's `materials` array. The original Java file is displayed as-is; the guide explains that exact implementation, including its real limitations.
+Open a project on the [website](https://duartexz-dev.github.io/BuildJava.ln/) to see the complete Java file beside one study guide. The Java source is the primary content; the guide explains it without splitting it into artificial interface-only fragments.
 
-Every guide follows the same eleven-section learning structure:
+Every guide follows the same learning structure:
 
-1. **Overview** — what the program does.
-2. **Learning goals** — what the learner should understand.
-3. **Prerequisites** — the concepts needed before reading the code.
-4. **Project and file structure** — the source file, package, imports, and related classes.
-5. **Program execution** — the actual path through the program.
-6. **Complete code walkthrough** — the implementation explained in source order.
-7. **Key Java concepts in context** — why each language feature is used here.
-8. **Example execution** — input and output that match the source.
-9. **Limitations and common mistakes** — real defects and constraints.
-10. **Practice and extensions** — exercises that build on the existing code.
-11. **Summary and source** — a recap and the exact Java file link.
+1. **Overview and learning goals** — what the program does and what the reader should understand.
+2. **Prerequisites and structure** — the minimum background, package, imports, classes, and related files.
+3. **Program execution** — the real path from `main` through the methods and branches.
+4. **Complete code walkthrough** — meaningful statements explained in source order, including types, fields, constructors, parameters, return values, and control flow.
+5. **Java concepts in context** — why each concept is used in this exact implementation.
+6. **Example execution** — a realistic interaction based on the actual program.
+7. **Limitations and common mistakes** — existing constraints or defects, separated from possible improvements.
+8. **Practice and extensions** — small next steps that build on the concepts already present.
+9. **Summary and source** — a concise recap and a link to the original Java file.
 
 Explanations must describe what the source actually does. They must not invent features, validation, output, or behavior that has not been implemented.
 
@@ -57,7 +55,7 @@ Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete 
 bash scripts/project-id.sh path/to/Project.java
 ```
 
-JavaSage then adds one entry to `data/projects.json` with a `materials` array containing the exact Java source and one Markdown study guide. The original Java file is never rewritten. The guide must follow the same structure used by the existing projects and explain the source as it exists. The source is not copied into JavaScript, and the published website does not call an AI service.
+JavaSage then adds one entry to `data/projects.json` and creates one complete Markdown study guide in `projects/md/`. The guide must follow the same structure used by the existing projects. The source code is not copied into JavaScript, and the published website does not call an AI service.
 
 ## Run a Java exercise
 
@@ -79,7 +77,7 @@ java -cp out Calculator
 
 ## Run the website locally
 
-Requirements: Node.js 22 or later for JavaScript syntax checks, Python 3 for repository tests and a local HTTP server.
+Requirements: Node.js 22 or later for repository checks, plus Python or another local HTTP server.
 
 ```bash
 git clone https://github.com/duartexz-dev/BuildJava.ln.git
@@ -91,18 +89,16 @@ Open [http://localhost:8000](http://localhost:8000). The study page loads Java a
 
 ## Automated validation
 
-Run the syntax checks and repository tests:
+Run:
 
 ```bash
 npm run check
 npm test
 ```
 
-Repository checks run in Python so the JavaScript test files do not increase the JavaScript code footprint.
-
 GitHub Actions also compiles every Java source file, runs smoke tests for selected CandidateManager and Vehicle behaviors, checks repository data and study-guide structure, and deploys GitHub Pages after successful validation on the main branch.
 
-The Python tests protect the catalogue, the two resources for every project, study-guide structure, preservation of the original CandidateManager and Vehicle exercises, and the Java-over-JavaScript line-count target. They are not a substitute for comprehensive unit tests of every Java method.
+The tests protect important repository structure and selected behaviors. They are not a substitute for comprehensive unit tests of every Java method.
 
 ## Repository structure
 
@@ -117,7 +113,7 @@ BuildJava.ln/
 ├── js/
 │   ├── project-data.js         # Small JSON catalogue adapter
 │   ├── landing.js              # Renders the project index
-│   └── project-study.js        # Loads the selected project resource
+│   └── project-study.js        # Loads Java source and renders its guide
 ├── projects/
 │   ├── Beginner/               # Four introductory Java exercises
 │   ├── Intermediate/           # Six combined and object-oriented exercises
@@ -127,8 +123,9 @@ BuildJava.ln/
 ├── styles/
 │   └── site.css                # Shared, responsive presentation
 ├── tests/
+│   ├── project-data.test.js    # Catalogue and project-page checks
+│   ├── study-content.test.js   # Guide structure and Java-first layout checks
 │   ├── test_project_id.py      # Project ID generator tests
-│   ├── test_repository.py      # Catalogue, resources, guides, and Java-first checks
 │   └── fixtures/
 │       └── ProjectIdFixture.java
 ├── index.html
@@ -143,9 +140,8 @@ BuildJava.ln/
 | Java | Main learning content and console exercises |
 | Markdown | Study guides and code explanations |
 | HTML and CSS | Accessible project index and study layout |
-| JavaScript | Generates resource options from the project data and displays the selected source or guide |
-| Node.js | JavaScript syntax checks |
-| Python | Repository integrity and project ID tests |
+| JavaScript | Loads the source and presents the guide |
+| Node.js and Python | Repository validation tests |
 | GitHub Actions | Compilation, smoke tests, and deployment |
 
 The website is static and has no backend, database, frontend framework, or runtime AI dependency. Google Fonts provide the typography and fall back to system fonts when unavailable.

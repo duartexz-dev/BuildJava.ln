@@ -11,20 +11,8 @@
       "Data types",
       "Formatted output"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Beginner/TypeProfile.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/TypeProfile.md"
-      }
-    ]
+    "javaPath": "projects/Beginner/TypeProfile.java",
+    "markdownPath": "projects/md/TypeProfile.md"
   },
   {
     "id": "WeekDay",
@@ -38,20 +26,8 @@
       "switch",
       "Selection"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Beginner/WeekDay.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/WeekDay.md"
-      }
-    ]
+    "javaPath": "projects/Beginner/WeekDay.java",
+    "markdownPath": "projects/md/WeekDay.md"
   },
   {
     "id": "Calculator",
@@ -65,20 +41,8 @@
       "Operators",
       "switch"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Beginner/Calculator.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/Calculator.md"
-      }
-    ]
+    "javaPath": "projects/Beginner/Calculator.java",
+    "markdownPath": "projects/md/Calculator.md"
   },
   {
     "id": "JoKenPo",
@@ -92,20 +56,8 @@
       "Loops",
       "Conditions"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Beginner/JoKenPo.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/JoKenPo.md"
-      }
-    ]
+    "javaPath": "projects/Beginner/JoKenPo.java",
+    "markdownPath": "projects/md/JoKenPo.md"
   },
   {
     "id": "LoginIntermediary",
@@ -119,20 +71,8 @@
       "Boolean logic",
       "while"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Intermediate/LoginIntermediary.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/LoginIntermediary.md"
-      }
-    ]
+    "javaPath": "projects/Intermediate/LoginIntermediary.java",
+    "markdownPath": "projects/md/LoginIntermediary.md"
   },
   {
     "id": "bulletin",
@@ -146,20 +86,8 @@
       "Objects",
       "Average"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Intermediate/bulletin.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/bulletin.md"
-      }
-    ]
+    "javaPath": "projects/Intermediate/bulletin.java",
+    "markdownPath": "projects/md/bulletin.md"
   },
   {
     "id": "Vehicle",
@@ -170,24 +98,12 @@
     "lesson": "Use a constructor and this to initialize an object with several related attributes.",
     "concepts": [
       "Classes",
-      "Objects",
-      "Constructors",
-      "Fields"
+      "Constructor",
+      "Encapsulation",
+      "toString()"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Intermediate/Vehicle.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/Vehicle.md"
-      }
-    ]
+    "javaPath": "projects/Intermediate/Vehicle.java",
+    "markdownPath": "projects/md/Vehicle.md"
   },
   {
     "id": "DeveloperProfile",
@@ -201,20 +117,8 @@
       "Objects",
       "do-while"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Intermediate/DeveloperProfile.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/DeveloperProfile.md"
-      }
-    ]
+    "javaPath": "projects/Intermediate/DeveloperProfile.java",
+    "markdownPath": "projects/md/DeveloperProfile.md"
   },
   {
     "id": "library",
@@ -228,20 +132,8 @@
       "add()",
       "Iteration"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Intermediate/library.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/library.md"
-      }
-    ]
+    "javaPath": "projects/Intermediate/library.java",
+    "markdownPath": "projects/md/library.md"
   },
   {
     "id": "CandidateManager",
@@ -252,23 +144,10 @@
     "lesson": "Combine ArrayList operations, methods, search logic, and a menu-driven loop.",
     "concepts": [
       "ArrayList",
-      "Menu-driven flow",
-      "do-while",
-      "Index handling"
+      "Methods",
+      "Input validation"
     ],
-    "materials": [
-      {
-        "id": "code",
-        "label": "Original code",
-        "type": "java",
-        "path": "projects/Intermediate/CandidateManager.java"
-      },
-      {
-        "id": "didactic",
-        "label": "Study material",
-        "type": "markdown",
-        "path": "projects/md/CandidateManager.md"
-      }
-    ]
+    "javaPath": "projects/Intermediate/CandidateManager.java",
+    "markdownPath": "projects/md/CandidateManager.md"
   }
 ]
