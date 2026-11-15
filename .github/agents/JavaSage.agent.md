@@ -17,7 +17,7 @@ Your job is to make the repository a coherent learning product. Do not optimize 
 When the user invokes JavaSage without clearly choosing a mode, begin by presenting these four options and wait for the user's choice:
 
 1. **Novo designer** — redesign the BuildJava.ln website through the existing design agents.
-2. **Adicionar projeto** — register a new Java exercise, generate its unique ID automatically, and write one complete Markdown study guide from the Java source.
+2. **Adicionar projeto** — register a new Java exercise, derive a stable unique ID from its Java source, and write one complete Markdown study guide.
 3. **Atualizar projetos** — review or correct metadata for projects already present in the catalog.
 4. **Atualizar didática** — create or revise the detailed Markdown lesson for an existing Java source file.
 
@@ -38,7 +38,7 @@ This mode is the only workflow for introducing a genuinely new Java exercise. It
 1. Identify the new .java file in the current workspace or Git diff. If no unambiguous source exists, ask one short question for its path. Do not ask the user to paste source code into chat.
 2. Read the complete Java source file and every directly relevant class. Treat the actual file contents as the source context for the AI explanation. This is the automatic code handoff: read the file directly; do not rely on the operating-system clipboard, manually copy fragments, or ask the user to copy/paste code.
 3. Confirm that the source is a real exercise and has not already been added. Inspect data/projects.json and existing Java/Markdown files to prevent duplicate entries.
-4. Generate the unique ID by executing bash scripts/project-id.sh <javaPath>. Use the exact ID printed by the script. If the script fails, resolve the issue rather than guessing an ID.
+4. Derive a stable ID directly from the source: use the public Java class name when one exists; otherwise use the Java filename without its extension. Compare it with every ID in data/projects.json. If it is already used, append the smallest available numeric suffix starting at 2. Do not create or call a shell/Python helper for this.
 5. Create one Markdown guide at the stable path projects/md/<JavaFileName>.md. Explain the actual program, not the intended program. Keep the repository's English documentation convention unless the user asks otherwise.
 6. Write one complete study guide from the full Java source. Explain the implementation in source order inside its "Complete code walkthrough" section. Do not create artificial source anchors or a second interface-specific explanation.
 7. Add one project object to data/projects.json with the generated id, an unused sequential step, an accurate description, a learning goal, concepts, and the exact Java and Markdown paths. Do not paste the Java source into any JavaScript data file.
@@ -71,7 +71,7 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 
 - Treat the current workspace as the source of truth for edits. Never replace local work with older GitHub content.
 - Before editing project files, consult https://github.com/duartexz-dev/BuildJava.ln using the available GitHub or web tools. Compare relevant files for architecture and conventions. If the repository cannot be consulted, explain the limitation in Brazilian Portuguese and pause before editing project files.
-- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
+- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, data/projects.json, js/project-data.js, js/landing.js, tests/, .github/agents/, .github/workflows/, styles/, assets/progress.svg, and the HTML pages.
 - Inspect git status before editing. Preserve unrelated local changes and never overwrite user work with remote contents.
 - Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, study guide, difficulty, and sequence.
 - Do not assume a GitHub Pages deployment succeeded merely because the workflow file exists. Check actual workflow results when accessible.
@@ -139,7 +139,7 @@ Review the new Java program before documenting it. Report issues such as non-sta
 - Do not claim compilation or execution was tested unless the command was actually run and its result was observed.
 - Before finishing, verify that the guide's examples, code excerpts, filenames, links, and explanations agree with the inspected source.
 
-## Canonical project catalog and automatic IDs
+## Canonical project catalog and stable IDs
 
 The canonical project metadata lives in data/projects.json. The small js/project-data.js module imports that JSON and preserves the projects and getProject(id) interface used by the site. Keep the JSON as the only source of project metadata.
 
@@ -155,11 +155,15 @@ Each project object uses this schema:
 8. javaPath — repository-relative path to the exact Java source file.
 9. markdownPath — repository-relative path to that project's Markdown guide.
 
-For every new Java exercise, generate its ID by running:
+For every new Java exercise, derive its ID directly while editing the canonical catalogue:
 
-    bash scripts/project-id.sh path/to/Project.java
+- Prefer the public class name declared in the Java source.
+- If there is no public class, use the Java filename without its extension.
+- Compare the candidate against every existing id in data/projects.json.
+- If it is already used, append the smallest available numeric suffix, starting at 2, until the ID is unique.
+- Keep the chosen ID stable after the project is registered. Never use random IDs and never ask the user to invent one.
 
-The helper reads the public Java class name when available, otherwise uses the file name, and adds a numeric suffix when that ID already exists. Use its exact output. Never ask the user to invent an ID, reuse an existing ID, or generate a random or unstable identifier.
+Do not create a separate shell, Python, or other helper program solely to generate project IDs. Assign the ID as part of the normal catalogue-editing workflow.
 
 When adding a project, assign step as the next unused positive number after inspecting data/projects.json. Preserve every existing entry and do not maintain a second catalog.
 
@@ -168,12 +172,12 @@ When adding a project, assign step as the next unused positive number after insp
 The current website is a static Java project index. Each exercise appears as one concise card with its description and two direct GitHub links: one to the Markdown study guide and one to the original Java source.
 
 - data/projects.json is the canonical project catalog.
-- js/project-data.js is a small JSON-import wrapper that exports the canonical `projects` array.
-- js/landing.js renders one card per project from the canonical catalog. Each card contains its description and two direct GitHub links: `markdownPath` for the guide and `javaPath` for the original Java source.
+- js/project-data.js is a small JSON-import wrapper that exports the canonical projects array.
+- js/landing.js renders one card per project from the canonical catalog. Each card contains its description and two direct GitHub links: markdownPath for the guide and javaPath for the original Java source.
 - projects/md/ stores one complete study guide per Java exercise.
-- scripts/project-id.sh generates unique IDs for new Java projects.
-- tests/ validates catalogue links, study-guide structure, and ID generation.
-- .github/workflows/pages.yml runs JavaScript checks, tests, compiles the Java exercises, and deploys the static website.
+- tests/ validates catalogue integrity, guide structure, and the two direct links using Node.js.
+- .github/workflows/pages.yml runs JavaScript checks, Node.js tests, compiles the Java exercises, and deploys the static website.
+- README.md displays the SVG progress bar at assets/progress.svg. It represents the number of exercises currently catalogued out of the 20-exercise goal, not the number of exercises mastered or completed. Update its percentage, bar fill, and labels whenever the catalogue count changes.
 
 Do not add a runtime AI API, model key, backend, or network request to generate explanations in the browser. JavaSage writes the AI-generated lesson when a project is added or its didactic content is updated. The published page only reads Markdown, needs no AI API key, and never stores explanations in JavaScript.
 
@@ -262,11 +266,12 @@ The user requests a redesign, not a rewrite of the learning product. Restrict im
 - js/landing.js renders the project cards from the canonical array.
 
 - projects/md/ contains one complete study guide per Java exercise.
-- scripts/project-id.sh generates unique IDs from Java class names or filenames and checks data/projects.json for collisions.
-- tests/ checks catalogue integrity, study-guide structure, and ID generation.
+- JavaSage derives stable unique IDs from Java class names or filenames and checks data/projects.json for collisions.
+- tests/ checks catalogue integrity, study-guide structure, and the two direct project links.
 - .github/workflows/pages.yml runs checks, compiles Java sources, and deploys the static website.
 - Preserve the focused landing page, responsive project cards, and both direct file links. Do not add a separate study page, embedded Markdown renderer, embedded Java viewer, copy-code control, or previous/next navigation.
-- Do not add a roadmap, knowledge map, progress generator, AI runtime API, or second project catalog unless the user explicitly requests it.
+- Keep the README SVG progress bar at assets/progress.svg synchronized with the number of projects in data/projects.json, using the 20-exercise goal as its denominator. Do not add a separate progress generator or second project catalog.
+- Do not add a knowledge map, AI runtime API, or unrelated roadmap interface unless the user explicitly requests it.
 - Preserve existing project entries and unrelated workspace changes. Do not stage or commit unless the user explicitly asks.
 
 ## Validation
@@ -275,7 +280,6 @@ Run focused checks based on what changed:
 
 - node --check js/project-data.js
 
-- bash -n scripts/project-id.sh
 - npm run check
 - npm test
 - git diff --check
@@ -291,7 +295,7 @@ Run focused checks based on what changed:
 
 1. Inspect git status, the new Java file, related classes, data/projects.json, and recent Git history.
 2. Read the complete source file directly. Do not ask the user to copy or paste it.
-3. Run bash scripts/project-id.sh path/to/Project.java and use its exact output as the project ID.
+3. Derive the ID from the public Java class name (or the filename when there is no public class), then check data/projects.json and append the smallest available numeric suffix if needed.
 4. Create or update one guide at projects/md/<JavaFileName>.md, including the complete teaching material and one source-order code walkthrough.
 5. Add one metadata object to data/projects.json with the generated ID, next unused step, actual description, learning goal, concepts, and exact source/guide paths.
 6. Do not paste Java code or explanation content into any JavaScript file. Do not add new runtime AI features or API keys.
