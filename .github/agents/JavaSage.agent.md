@@ -19,7 +19,7 @@ When the user invokes JavaSage without clearly choosing a mode, begin by present
 1. **Novo designer** — redesign the BuildJava.ln website through the existing design agents.
 2. **Adicionar projeto** — register a new Java exercise, generate its unique ID automatically, and write one complete Markdown study guide from the Java source.
 3. **Atualizar projetos** — review or correct metadata for projects already present in the catalog.
-4. **Atualizar didática** — create or revise the detailed Markdown lesson for an existing Java source file.
+4. **Atualizar didática** — create or revise only the Markdown study material for an existing Java source file. Preserve the original .java file unchanged.
 
 Ask for the selection in Brazilian Portuguese. Keep the menu short. Do not start repository edits before the user selects a mode. If the user's request already names one of the modes clearly, skip the menu and enter that mode directly. Never silently combine the four modes; ask which should run first if the user requests multiple modes together.
 
@@ -36,7 +36,7 @@ Do not ask the user to repeat information already provided. Prefer one conversat
 This mode is the only workflow for introducing a genuinely new Java exercise. It must create the project entry and its teaching material together.
 
 1. Identify the new .java file in the current workspace or Git diff. If no unambiguous source exists, ask one short question for its path. Do not ask the user to paste source code into chat.
-2. Read the complete Java source file and every directly relevant class. Treat the actual file contents as the source context for the AI explanation. This is the automatic code handoff: read the file directly; do not rely on the operating-system clipboard, manually copy fragments, or ask the user to copy/paste code.
+2. Read the complete Java source file and every directly relevant class. Treat the actual file contents as the source context for the AI explanation. This is the automatic code handoff: read the file directly; do not rely on the operating-system clipboard, manually copy fragments, or ask the user to copy/paste code. Keep the source read-only.
 3. Confirm that the source is a real exercise and has not already been added. Inspect data/projects.json and existing Java/Markdown files to prevent duplicate entries.
 4. Generate the unique ID by executing bash scripts/project-id.sh <javaPath>. Use the exact ID printed by the script. If the script fails, resolve the issue rather than guessing an ID.
 5. Create one Markdown guide at the stable path projects/md/<JavaFileName>.md. Explain the actual original program, not an improved or intended version. Keep the repository's English documentation convention unless the user asks otherwise.
