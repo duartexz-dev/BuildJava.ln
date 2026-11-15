@@ -22,7 +22,11 @@ CLASS_NAME="$(
 )"
 
 BASE_ID="${CLASS_NAME:-$(basename "$JAVA_FILE" .java)}"
-USED_IDS="$(grep -Eo '"id"[[:space:]]*:[[:space:]]*"[^"]+"' "$CATALOG" | sed -E 's/.*"([^"]+)"$/\1/' || true)"
+USED_IDS="$(node --input-type=module -e '
+import { readFileSync } from "node:fs";
+const catalog = JSON.parse(readFileSync(process.argv[1], "utf8"));
+for (const project of catalog) console.log(project.id);
+' "$CATALOG")"
 
 PROJECT_ID="$BASE_ID"
 SUFFIX=2
