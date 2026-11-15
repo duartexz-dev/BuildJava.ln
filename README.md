@@ -77,7 +77,7 @@ java -cp out Calculator
 
 ## Run the website locally
 
-Requirements: Node.js 22 or later for repository checks, plus Python or another local HTTP server.
+Requirements: Node.js 22 or later for JavaScript syntax checks, Python 3 for repository tests and a local HTTP server.
 
 ```bash
 git clone https://github.com/duartexz-dev/BuildJava.ln.git
@@ -89,16 +89,18 @@ Open [http://localhost:8000](http://localhost:8000). The study page loads Java a
 
 ## Automated validation
 
-Run:
+Run the syntax checks and repository tests:
 
 ```bash
 npm run check
 npm test
 ```
 
+Repository checks run in Python so the JavaScript test files do not increase the JavaScript code footprint.
+
 GitHub Actions also compiles every Java source file, runs smoke tests for selected CandidateManager and Vehicle behaviors, checks repository data and study-guide structure, and deploys GitHub Pages after successful validation on the main branch.
 
-The tests protect important repository structure and selected behaviors. They are not a substitute for comprehensive unit tests of every Java method.
+The Python tests protect the catalogue, the two resources for every project, study-guide structure, preservation of the original CandidateManager and Vehicle exercises, and the Java-over-JavaScript line-count target. They are not a substitute for comprehensive unit tests of every Java method.
 
 ## Repository structure
 
@@ -113,7 +115,7 @@ BuildJava.ln/
 ├── js/
 │   ├── project-data.js         # Small JSON catalogue adapter
 │   ├── landing.js              # Renders the project index
-│   └── project-study.js        # Loads Java source and renders its guide
+│   └── project-study.js        # Loads the selected project resource
 ├── projects/
 │   ├── Beginner/               # Four introductory Java exercises
 │   ├── Intermediate/           # Six combined and object-oriented exercises
@@ -123,9 +125,8 @@ BuildJava.ln/
 ├── styles/
 │   └── site.css                # Shared, responsive presentation
 ├── tests/
-│   ├── project-data.test.js    # Catalogue and project-page checks
-│   ├── study-content.test.js   # Guide structure and Java-first layout checks
 │   ├── test_project_id.py      # Project ID generator tests
+│   ├── test_repository.py      # Catalogue, resources, guides, and Java-first checks
 │   └── fixtures/
 │       └── ProjectIdFixture.java
 ├── index.html
@@ -141,7 +142,8 @@ BuildJava.ln/
 | Markdown | Study guides and code explanations |
 | HTML and CSS | Accessible project index and study layout |
 | JavaScript | Generates resource options from the project data and displays the selected source or guide |
-| Node.js and Python | Repository validation tests |
+| Node.js | JavaScript syntax checks |
+| Python | Repository integrity and project ID tests |
 | GitHub Actions | Compilation, smoke tests, and deployment |
 
 The website is static and has no backend, database, frontend framework, or runtime AI dependency. Google Fonts provide the typography and fall back to system fonts when unavailable.
