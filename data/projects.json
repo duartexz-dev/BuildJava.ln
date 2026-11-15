@@ -170,9 +170,9 @@
     "lesson": "Use a constructor and this to initialize an object with several related attributes.",
     "concepts": [
       "Classes",
-      "Constructor",
-      "Encapsulation",
-      "toString()"
+      "Objects",
+      "Constructors",
+      "Fields"
     ],
     "materials": [
       {
@@ -252,8 +252,9 @@
     "lesson": "Combine ArrayList operations, methods, search logic, and a menu-driven loop.",
     "concepts": [
       "ArrayList",
-      "Methods",
-      "Input validation"
+      "Menu-driven flow",
+      "do-while",
+      "Index handling"
     ],
     "materials": [
       {
