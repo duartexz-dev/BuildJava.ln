@@ -22,7 +22,14 @@ CLASS_NAME="$(
 )"
 
 BASE_ID="${CLASS_NAME:-$(basename "$JAVA_FILE" .java)}"
-USED_IDS="$(grep -Eo '"id"[[:space:]]*:[[:space:]]*"[^"]+"' "$CATALOG" | sed -E 's/.*"([^"]+)"$/\1/' || true)"
+USED_IDS="$(python -c '
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as catalog_file:
+    catalog = json.load(catalog_file)
+print("\n".join(project["id"] for project in catalog))
+' "$CATALOG")"
 
 PROJECT_ID="$BASE_ID"
 SUFFIX=2
