@@ -31,9 +31,9 @@ This is a record of practical learning, not a claim that the exercises are produ
 
 ## How each project is taught
 
-Open a project on the [website](https://duartexz-dev.github.io/BuildJava.ln/) to see the complete Java file beside one study guide. The Java source is the primary content; the guide explains it without splitting it into artificial interface-only fragments.
+Open a project on the [website](https://duartexz-dev.github.io/BuildJava.ln/) and choose between **Original code** and **Study material**. Both options are generated from that project's `materials` array. The original Java file is displayed as-is; the guide explains that exact implementation, including its real limitations.
 
-Every guide follows the same learning structure:
+Every guide follows the same eleven-section learning structure:
 
 1. **Overview and learning goals** — what the program does and what the reader should understand.
 2. **Prerequisites and structure** — the minimum background, package, imports, classes, and related files.
@@ -55,7 +55,7 @@ Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete 
 bash scripts/project-id.sh path/to/Project.java
 ```
 
-JavaSage then adds one entry to `data/projects.json` and creates one complete Markdown study guide in `projects/md/`. The guide must follow the same structure used by the existing projects. The source code is not copied into JavaScript, and the published website does not call an AI service.
+JavaSage then adds one entry to `data/projects.json` with a `materials` array containing the exact Java source and one Markdown study guide. The original Java file is never rewritten. The guide must follow the same structure used by the existing projects and explain the source as it exists. The source is not copied into JavaScript, and the published website does not call an AI service.
 
 ## Run a Java exercise
 
@@ -140,7 +140,7 @@ BuildJava.ln/
 | Java | Main learning content and console exercises |
 | Markdown | Study guides and code explanations |
 | HTML and CSS | Accessible project index and study layout |
-| JavaScript | Loads the source and presents the guide |
+| JavaScript | Generates resource options from the project data and displays the selected source or guide |
 | Node.js and Python | Repository validation tests |
 | GitHub Actions | Compilation, smoke tests, and deployment |
 
