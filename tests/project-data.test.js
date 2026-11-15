@@ -66,3 +66,18 @@ test("the website JavaScript does not fetch or render project files", () => {
   assert.equal(script.includes("renderMarkdown"), false);
   assert.equal(script.includes("textContent = await"), false);
 });
+
+test("the README progress graphic matches the current catalogue size", () => {
+  const target = 20;
+  const percentage = Math.round((projects.length / target) * 100);
+  const filledWidth = 656 * percentage / 100;
+  const readme = readFileSync(resolve(root, "README.md"), "utf8");
+  const svg = readFileSync(resolve(root, "assets/progress.svg"), "utf8");
+
+  assert.ok(readme.includes("./assets/progress.svg"));
+  assert.ok(readme.includes(`**${projects.length} exercises currently catalogued**`));
+  assert.ok(svg.includes(`>${percentage}%</text>`));
+  assert.ok(svg.includes(`width="${filledWidth}"`));
+  assert.ok(svg.includes(`${projects.length} current Java exercises`));
+  assert.ok(svg.includes(`Learning roadmap target: ${target}`));
+});

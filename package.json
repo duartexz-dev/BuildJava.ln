@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "node --check js/project-data.js && node --check js/landing.js && bash -n scripts/project-id.sh && node --check tests/project-data.test.js && node --check tests/study-content.test.js",
-    "test": "node --test && python -m unittest discover -s tests -p 'test_*.py' -v"
+    "check": "node --check js/project-data.js && node --check js/landing.js && node --check tests/project-data.test.js && node --check tests/study-content.test.js",
+    "test": "node --test"
   }
 }

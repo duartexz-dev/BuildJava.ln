@@ -1,33 +1,34 @@
 # BuildJava.ln
 
 ![Java](https://img.shields.io/badge/Java-learning%20repository-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
-![Exercises](https://img.shields.io/badge/exercises-10-315B48?style=flat-square)
+![Exercises](https://img.shields.io/badge/exercises-10%2F20-315B48?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square)
 
-**A Java-first record of learning through practical exercises, original source code, and careful explanations.**
+**A personal Java learning journey built around 20 practical exercises, original code, and detailed study guides.**
 
-[Open the website](https://duartexz-dev.github.io/BuildJava.ln/) · [GitHub profile](https://github.com/duartexz-dev) · [Instagram](https://www.instagram.com/duarteeo.dev/) · [YouTube](https://www.youtube.com/@duarteeo-dev)
+[Open the website](https://duartexz-dev.github.io/BuildJava.ln/) · [GitHub](https://github.com/duartexz-dev) · [Instagram](https://www.instagram.com/duarteeo.dev/) · [YouTube](https://www.youtube.com/@duarteeo-dev)
 
-<p align="center">
-  <strong>10 of 20 planned projects · 50%</strong><br />
-  <code>██████████░░░░░░░░░░</code>
-</p>
+![BuildJava.ln progress: 10 of 20 Java exercises currently catalogued (50%)](./assets/progress.svg)
 
-The progress indicator tracks the ten currently catalogued Java exercises against the twenty-project learning goal.
+## The idea
 
-## Purpose
+BuildJava.ln was created to turn learning Java into a practical, visible process. Instead of keeping notes disconnected from code or following tutorials without building anything, the repository brings each exercise, its original Java implementation, and its explanation together.
 
-BuildJava.ln is a learning repository centered on Java. The programs are the main work; the website is deliberately limited to a simple index that makes each exercise easy to find.
+The goal is to develop **20 Java exercises**, gradually moving from language fundamentals toward object-oriented programming, collections, and small console applications. The repository currently contains **10 exercises**. The other **10 are still ahead** and will be added as the learning journey progresses.
 
-The site does not host a separate lesson page or display the contents of Java and Markdown files. Each project appears as a card with a short description and two direct links:
-- **Study guide** — opens the project's Markdown file on GitHub.
-- **Java source** — opens the original `.java` implementation on GitHub.
+This is a learning record, not a collection of finished or production-ready applications. The code is allowed to show the stage at which it was written, and each guide explains the implementation that actually exists.
 
-This is a record of practical learning, not a claim that the exercises are production-ready applications. Each guide describes what the source actually does, including its current limitations.
+## Progress
 
-## Current Java exercises
+- **10 exercises currently catalogued**
+- **10 more exercises planned**
+- **20 exercises in the overall learning goal**
 
-| # | Project | Main concepts | Level |
+The 50% indicator measures catalogue progress (10 entries out of 20). It does not claim that every exercise is mastered or that the project is finished.
+
+## The 10 current exercises
+
+| # | Exercise | Main concepts | Level |
 | --- | --- | --- | --- |
 | 01 | [TypeProfile](./projects/Beginner/TypeProfile.java) | Data types, Scanner, formatted output | Beginner |
 | 02 | [WeekDay](./projects/Beginner/WeekDay.java) | switch, selection, input | Beginner |
@@ -40,31 +41,26 @@ This is a record of practical learning, not a claim that the exercises are produ
 | 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
 | 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | Methods, collections, menu flow | Intermediate |
 
-## How each project is taught
+The next ten exercises have not been registered yet. They will be defined as the learning sequence develops rather than listed as projects that do not exist.
 
-Every exercise has one Markdown guide in `projects/md/`. The guide follows the same learning structure:
+## How each exercise works
 
-1. **Overview and learning goals** — what the program does and what the reader should understand.
-2. **Prerequisites and structure** — the minimum background, package, imports, classes, and related files.
-3. **Program execution** — the real path from `main` through the methods and branches.
-4. **Complete code walkthrough** — meaningful statements explained in source order.
-5. **Java concepts in context** — why each concept is used in this implementation.
-6. **Example execution** — a realistic interaction based on the actual program.
-7. **Limitations and common mistakes** — existing constraints or defects, separated from possible improvements.
-8. **Practice and extensions** — small next steps that build on the concepts already present.
-9. **Summary and source** — a concise recap and a link to the original Java file.
+Every exercise has two central files:
 
-Explanations must describe what the source actually does. They must not invent features, validation, output, or behavior that has not been implemented.
+- **Java source** — the original program, kept as the main practical work.
+- **Study guide** — a Markdown document in `projects/md/` that explains the actual source, its concepts, execution flow, examples, limitations, and possible practice extensions.
 
-## Add the next Java project
+The website is intentionally a small index. Each project card shows a description and provides two direct links: one to the study guide and one to the Java source. It does not embed the code, render Markdown into a separate lesson page, or replace the repository files.
 
-Use the **Adicionar projeto** mode in the JavaSage agent. It reads the complete Java file from the workspace, generates a unique ID with:
+## Learning approach
 
-```bash
-bash scripts/project-id.sh path/to/Project.java
-```
+1. Build a small Java program around a specific concept or problem.
+2. Understand the source instead of treating a working output as proof of understanding.
+3. Document the code in source order, connecting Java syntax to what the program does.
+4. Review limitations and improve the solution as knowledge grows.
+5. Add the next exercise without losing the history of the previous work.
 
-JavaSage then adds one entry to `data/projects.json` and creates one complete Markdown study guide in `projects/md/`. The landing page automatically creates a new card from the catalogue and adds its two direct links. No new interface code or separate project page is required.
+The project prioritizes practice, clear explanations, and gradual progression over a large interface or unnecessary tooling.
 
 ## Run a Java exercise
 
@@ -72,42 +68,36 @@ Requirements: Java 21 or later.
 
 Compile and run CandidateManager:
 
-```bash
+```console
 javac -d out projects/Intermediate/CandidateManager.java
 java -cp out Intermediate.CandidateManager
 ```
 
 Compile and run Calculator:
 
-```bash
+```console
 javac -d out projects/Beginner/Calculator.java
 java -cp out Calculator
 ```
 
 ## Run the website locally
 
-Requirements: Node.js 22 or later for repository checks, plus Python or another local HTTP server.
+Use the VS Code Live Server extension or another local static HTTP server from the repository root. Opening `index.html` directly may prevent the browser from loading the JavaScript modules correctly.
 
-```bash
-git clone https://github.com/duartexz-dev/BuildJava.ln.git
-cd BuildJava.ln
-python -m http.server 8000
-```
+Once the local server is running, open its local address in the browser. The page reads `data/projects.json`; the two links on each card point to the corresponding files in this repository.
 
-Open [http://localhost:8000](http://localhost:8000). The page reads the local project catalogue; its two project links open the corresponding files on GitHub.
+## Automated checks
 
-## Automated validation
+Requirements: Node.js 22 or later and Java 21 or later.
 
-Run:
+Run the repository checks:
 
-```bash
+```console
 npm run check
 npm test
 ```
 
-GitHub Actions also compiles every Java source file and runs smoke tests for selected CandidateManager and Vehicle behaviors.
-
-The tests protect important repository structure and selected behaviors. They are not a substitute for comprehensive unit tests of every Java method.
+The GitHub Actions workflow also compiles the Java exercises and runs smoke tests for selected CandidateManager and Vehicle behaviors. The checks protect catalogue integrity, guide structure, source links, the README progress count, and selected program behavior; they are not a substitute for comprehensive tests of every Java method.
 
 ## Repository structure
 
@@ -116,7 +106,9 @@ BuildJava.ln/
 ├── .github/
 │   ├── agents/                 # JavaSage and design workflow instructions
 │   └── workflows/
-│       └── pages.yml           # Validation, Java compilation, and deployment
+│       └── pages.yml           # Node checks, Java compilation, and deployment
+├── assets/
+│   └── progress.svg            # README progress bar (10 of 20)
 ├── data/
 │   └── projects.json           # Canonical project catalogue
 ├── js/
@@ -124,42 +116,37 @@ BuildJava.ln/
 │   └── landing.js              # Renders project cards and direct file links
 ├── projects/
 │   ├── Beginner/               # Four introductory Java exercises
-│   ├── Intermediate/           # Six combined and object-oriented exercises
-│   └── md/                     # One complete study guide per exercise
-├── scripts/
-│   └── project-id.sh           # Generates unique project IDs
+│   ├── Intermediate/           # Six developing Java exercises
+│   └── md/                     # One study guide per exercise
 ├── styles/
 │   └── site.css                # Landing page and project-card styles
 ├── tests/
 │   ├── project-data.test.js    # Catalogue and project-index checks
-│   ├── study-content.test.js   # Guide structure and direct-link checks
-│   ├── test_project_id.py      # Project ID generator tests
-│   └── fixtures/
-│       └── ProjectIdFixture.java
+│   └── study-content.test.js   # Guide structure and direct-link checks
 ├── index.html
 └── package.json
 ```
 
-## Technology
+## Technologies
 
-| Technology | Role |
+| Technology | Purpose |
 | --- | --- |
 | Java | Main learning content and console exercises |
 | Markdown | Study guides and code explanations |
-| HTML and CSS | Accessible project index and cards |
-| JavaScript | Reads the project catalogue and creates the cards |
-| Node.js and Python | Repository validation tests |
-| GitHub Actions | Compilation, smoke tests, and deployment |
+| HTML and CSS | Lightweight project index and cards |
+| JavaScript | Reads the catalogue and renders the cards |
+| Node.js | Repository validation tests |
+| GitHub Actions | Java compilation, smoke tests, and website deployment |
 
-The website is static and has no backend, database, frontend framework, or runtime AI dependency. Google Fonts provide the typography and fall back to system fonts when unavailable.
+The website is static. It has no backend, database, frontend framework, or runtime AI dependency.
 
-## Learning principles
+## Project principles
 
-- Keep Java code as the central deliverable.
-- Give every project a short, accurate description and two direct resource links.
-- Keep the website small; the Java and Markdown files are the actual learning material.
-- Explain the actual implementation, including limitations.
-- Improve the source as understanding grows, without hiding the learning process.
+- Java is the main focus; the website exists only to organize access to the exercises.
+- Every registered exercise has one source file, one study guide, and one catalogue entry.
+- The README and progress graphic reflect the real catalogue, not hypothetical projects.
+- Explanations follow the actual implementation, including its limitations.
+- The remaining ten exercises will be added as they are developed.
 
 ## License
 
