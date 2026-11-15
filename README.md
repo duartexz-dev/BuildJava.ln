@@ -97,7 +97,7 @@ npm run check
 npm test
 ```
 
-The GitHub Actions workflow also compiles the Java exercises and runs smoke tests for selected CandidateManager and Vehicle behaviors. The checks protect catalogue integrity, guide structure, source links, and selected program behavior; they are not a substitute for comprehensive tests of every Java method.
+The GitHub Actions workflow also compiles the Java exercises and runs smoke tests for selected CandidateManager and Vehicle behaviors. The checks protect catalogue integrity, guide structure, source links, the README progress count, and selected program behavior; they are not a substitute for comprehensive tests of every Java method.
 
 ## Repository structure
 
