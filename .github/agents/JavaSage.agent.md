@@ -42,9 +42,9 @@ This mode is the only workflow for introducing a genuinely new Java exercise. It
 5. Create one Markdown guide at the stable path projects/md/<JavaFileName>.md. Explain the actual program, not the intended program. Keep the repository's English documentation convention unless the user asks otherwise.
 6. Write one complete study guide from the full Java source. Explain the implementation in source order inside its "Complete code walkthrough" section. Do not create artificial source anchors or a second interface-specific explanation.
 7. Add one project object to data/projects.json with the generated id, an unused sequential step, an accurate description, a learning goal, concepts, and the exact Java and Markdown paths. Do not paste the Java source into any JavaScript data file.
-8. Validate the explanations against the actual Java source, confirm the ID is unique, and ensure the project appears on the landing page and opens its study page.
+8. Validate the explanations against the actual Java source, confirm the ID is unique, and ensure the project appears as one landing-page card with direct links to its Markdown guide and original Java source.
 9. Update README.md only where the project list or project count needs to stay accurate. Run npm run check, npm test, Java compilation for the new file, and git diff --check. Report any validation that could not be performed.
-10. Do not change the Java program's behavior, the existing study-page design, or unrelated projects as part of this workflow. Do not commit unless the user explicitly asks.
+10. Do not change the Java program's behavior, the existing project-index design, or unrelated projects as part of this workflow. Do not commit unless the user explicitly asks.
 
 The study guide is authored at project-add time by JavaSage and stored beside the Java source in Markdown. The website does not call an AI model at runtime, does not need an API key, and never stores lesson content in JavaScript. Adding a project should add Java source, catalogue metadata, and one guide — not a new block of interface code.
 
@@ -71,7 +71,7 @@ A full metadata review belongs to **Atualizar projetos**. A new Java exercise be
 
 - Treat the current workspace as the source of truth for edits. Never replace local work with older GitHub content.
 - Before editing project files, consult https://github.com/duartexz-dev/BuildJava.ln using the available GitHub or web tools. Compare relevant files for architecture and conventions. If the repository cannot be consulted, explain the limitation in Brazilian Portuguese and pause before editing project files.
-- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, js/project-study.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
+- Inspect local files before making changes. Relevant areas include projects/, projects/Beginner/, projects/Intermediate/, projects/md/, js/project-data.js, js/landing.js, scripts/project-id.sh, tests/, .github/agents/, .github/workflows/, styles/, and the HTML pages.
 - Inspect git status before editing. Preserve unrelated local changes and never overwrite user work with remote contents.
 - Use existing Java exercises and catalog entries as teaching and formatting examples. Compare the source behavior with its description, learning outcomes, code preview, concepts, study guide, difficulty, and sequence.
 - Do not assume a GitHub Pages deployment succeeded merely because the workflow file exists. Check actual workflow results when accessible.
@@ -165,12 +165,12 @@ When adding a project, assign step as the next unused positive number after insp
 
 ## Current website data flow
 
-The current website is a static Java project catalogue and source-and-guide study page. It does not have a separate knowledge map, roadmap, or progress generator. Do not recreate those retired systems unless the user explicitly requests them.
+The current website is a static Java project index. Each exercise appears as one concise card with its description and two direct GitHub links: one to the Markdown study guide and one to the original Java source.
 
 - data/projects.json is the canonical project catalog.
 - js/project-data.js is a small JSON-import wrapper that exports projects and getProject(id).
 - js/landing.js renders project cards from the catalog.
-- project.html and js/project-study.js load the complete Java source and its Markdown guide, then display them side by side.
+- js/landing.js renders one card per project from the canonical catalog. Each card contains its description and two direct GitHub links: `markdownPath` for the guide and `javaPath` for the original Java source.
 - projects/md/ stores one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs for new Java projects.
 - tests/ validates catalogue links, study-guide structure, and ID generation.
@@ -241,7 +241,7 @@ The complete Design Brief must include:
 - Audience: beginner and developing Java learners.
 - Current repository architecture and actual technologies, verified from the workspace rather than assumed.
 - User-selected redesign scope, allowed areas, protected areas, and explicit permissions.
-- Existing project cards, canonical project catalogue, Java source links, Markdown study guides, and previous/next project navigation.
+- The canonical project catalogue and simple project cards. Each card retains the project name, short description, a direct Markdown guide link, and a direct Java source link.
 - Approved palette with HEX values and functional roles, platform, responsive behavior, direction, motion intensity, accessibility, and acceptance criteria.
 - A clear instruction to preserve Java source code, catalog meaning, project links, current working interactions, progress logic, and learning content unless the user explicitly authorizes a specific change.
 
@@ -261,12 +261,12 @@ The user requests a redesign, not a rewrite of the learning product. Restrict im
 - data/projects.json is the canonical catalog. Do not maintain a second list or duplicate project objects in JavaScript.
 - js/project-data.js provides the small projects/getProject API consumed by the website.
 - js/landing.js renders the project cards from the canonical array.
-- js/project-study.js loads the selected Java source and Markdown guide, then displays them side by side.
+
 - projects/md/ contains one complete study guide per Java exercise.
 - scripts/project-id.sh generates unique IDs from Java class names or filenames and checks data/projects.json for collisions.
 - tests/ checks catalogue integrity, study-guide structure, and ID generation.
 - .github/workflows/pages.yml runs checks, compiles Java sources, and deploys the static website.
-- Preserve the current Java-first landing page, Java-source-and-guide study layout, responsive styling, copy-code action, and previous/next navigation.
+- Preserve the focused landing page, responsive project cards, and both direct file links. Do not add a separate study page, embedded Markdown renderer, embedded Java viewer, copy-code control, or previous/next navigation.
 - Do not add a roadmap, knowledge map, progress generator, AI runtime API, or second project catalog unless the user explicitly requests it.
 - Preserve existing project entries and unrelated workspace changes. Do not stage or commit unless the user explicitly asks.
 
@@ -275,7 +275,7 @@ The user requests a redesign, not a rewrite of the learning product. Restrict im
 Run focused checks based on what changed:
 
 - node --check js/project-data.js
-- node --check js/project-study.js
+
 - bash -n scripts/project-id.sh
 - npm run check
 - npm test
