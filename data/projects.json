@@ -94,13 +94,15 @@
     "name": "Vehicle",
     "step": 7,
     "difficulty": "Intermediate",
-    "description": "Collect a vehicle's year, name, horsepower, brand, and color, then group those values in an object.",
-    "lesson": "Use a constructor and this to initialize an object with several related attributes.",
+    "description": "Collect a vehicle's year, name, horsepower, brand, and color, group them in a nested object, and print a formatted summary.",
+    "lesson": "Use a nested class, constructor parameters, this, Scanner input, and printf to display object data.",
     "concepts": [
       "Classes",
+      "Objects",
       "Constructor",
-      "Encapsulation",
-      "toString()"
+      "this",
+      "Scanner",
+      "printf"
     ],
     "javaPath": "projects/Intermediate/Vehicle.java",
     "markdownPath": "projects/md/Vehicle.md"
@@ -140,14 +142,36 @@
     "name": "CandidateManager",
     "step": 10,
     "difficulty": "Intermediate",
-    "description": "Manage candidates with a menu that can add, list, search, remove, and count entries.",
-    "lesson": "Combine ArrayList operations, methods, search logic, and a menu-driven loop.",
+    "description": "Manage a predefined list of candidate names with a console menu to add, list, search, remove, and count entries.",
+    "lesson": "Practice ArrayList operations, switch selection, do-while repetition, and Scanner input.",
     "concepts": [
       "ArrayList",
-      "Methods",
-      "Input validation"
+      "switch",
+      "do-while",
+      "Scanner",
+      "List indexes"
     ],
     "javaPath": "projects/Intermediate/CandidateManager.java",
     "markdownPath": "projects/md/CandidateManager.md"
+  },
+  {
+    "id": "MoviesSystem",
+    "name": "MoviesSystem",
+    "step": 11,
+    "difficulty": "Intermediate",
+    "description": "Collect a customer's name and movie title, then create a ticket with a randomly selected seat and formatted price for a matching movie.",
+    "lesson": "Practice nested classes, constructors, toString(), arrays, Random, and exact String membership checks.",
+    "concepts": [
+      "Nested classes",
+      "Objects",
+      "Constructors",
+      "toString()",
+      "Arrays",
+      "Random",
+      "Arrays.asList()",
+      "contains()"
+    ],
+    "javaPath": "projects/Intermediate/MoviesSystem.java",
+    "markdownPath": "projects/md/MoviesSystem.md"
   }
 ]
