@@ -21,8 +21,9 @@ public class MoviesSystem {
             this.seatNumber = seatNumber;
         }
 
-        @Override
         // toString() defines the multi-line text printed for a ticket object.
+        @Override
+
         public String toString() {
             return "Name:" + name +
                     "\n Movie:" + nameMovie +

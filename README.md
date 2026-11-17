@@ -148,3 +148,15 @@ BuildJava.ln/
 | GitHub Actions | Java compilation, smoke tests, and website deployment |
 
 The website is static. It has no backend, database, frontend framework, or runtime AI dependency.
+
+## Project principles
+
+- Java is the main focus; the website exists only to organize access to the exercises.
+- Every registered exercise has one source file, one study guide, and one catalogue entry.
+- The README and progress graphic reflect the real catalogue, not hypothetical projects.
+- Explanations follow the actual implementation, including its limitations.
+- The remaining nine exercises will be added as they are developed.
+
+## License
+
+This project is distributed under the MIT License. See [LICENSE](./LICENSE).
