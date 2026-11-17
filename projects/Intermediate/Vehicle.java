@@ -70,7 +70,7 @@ public class Vehicle {
         // Use the correct format specifiers for each value type.
         // %s is for strings, %d is for integer values, and %n creates a new line.
         System.out.printf(
-                "Name: %s%nYear: %d%nHorse power: %d%nBrand: %s%nVehicle color: %s%n",
+                "Vehicle: %s%nYear: %d%nHorse power: %d%nBrand: %s%nVehicle color: %s%n",
                 nameVehicle,
                 yearVehicle,
                 horsesPotence,
