@@ -1,6 +1,7 @@
 package Intermediate;
 
 import java.util.Scanner;
+import java.util.Arrays;
 import java.util.Random;
 
 public class MoviesSystem {
@@ -57,24 +58,28 @@ public class MoviesSystem {
 
         String nameMovie = scanner.nextLine();
 
-        System.out.println("x----------------------------x");
-        System.out.println("|    Ok , now let´s see      |");
-        System.out.println("|  Your seat and price movie |");
-        System.out.println("|  ........................  |");
-        System.out.println("x----------------------------x");
+        while (Arrays.asList(movies).contains(nameMovie)) {
 
-        int PriceTicketIndex = random.nextInt(prices.length);
-        String PriceTicket = prices[PriceTicketIndex];
+            System.out.println("x----------------------------x");
+            System.out.println("|    Ok , now let´s see      |");
+            System.out.println("|  Your seat and price movie |");
+            System.out.println("|  ........................  |");
+            System.out.println("x----------------------------x");
 
-        String CharSeatsSelected = CharSeats[random.nextInt(CharSeats.length)];
-        String NumberSeatsSelected = NumberSeats[random.nextInt(NumberSeats.length)];
+            int PriceTicketIndex = random.nextInt(prices.length);
+            String PriceTicket = prices[PriceTicketIndex];
 
-        String Seat = CharSeatsSelected + NumberSeatsSelected;
+            String CharSeatsSelected = CharSeats[random.nextInt(CharSeats.length)];
+            String NumberSeatsSelected = NumberSeats[random.nextInt(NumberSeats.length)];
 
-        ticket ticket = new ticket(nameUser, Seat, nameMovie, PriceTicket);
+            String Seat = CharSeatsSelected + NumberSeatsSelected;
 
-        System.out.println(ticket);
+            ticket ticket = new ticket(nameUser, Seat, nameMovie, PriceTicket);
 
+            System.out.println(ticket);
+            break;
+        }
+        ;
         scanner.close();
     }
 

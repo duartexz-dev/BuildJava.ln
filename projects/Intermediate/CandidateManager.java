@@ -82,10 +82,10 @@ public class CandidateManager {
 
                     int candidateNumber = scanner.nextInt();
 
-                    if (candidateNumber > 20) {
+                    if (candidateNumber > candidates.size()) {
                         System.out.println("You choose a inválid number .");
-                        System.out
-                                .println("Would you like to choose another option? Enter true or false:");
+
+                        System.out.println("Would you like to choose another option? Enter true or false:");
                         shouldContinue = scanner.nextBoolean();
                         break;
                     }
