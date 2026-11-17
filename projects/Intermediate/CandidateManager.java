@@ -91,14 +91,17 @@ public class CandidateManager {
                     }
 
                     int candidatePosition = candidateNumber - 1;
+                    String nameRemoved = candidates.get(candidatePosition);
                     candidates.remove(candidatePosition);
 
                     for (int remainingIndex = 0; remainingIndex < candidates.size(); remainingIndex++) {
                         System.out.println(candidates.get(remainingIndex));
 
                     }
-                    System.out
-                            .println("Would you like to choose another option? Enter true or false:");
+
+                    System.out.printf("Removed: %s \n", nameRemoved);
+
+                    System.out.println("Would you like to choose another option? Enter true or false:");
                     shouldContinue = scanner.nextBoolean();
 
                     break;
