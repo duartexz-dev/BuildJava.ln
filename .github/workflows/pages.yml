@@ -50,7 +50,7 @@ jobs:
           set -euo pipefail
           classes="$RUNNER_TEMP/buildjava-classes"
 
-          candidate_output="$(printf '4\n20\true\n20\n0\n' | java -cp "$classes" Intermediate.CandidateManager)"
+          candidate_output="$(printf '4\n20\nfalse\n20\n0\n' | java -cp "$classes" Intermediate.CandidateManager)"
           grep -Fq "Removed: Vinicius Teixeira" <<< "$candidate_output"
           grep -Fq "Invalid position. Choose a number between 1 and 19." <<< "$candidate_output"
 
