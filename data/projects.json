@@ -63,7 +63,7 @@
     "id": "LoginIntermediary",
     "name": "LoginIntermediary",
     "step": 5,
-    "difficulty": "Intermediate",
+    "difficulty": "Beginner",
     "description": "Create a console login exercise with a limited number of attempts and a boolean state.",
     "lesson": "Compare String values, combine boolean conditions, and control repetition with while.",
     "concepts": [
@@ -173,5 +173,24 @@
     ],
     "javaPath": "projects/Intermediate/MoviesSystem.java",
     "markdownPath": "projects/md/MoviesSystem.md"
+  },
+  {
+    "id": "PizzaCenter",
+    "name": "PizzaCenter",
+    "step": 12,
+    "difficulty": "Intermediate",
+    "description": "Collect topping preferences and a customer name, create a Pizza object, and store the order in an ArrayList.",
+    "lesson": "Model an order with a nested class and constructor, override toString(), and store objects in ArrayList<Pizza>.",
+    "concepts": [
+      "Nested classes",
+      "Objects",
+      "Constructors",
+      "ArrayList<Pizza>",
+      "Boolean fields",
+      "toString()",
+      "Scanner"
+    ],
+    "javaPath": "projects/Advanced/PizzaCenter.java",
+    "markdownPath": "projects/md/PizzaCenter.md"
   }
 ]
