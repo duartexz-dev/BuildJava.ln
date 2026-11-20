@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg"
   width="720" height="164" viewBox="0 0 720 164" role="img"
   aria-labelledby="progress-title progress-description">
-  <title id="progress-title">BuildJava.ln learning roadmap progress: 55%</title>
-  <desc id="progress-description">11 of the 20 planned Java exercises are currently catalogued. This measures repository catalogue progress, not mastery or completion.</desc>
+  <title id="progress-title">BuildJava.ln learning roadmap progress: 60%</title>
+  <desc id="progress-description">12 of the 20 planned Java exercises are currently catalogued. This measures repository catalogue progress, not mastery or completion.</desc>
   <defs>
     <linearGradient id="progress-accent" x1="0" x2="1">
       <stop offset="0%" stop-color="#d97706"/>
@@ -13,12 +13,12 @@
   <text x="32" y="42" fill="#f3f4f6" font-family="Arial, sans-serif"
     font-size="20" font-weight="700">BuildJava.ln</text>
   <text x="688" y="42" fill="#f59e0b" font-family="Arial, sans-serif"
-    font-size="24" font-weight="700" text-anchor="end">55%</text>
+    font-size="24" font-weight="700" text-anchor="end">60%</text>
   <rect x="32" y="66" width="656" height="16" rx="8" fill="#343741"/>
-  <rect x="32" y="66" width="360.8" height="16" rx="8"
+  <rect x="32" y="66" width="393.6" height="16" rx="8"
     fill="url(#progress-accent)"/>
   <text x="32" y="123" fill="#b9bbc4" font-family="Arial, sans-serif"
-    font-size="14">11 current Java exercises</text>
+    font-size="14">12 current Java exercises</text>
   <text x="688" y="123" fill="#b9bbc4" font-family="Arial, sans-serif"
     font-size="14" text-anchor="end">Learning roadmap target: 20</text>
 </svg>
