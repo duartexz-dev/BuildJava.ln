@@ -36,6 +36,8 @@ When the user clearly requests one workflow, begin directly. Do not ask for info
 Inspect Git status/diff and `projects/` to identify the newly added `.java` file. Read its complete contents and any directly required classes. Check `data/projects.json` and `projects/md/` for duplicates. If multiple unregistered sources are plausible, ask which one to add instead of guessing.
 
 ### 2. Create the study guide
+Before creating the guide, apply the difficulty rubric below and compare the source with existing projects in each tier. Reassess any existing catalogue entry whose level is clearly inconsistent with the rubric. Keep IDs and step numbers stable.
+
 
 Create exactly one guide at `projects/md/<JavaFileName>.md`, using the Java filename without `.java`. Update an existing matching guide rather than creating a duplicate. Explain the actual source in declaration and execution order. Cover meaningful fields, constructors, methods, parameters, conditions, loops, collections, input, and output that are present.
 
@@ -95,7 +97,7 @@ Read `data/projects.json`, every Java source under `projects/Beginner/` and `pro
 
 ### 2. Check source, catalogue, and guide consistency
 
-For every exercise, verify that JSON `id`, `name`, `step`, `difficulty`, `description`, `lesson`, `concepts`, `javaPath`, and `markdownPath` reflect the current source. Verify that the guide names the correct class and file, follows the eleven-section structure, explains actual fields and control flow, and uses accurate code fragments, examples, output, limitations, and source links. Correct inaccurate or outdated documentation; never change Java behavior to fit stale documentation.
+For every exercise, verify that JSON `id`, `name`, `step`, `difficulty`, `description`, `lesson`, `concepts`, `javaPath`, and `markdownPath` reflect the current source. Reclassify `difficulty` when the actual source concepts belong to another tier; do not move the file merely to match its catalogue label. Verify that the guide names the correct class and file, follows the eleven-section structure, explains actual fields and control flow, and uses accurate code fragments, examples, output, limitations, and source links. Correct inaccurate or outdated documentation; never change Java behavior to fit stale documentation.
 
 ### 3. Review educational Java comments
 
@@ -110,6 +112,51 @@ Do not perform a runtime/logic bug review. Do not diagnose or fix algorithmic de
 ### 5. Validate and report
 
 Run `npm run check`, `npm test`, Java compilation, and `git diff --check`. Inspect the final diff to ensure Java executable lines are unchanged. Report the number of projects reviewed, files corrected, and checks actually completed. Do not claim complete coverage if any source or guide could not be read.
+
+## Difficulty classification
+
+Assign each catalogue `difficulty` from the concepts the source actually teaches. Compare each exercise with the current projects in all tiers. **Folder, package, filename, title, and apparent ambition do not determine difficulty.** A source may stay in its original directory and package even when its catalogue level is lower.
+
+### Beginner
+
+Use `Beginner` for Java fundamentals and straightforward procedural flow:
+- variables, primitive/reference types, strings, literals, and basic expressions;
+- arithmetic, comparison, logical, and assignment operators;
+- console input/output with `Scanner`, `print`, `println`, and basic formatting;
+- `if`/`else`, `switch`, boolean conditions, ternary expressions, and simple string comparisons;
+- `for`, `while`, and `do-while` loops, counters, and simple state flags;
+- small programs combining these foundations without object modelling or substantial collection work.
+
+A tiny fixed array used only as a lookup table does not automatically make a project Intermediate.
+
+### Intermediate
+
+Use `Intermediate` when the exercise meaningfully introduces or combines object-oriented programming and core data structures:
+- classes and objects, fields/state, constructors, `this`, methods, and basic encapsulation;
+- nested classes, object creation, `toString()`, and simple object relationships;
+- arrays as a meaningful part of the task, including indexes, traversal, selection, or processing;
+- `ArrayList`, generics such as `ArrayList<String>` or `ArrayList<Pizza>`, and operations such as `add`, `get`, `remove`, `contains`, `indexOf`, and `size`;
+- programs combining these concepts with input, decisions, and loops.
+
+An exercise need not use every item. Judge its central learning goals and combined complexity, not a checklist count.
+
+### Advanced
+
+Reserve `Advanced` for exercises whose central learning goals go beyond Intermediate foundations:
+- inheritance/subclassing, polymorphism, dynamic dispatch, and overriding across a hierarchy;
+- abstract classes, interfaces, and multiple collaborating implementations;
+- more involved object composition/design, reusable generic types beyond basic collections, or custom data structures;
+- exception handling/recovery as a deliberate topic, file persistence and I/O, streams/lambdas, recursion, non-trivial algorithms, concurrency, networking, or external API integration.
+
+At least one Advanced concept must be central, or Intermediate concepts must be combined at clearly greater depth. A constructor, nested class, `ArrayList`, or a single basic `toString()` override is not enough.
+
+### Relative classification and re-evaluation
+
+- Compare a new exercise with existing projects in all three tiers before assigning its level.
+- A project in an `Advanced` folder/package with concepts and complexity similar to Intermediate must be classified as `Intermediate`; do not preserve an inflated level because of its path.
+- Move procedural exercises to `Beginner` when their actual concepts fit that tier, regardless of filename or folder.
+- Whenever this rubric is applied or refined, re-evaluate every registered project's `difficulty`. Keep IDs, step numbers, source files, and package declarations unchanged unless separately requested.
+- Synchronize the website, README, and progress graphic with the catalogue.
 
 ## Repository architecture
 

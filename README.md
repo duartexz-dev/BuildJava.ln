@@ -1,32 +1,32 @@
 # BuildJava.ln
 
 ![Java](https://img.shields.io/badge/Java-learning%20repository-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
-![Exercises](https://img.shields.io/badge/exercises-11%2F20-315B48?style=flat-square)
+![Exercises](https://img.shields.io/badge/exercises-12%2F20-315B48?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square)
 
 **A personal Java learning journey built around 20 practical exercises, original code, and detailed study guides.**
 
 [Open the website](https://duartexz-dev.github.io/BuildJava.ln/) · [GitHub](https://github.com/duartexz-dev) · [Instagram](https://www.instagram.com/duarteeo.dev/) · [YouTube](https://www.youtube.com/@duarteeo-dev)
 
-![BuildJava.ln progress: 11 of 20 Java exercises currently catalogued (55%)](./assets/progress.svg)
+![BuildJava.ln progress: 12 of 20 Java exercises currently catalogued (60%)](./assets/progress.svg)
 
 ## The idea
 
 BuildJava.ln was created to turn learning Java into a practical, visible process. Instead of keeping notes disconnected from code or following tutorials without building anything, the repository brings each exercise, its original Java implementation, and its explanation together.
 
-The goal is to develop **20 Java exercises**, gradually moving from language fundamentals toward object-oriented programming, collections, and small console applications. The repository currently contains **11 exercises**. The other **9 are still ahead** and will be added as the learning journey progresses.
+The goal is to develop **20 Java exercises**, gradually moving from language fundamentals toward object-oriented programming, collections, and small console applications. The repository currently contains **12 exercises**. The other **8 are still ahead** and will be added as the learning journey progresses.
 
 This is a learning record, not a collection of finished or production-ready applications. The code is allowed to show the stage at which it was written, and each guide explains the implementation that actually exists.
 
 ## Progress
 
-- **11 exercises currently catalogued**
-- **9 more exercises planned**
+- **12 exercises currently catalogued**
+- **8 more exercises planned**
 - **20 exercises in the overall learning goal**
 
-The 55% indicator measures catalogue progress (11 entries out of 20). It does not claim that every exercise is mastered or that the project is finished.
+The 60% indicator measures catalogue progress (12 entries out of 20). It does not claim that every exercise is mastered or that the project is finished.
 
-## The 11 current exercises
+## The 12 current exercises
 
 | # | Exercise | Main concepts | Level |
 | --- | --- | --- | --- |
@@ -34,13 +34,14 @@ The 55% indicator measures catalogue progress (11 entries out of 20). It does no
 | 02 | [WeekDay](./projects/Beginner/WeekDay.java) | switch, selection, input | Beginner |
 | 03 | [Calculator](./projects/Beginner/Calculator.java) | Arithmetic, operators, switch | Beginner |
 | 04 | [JoKenPo](./projects/Beginner/JoKenPo.java) | Random, conditions, loops | Beginner |
-| 05 | [LoginIntermediary](./projects/Intermediate/LoginIntermediary.java) | String comparison, boolean logic, while | Intermediate |
+| 05 | [LoginIntermediary](./projects/Intermediate/LoginIntermediary.java) | String comparison, boolean logic, while | Beginner |
 | 06 | [bulletin](./projects/Intermediate/bulletin.java) | Classes, objects, constructors | Intermediate |
 | 07 | [Vehicle](./projects/Intermediate/Vehicle.java) | Nested class, constructor, this, printf | Intermediate |
 | 08 | [DeveloperProfile](./projects/Intermediate/DeveloperProfile.java) | Objects, ArrayList, enhanced for | Intermediate |
 | 09 | [library](./projects/Intermediate/library.java) | ArrayList, input loop | Intermediate |
 | 10 | [CandidateManager](./projects/Intermediate/CandidateManager.java) | ArrayList, switch, do-while, indexes | Intermediate |
 | 11 | [MoviesSystem](./projects/Intermediate/MoviesSystem.java) | Nested classes, arrays, Random, toString | Intermediate |
+| 12 | [PizzaCenter](./projects/Advanced/PizzaCenter.java) | Nested class, constructor, ArrayList, toString | Intermediate |
 
 The next nine exercises have not been registered yet. They will be defined as the learning sequence develops rather than listed as projects that do not exist.
 
@@ -88,6 +89,13 @@ javac -d out projects/Beginner/Calculator.java
 java -cp out Calculator
 ```
 
+Compile and run PizzaCenter (its `main` method is inside the nested `Pizza` class):
+
+```console
+javac -d out projects/Advanced/PizzaCenter.java
+java -cp out 'Advanced.PizzaCenter$Pizza'
+```
+
 ## Run the website locally
 
 Use the VS Code Live Server extension or another local static HTTP server from the repository root. Opening `index.html` directly may prevent the browser from loading the JavaScript modules correctly.
@@ -117,7 +125,7 @@ BuildJava.ln/
 │   └── workflows/
 │       └── pages.yml           # Node checks, Java compilation, and deployment
 ├── assets/
-│   └── progress.svg            # README progress bar (11 of 20)
+│   └── progress.svg            # README progress bar (12 of 20)
 ├── data/
 │   └── projects.json           # Canonical project catalogue
 ├── js/
@@ -125,7 +133,8 @@ BuildJava.ln/
 │   └── landing.js              # Renders cards and direct links from the catalogue
 ├── projects/
 │   ├── Beginner/               # Four introductory Java exercises
-│   ├── Intermediate/           # Seven developing Java exercises
+│   ├── Intermediate/           # Seven Java sources in the Intermediate package
+│   ├── Advanced/                # PizzaCenter source; catalogue difficulty is Intermediate
 │   └── md/                     # One study guide per exercise
 ├── styles/
 │   └── site.css                # Landing page and project-card styles
@@ -148,6 +157,8 @@ BuildJava.ln/
 | GitHub Actions | Java compilation, smoke tests, and website deployment |
 
 The website is static. It has no backend, database, frontend framework, or runtime AI dependency.
+
+Difficulty labels are based on the Java concepts demonstrated by each exercise, not on its source folder or package name. `LoginIntermediary` is catalogued as Beginner, while `PizzaCenter` remains in the `Advanced` source folder but is catalogued as Intermediate.
 
 ## Project principles
 

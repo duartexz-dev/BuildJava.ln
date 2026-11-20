@@ -38,6 +38,7 @@ public class PizzaCenter {
 
             Scanner scanner = new Scanner(System.in);
 
+            // This generic list stores Pizza objects; this run adds one order.
             ArrayList<Pizza> Pedidos = new ArrayList<>();
 
             System.out.println("x-------------------------x");
